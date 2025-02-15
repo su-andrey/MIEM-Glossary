@@ -1,0 +1,9 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+ bin = "main.go"
+ cmd = "go build -o {{.Output}} {{.Input}}"
+ exclude = ["tmp/*", "client/*"]
+ include = ["**/*.go"]
+ igmore = ["tmp/*"]
