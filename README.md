@@ -14,6 +14,12 @@
 Исполнять инструкицю стоит до момента "Как подключиться к PostgreSQL на Mac OS". Остальное нам не интересно.`
 ```ВАЖНО```
 !Запомнить имя пользователя, пароль и название базы данных для доступа на сервер. Они пригодятся нам позже для подключения БД к приложению!
+Далее необходимо выдать права на редактирование таблиц созданному пользователю.
+Заходим от лица суперпользователя: (замените "<SELECTED NAME>" на выбранное для работы имя)
+```
+GRANT CREATE ON SCHEMA public TO <SELECTED NAME>;
+GRANT USAGE ON SCHEMA public TO <SELECTED NAME>;
+```
 !!ТАКЖЕ НЕ ЗАБЫВАЙТЕ СТАВИТЬ ТОЧКУ С ЗАПЯТОЙ В КОНЦЕ КАЖДОЙ КОМАНДЫ!!
 
 ---------------------
@@ -27,7 +33,15 @@
 Кратко:
 ```
 curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s
-alias air='~/.air'
+sudo nano ~/.zshrc
+
+Дописать в конец файла:
+alias air="~/.air"
+
+Далее:
+^X              #CTRL+X на маке
+Y
+ENTER
 ```
 (Работает на MacOS)
 [Полная инструкция по установке](https://github.com/air-verse/air)
@@ -63,3 +77,6 @@ alias air='~/.air'
 Список используемых библиотек:
 [Fiber V3](https://docs.gofiber.io/next/)
 [GoDotEnv](https://github.com/joho/godotenv)
+[PGX Pool](	"github.com/jackc/pgx/v5/pgxpool")
+[React](https://react.dev/)
+[TanStack Query](https://tanstack.com/query/latest)
