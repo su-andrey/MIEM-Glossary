@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import './App.css'
 import { useState } from 'react'
 
-export const BASE_URL = "http://localhost:3000/api" /* экспорт константы базовой ссылки для получения и отправки api */
+export const BASE_URL = import.meta.env.VITE_ENV == "production" || import.meta.env.VITE_ENV == undefined ? "/api" : import.meta.env.VITE_API_URL + ":" + import.meta.env.VITE_API_PORT + "/api"
 
 function App() {
   // Тут показаны функции взаимодействия с API на примере комментариев к постам. постараюсь снабдить комментами максимально подробно. 
