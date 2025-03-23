@@ -2,23 +2,17 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
-	"github.com/joho/godotenv"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/routes"
 )
 
 func main() {
 	app := fiber.New() // Создаем экземпляр приложения
-
-	if err := godotenv.Load(".env"); err != nil { // Открываем .env и отлавливаем возможную ошибку
-		log.Fatal("Error loading .env file:", err)
-	}
-
-	PORT := os.Getenv("PORT") // Получаем порт из .env
+	cfg := config.LoadConfig()
 
 	database.ConnectDB()      // Подключаемся к БД + создаем таблицы, если те еще не существуют
 	defer database.DB.Close() // defer откладывает выполнение функции на момет исполнения всех других процессов в текущем окружении (в данном случае в функции main)
@@ -31,7 +25,7 @@ func main() {
 
 	routes.SetupRoutes(app) // Запускаем обработчики запросов (сама функция, вызывающая обработчики, находится в ./routes)
 
-	err := app.Listen(":" + PORT) // Запускаем сервер на localhost:<PORT>
+	err := app.Listen(":" + cfg.Port) // Запускаем сервер на localhost:<PORT>
 	if err != nil {
 		log.Fatal("Ошибка запуска сервера:", err)
 	}
