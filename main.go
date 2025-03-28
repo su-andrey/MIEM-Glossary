@@ -46,6 +46,6 @@ func main() {
 	}
 
 	if err := app.Listen(":" + cfg.Port); err != nil { // Запускаем сервер на localhost:<PORT>
-		log.Fatal("Ошибка запуска сервера:", err)
+		log.Fatal("Ошибка запуска сервера:", err) // логируем критические ошибки
 	}
 }

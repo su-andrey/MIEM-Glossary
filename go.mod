@@ -1,7 +1,7 @@
 module github.com/su-andrey/kr_aip
 
 go 1.23.6
-
+// список зависимостей
 require github.com/jackc/pgx/v5 v5.7.2
 
 require (

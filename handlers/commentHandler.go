@@ -8,6 +8,10 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
+// Общая структура хэндлеров в данном файле (схоже с категориями)
+// Пробуем подключиться к бд и выполнить запрос, если ошибка - выводим информативное сообщение
+// При успешном получении данных пытаемся их обработать, в случае отсутствия ошибок возвращаем их
+// Если возвращать нечего (например удаление), выводим сообщение (удалённый объект не возвращаем за ненадобностью)
 // GetComments возвращает все комментарии
 func GetComments(c fiber.Ctx) error {
 	rows, err := database.DB.Query(context.Background(),
@@ -19,7 +23,7 @@ func GetComments(c fiber.Ctx) error {
 		 JOIN posts p ON cm.post_id = p.id
 		 JOIN categories c ON p.category_id = c.id`)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 	defer rows.Close()
 
@@ -33,7 +37,7 @@ func GetComments(c fiber.Ctx) error {
 			&comment.AuthorID,
 		)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"})
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 		comments = append(comments, comment)
 	}
@@ -63,7 +67,7 @@ func GetComment(c fiber.Ctx) error {
 		)
 
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Комментарий не найден"})
+		return c.Status(404).JSON(fiber.Map{"error": "Комментарий не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	return c.JSON(comment)
@@ -80,7 +84,7 @@ func CreateComment(c fiber.Ctx) error {
 
 	// Парсим тело запроса
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
+		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Проверяем, существует ли пост
@@ -92,7 +96,7 @@ func CreateComment(c fiber.Ctx) error {
 	).Scan(&post.ID, &post.Name, &post.Body, &post.Category.ID, &post.AuthorID, &post.Likes, &post.Dislikes)
 
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Пост не найден"})
+		return c.Status(400).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Подгружаем объект категории
@@ -103,7 +107,7 @@ func CreateComment(c fiber.Ctx) error {
 	).Scan(&post.Category.ID, &post.Category.Name)
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка загрузки категории поста"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка загрузки категории поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Вставляем комментарий в базу
@@ -121,11 +125,11 @@ func CreateComment(c fiber.Ctx) error {
 
 	// Формируем объект Comment с вложенным постом
 	comment := models.Comment{
-		ID:       commentID, // ID созданного комментария
-		Post:     post,      // Заполненный объект поста
-		AuthorID: input.AuthorID,
+		ID:       commentID,      // ID созданного комментария
+		Post:     post,           // Заполненный объект поста
+		AuthorID: input.AuthorID, // Объект автора
 		Body:     input.Body,
-		Likes:    0,
+		Likes:    0, // По умолчанию все реакцию нулим
 		Dislikes: 0,
 	}
 
