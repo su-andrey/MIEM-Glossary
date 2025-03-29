@@ -11,7 +11,7 @@ func CreateUsersTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции:", err)
+		log.Fatal("Ошибка начала транзакции:", err) // логируем критические ошибки
 	}
 	defer tx.Rollback(ctx)
 
@@ -21,10 +21,10 @@ func CreateUsersTable(DB *pgxpool.Pool) {
 		"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users');").
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы users:", err)
+		log.Fatal("Ошибка проверки таблицы users:", err) // логируем критические ошибки
 	}
 
-	// Если таблицы нет — создаем
+	// Если таблицы нет — создаем, важно задание типа данных
 	if !tableExists {
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE users (
@@ -35,16 +35,16 @@ func CreateUsersTable(DB *pgxpool.Pool) {
 			);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы users:", err)
+			log.Fatal("Ошибка создания таблицы users:", err) // логируем критические ошибки
 		}
 
 		// Фиксируем транзакцию
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции:", err)
+			log.Fatal("Ошибка фиксации транзакции:", err) // логируем критические ошибки
 		}
 
-		log.Println("✅ Таблица users успешно создана!")
+		log.Println("✅ Таблица users успешно создана!") // Пишем сообщение об успехе
 	} else {
 		// Откатываем транзакцию, если таблица уже существует
 		tx.Rollback(ctx)

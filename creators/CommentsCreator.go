@@ -11,19 +11,19 @@ func CreateCommentsTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции:", err)
+		log.Fatal("Ошибка начала транзакции:", err) // логируем критические ошибки
 	}
 	defer tx.Rollback(ctx)
 
-	var tableExists bool
+	var tableExists bool // Проверяем существование таблицы
 	err = tx.QueryRow(ctx,
 		"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'comments');").
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы comments:", err)
+		log.Fatal("Ошибка проверки таблицы comments:", err) // логируем критические ошибки
 	}
 
-	if !tableExists {
+	if !tableExists { // Создаём таблицу, если её еще не было. Важны типы данных полей и первичные ключи
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE comments (
 				id SERIAL PRIMARY KEY,
@@ -35,15 +35,15 @@ func CreateCommentsTable(DB *pgxpool.Pool) {
 			);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы comments:", err)
+			log.Fatal("Ошибка создания таблицы comments:", err) // логируем критические ошибки
 		}
 
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции:", err)
+			log.Fatal("Ошибка фиксации транзакции:", err) // логируем критические ошибки
 		}
 
-		log.Println("✅ Таблица comments успешно создана!")
+		log.Println("✅ Таблица comments успешно создана!") // Пишем в лог об успехе
 	} else {
 		tx.Rollback(ctx)
 	}

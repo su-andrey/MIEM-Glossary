@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// задаем конфигурацию для всего приложения, указываем порты всех сервисов
 type Config struct {
 	Port      string
 	DbUrl     string
@@ -28,7 +29,7 @@ func LoadConfig() Config {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "3000" // Важное автозаполнение
 	}
 
 	return Config{
@@ -36,6 +37,6 @@ func LoadConfig() Config {
 		DbUrl:     os.Getenv("DB_URL"),
 		AppUrl:    os.Getenv("APP_URL"),
 		ReactPort: os.Getenv("REACT_PORT"),
-		ENV:       os.Getenv("ENV"),
+		ENV:       os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
 	}
 }

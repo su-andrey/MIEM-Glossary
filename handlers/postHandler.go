@@ -8,6 +8,10 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
+// Общая структура всех функций в данном хэндлере (схожа с другими)
+// Выполняем подключение к БД, выполняем запрос. В случае ошибки сообщаем информативно
+// Обрабатываем данные (алгоритмы разные от цели)
+// Возвращаем полученный результат или сообщение об ошибки. Если результата не является объектом - выводим сообщение
 // GetPosts возвращает все посты
 func GetPosts(c fiber.Ctx) error {
 	rows, err := database.DB.Query(context.Background(),
@@ -17,7 +21,7 @@ func GetPosts(c fiber.Ctx) error {
 		 FROM posts p
 		 JOIN categories c ON p.category_id = c.id`)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 	defer rows.Close()
 
@@ -27,7 +31,7 @@ func GetPosts(c fiber.Ctx) error {
 		err := rows.Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
 			&post.Category.ID, &post.Category.Name, &post.AuthorID)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"})
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 		posts = append(posts, post)
 	}
@@ -51,7 +55,7 @@ func GetPost(c fiber.Ctx) error {
 			&post.Category.ID, &post.Category.Name, &post.AuthorID)
 
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"})
+		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	return c.JSON(post)
@@ -69,7 +73,7 @@ func CreatePost(c fiber.Ctx) error {
 
 	// Парсим тело запроса
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
+		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Проверяем, существует ли категория
@@ -81,7 +85,7 @@ func CreatePost(c fiber.Ctx) error {
 	).Scan(&category.ID, &category.Name)
 
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Категория не найдена"})
+		return c.Status(400).JSON(fiber.Map{"error": "Категория не найдена"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Вставляем пост в базу
@@ -93,7 +97,7 @@ func CreatePost(c fiber.Ctx) error {
 	).Scan(&input.CategoryID) // Получаем ID созданного поста
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления поста"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	// Формируем объект Post с вложенной категорией
@@ -116,14 +120,14 @@ func UpdatePost(c fiber.Ctx) error {
 	post := new(models.Post)
 
 	if err := c.Bind().Body(post); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
+		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	_, err := database.DB.Exec(context.Background(),
 		"UPDATE posts SET name = $1, body = $2, likes = $3, dislikes = $4 WHERE id = $5",
 		post.Name, post.Body, post.Likes, post.Dislikes, id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления поста"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	return c.JSON(fiber.Map{"message": "Пост обновлен"})
@@ -136,7 +140,7 @@ func DeletePost(c fiber.Ctx) error {
 	_, err := database.DB.Exec(context.Background(),
 		"DELETE FROM posts WHERE id = $1", id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления поста"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	return c.JSON(fiber.Map{"message": "Пост удален"})
