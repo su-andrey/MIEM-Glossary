@@ -2,52 +2,50 @@ package main
 
 import (
 	"fmt"
-	"html/template"
-	"net/http"
-	"net/url"
-	"os"
+	"log"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/static"
+	"github.com/su-andrey/kr_aip/config"
+	"github.com/su-andrey/kr_aip/database"
+	"github.com/su-andrey/kr_aip/routes"
 )
 
-var wd, err = os.Getwd()
-var tpl = template.Must(template.ParseFiles(wd + "/templates/index.html")) // Необходимо для поиска без абсолютных путей
-// Можно докрутить проверку на пустоту, но не критично, и так есть Must
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	tpl.Execute(w, nil) // подключение шаблона
-}
-func registrationHandler(w http.ResponseWriter, r *http.Request) {
-	tpl.Execute(w, nil)                                         // подключение шаблона
-	w.Write([]byte("<h1>Registration is unavailable now</h1>")) // заглушка
-}
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	tpl.Execute(w, nil)                                  // подключение шаблона
-	w.Write([]byte("<h1>Login is unavailable now</h1>")) // заглушка
-}
-func searchHandler(w http.ResponseWriter, r *http.Request) {
-	u, err := url.Parse(r.URL.String()) // парсим строку
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Internal server error")) // Отлавливаем ошибку
-		return
-	}
-	params := u.Query()
-	searchKey := params.Get("q")
-	fmt.Println("Search topic is: ", searchKey) // вывод в консольку. Исключительно технический, для проверки
-	tpl.Execute(w, nil)                         // подключение шаблона
-	w.Write([]byte("<h1>Вот что удалось найти по запросу:</h1>"))
-	w.Write([]byte(searchKey)) // Технический вывод, убедиться что все ок.
-}
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
+	app := fiber.New() // Создаем экземпляр приложения
+	cfg := config.LoadConfig()
+
+	database.ConnectDB()      // Подключаемся к БД + создаем таблицы, если те еще не существуют
+	defer database.DB.Close() // defer откладывает выполнение функции на момет исполнения всех других процессов в текущем окружении (в данном случае в функции main)
+
+	if cfg.ENV != "production" {
+		originURL := fmt.Sprintf("%s:%s", cfg.AppUrl, cfg.ReactPort)
+
+		app.Use(cors.New(cors.Config{
+			AllowOrigins:     []string{originURL},
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
+			AllowCredentials: true,
+			ExposeHeaders:    []string{"Content-Length"},
+			MaxAge:           86400,
+		})) // Даем порту, на котором располагается реакт, возможность работать с API (для разработки, в проде порт будет единым)
 	}
 
-	mux := http.NewServeMux()
-	fs := http.FileServer(http.Dir("assets"))                // экземпляр файлового сервера
-	mux.Handle("/assets/", http.StripPrefix("/assets/", fs)) // Все пути, начинающиеся с assets отправляются к fs
-	mux.HandleFunc("/", indexHandler)                        // Задаем каждой страничке обработчик
-	mux.HandleFunc("/registration", registrationHandler)
-	mux.HandleFunc("/login", loginHandler)
-	mux.HandleFunc("/search", searchHandler)
-	http.ListenAndServe(":"+port, mux)
+	routes.SetupRoutes(app) // Запускаем обработчики запросов (сама функция, вызывающая обработчики, находится в ./routes)
+
+	if cfg.ENV == "production" {
+		app.Use("/assets", static.New("./client/dist/assets", static.Config{
+			Browse: false,
+			MaxAge: 3600,
+		}))
+
+		app.Get("/*", func(c fiber.Ctx) error {
+			return c.SendFile("./client/dist/index.html")
+		})
+	}
+
+	if err := app.Listen(":" + cfg.Port); err != nil { // Запускаем сервер на localhost:<PORT>
+		log.Fatal("Ошибка запуска сервера:", err) // логируем критические ошибки
+	}
 }
