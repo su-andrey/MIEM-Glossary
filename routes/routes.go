@@ -19,25 +19,25 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 
 	// Группировка комментариев
 	categories := api.Group("/categories")
-	categories.Get("/", handlers.GetCategories)
-	categories.Get("/:id", handlers.GetCategory)
-	categories.Post("/", handlers.CreateCategory)
-	categories.Put("/:id", handlers.UpdateCategory)
-	categories.Delete("/:id", handlers.DeleteCategory)
+	categories.Get("/", handlers.GetCategories) // Получение всех категорий
+	categories.Get("/:id", handlers.GetCategory) // Получение категории по ID
+	categories.Post("/", handlers.CreateCategory) // Создание категории
+	categories.Put("/:id", handlers.UpdateCategory) // Обновление категории
+	categories.Delete("/:id", handlers.DeleteCategory) // Удаление категории
 
 	// Группировка постов
 	posts := api.Group("/posts")
-	posts.Get("/", handlers.GetPosts)
-	posts.Get("/:id", handlers.GetPost)
-	posts.Post("/", handlers.CreatePost)
-	posts.Put("/:id", handlers.UpdatePost)
-	posts.Delete("/:id", handlers.DeletePost)
+	posts.Get("/", handlers.GetPosts) // Получение всех постов
+	posts.Get("/:id", handlers.GetPost) // Получение поста по ID
+	posts.Post("/", handlers.CreatePost) // Создание поста
+	posts.Put("/:id", handlers.UpdatePost) // Обновление поста 
+	posts.Delete("/:id", handlers.DeletePost) // Удаление поста
 
 	// Группировка комментариев
 	comments := api.Group("/comments")
-	comments.Get("/", handlers.GetComments)
-	comments.Get("/:id", handlers.GetComment)
-	comments.Post("/", handlers.CreateComment)
-	comments.Put("/:id", handlers.UpdateComment)
-	comments.Delete("/:id", handlers.DeleteComment)
-}
+	comments.Get("/", handlers.GetComments) // ПОлучение всех комментариев
+	comments.Get("/:id", handlers.GetComment) // Получение комментария по ID
+	comments.Post("/", handlers.CreateComment) // Создание комментария 
+	comments.Put("/:id", handlers.UpdateComment) // Обновление комментария
+	comments.Delete("/:id", handlers.DeleteComment) // Удаления комментария
+} // В каждой из группировок для удаления или обновления обязательно требуется ID
