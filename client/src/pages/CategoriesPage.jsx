@@ -58,7 +58,7 @@ function Categories() {
 
   return (
     <div>
-      <h1>Категории</h1>
+      <h1>Список категорий</h1>
 
       <h2>Создать категорию</h2>
       <input

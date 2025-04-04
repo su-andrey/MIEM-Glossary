@@ -8,7 +8,6 @@
 ## Далее нужно завести сервер PostgreSQL
 
 ### Запуск на MacOS
-
 [Инструкция для MacOS](https://ploshadka.net/ustanovka-i-podkljuchenie-postgresql-na-mac-os/)  
 `Исполнять инструкицю стоит до момента "Как подключиться к PostgreSQL на Mac OS". Остальное нам не интересно.`
 ```ВАЖНО```

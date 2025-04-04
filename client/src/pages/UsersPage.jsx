@@ -107,7 +107,7 @@ function Users() {
       <form onSubmit={createUser}>
         <input
           type="text"
-          placeholder="Имя"
+          placeholder="Имя пользователя"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -150,7 +150,7 @@ function Users() {
             />
             <br />
             <label>
-              Админ:
+              Является администратором:
               <input
                 type="checkbox"
                 checked={editUserIsAdmin}
