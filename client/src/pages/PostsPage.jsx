@@ -79,7 +79,7 @@ function Posts() {
     mutationKey: ['updatePost'],
     mutationFn: async (e) => {
       e.preventDefault();
-      if (!editAuthorId || !editCategoryId || !editName || !editBody) return alert('Заполните все поля!');
+      if (!editAuthorId || !editCategoryId || !editName || !editBody) return alert('Заполните корректно все поля!');
 
       const postData = {
         author_id: Number(editAuthorId),
@@ -132,7 +132,7 @@ function Posts() {
           value={categoryId}
           onChange={(e) => setCategoryId(e.target.value)}
         >
-          <option value="">Выберите категорию</option>
+          <option value="">Выберите категорию, к которой будет относиться пост:</option>
           {categories?.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
@@ -144,7 +144,7 @@ function Posts() {
           value={authorId}
           onChange={(e) => setAuthorId(e.target.value)}
         >
-          <option value="">Выберите автора</option>
+          <option value="">Выберите автора поста:</option>
           {users?.map((user) => (
             <option key={user.id} value={user.id}>
               {user.name}
@@ -176,7 +176,7 @@ function Posts() {
               value={editCategoryId}
               onChange={(e) => setEditCategoryId(e.target.value)}
             >
-              <option value="">Выберите категорию</option>
+              <option value="">Выберите категорию, к которой будет относться пост:</option>
               {categories?.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
