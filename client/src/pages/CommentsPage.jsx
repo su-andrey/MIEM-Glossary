@@ -133,7 +133,7 @@ function Comments() {
     }
   });
 
-  if (isLoading) return <p>Загрузка</p>
+  if (isLoading) return <p>Загрузка...</p>
 
   return (
     <div>
@@ -145,7 +145,7 @@ function Comments() {
           value={authorId}
           onChange={(e) => setAuthorId(e.target.value)}
         >
-          <option value="">Выберите автора</option>
+          <option value="">Выберите автора комментария</option>
           {users?.map((user) => (
             <option key={user.id} value={user.id}>
               {user.name}
@@ -154,7 +154,7 @@ function Comments() {
         </select>
         <br />
         <select value={postId} onChange={(e) => setPostId(e.target.value)}>
-          <option value="">Выберите пост</option>
+          <option value="">Выберите пост, к которому относится комментария</option>
           {posts?.map((post) => (
             <option key={post.id} value={post.id}>
               {post.name}
@@ -205,7 +205,7 @@ function Comments() {
       {comments?.map((comment) => (
         <div key={comment.id}>
           <h2>Комментарий к посту "{comment.post.name}"</h2>
-          <p>Текст: {comment.body}</p>
+          <p>Текст поста: {comment.body}</p>
           <p>Лайки: {comment.likes}</p>
           <p>Дизлайки: {comment.dislikes}</p>
           <button onClick={() => { 
