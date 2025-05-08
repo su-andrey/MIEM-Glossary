@@ -148,3 +148,6 @@ ENTER
 [PGX Pool](	"github.com/jackc/pgx/v5/pgxpool")
 [React](https://react.dev/)
 [TanStack Query](https://tanstack.com/query/latest)
+[Redux-Toolkit](https://redux-toolkit.js.org/)
+[React/Redux](https://react-redux.js.org/)
+[React-Router-Dom](https://reactrouter.com/)
