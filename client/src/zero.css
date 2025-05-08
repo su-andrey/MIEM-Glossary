@@ -11,11 +11,12 @@
 }
 
 
-a, a:link, a:visited  {
+a, a:link, a:visited, Link, Link:link, Link:visited {
     text-decoration: none;
+	color: white;
 }
 
-a:hover  {
+a:hover, Link, Link:link, Link:visited  {
     text-decoration: none;
 }
 

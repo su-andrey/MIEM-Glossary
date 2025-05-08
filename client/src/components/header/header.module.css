@@ -1,0 +1,133 @@
+.wrapper{
+    width: 100vw;
+    background: var(--primary-color-dark);
+    background: var(--dark-gradient);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 3vw;
+    padding-block: 3vh;
+    padding-right: 4vw;
+}
+
+
+.headerBlock{
+    display: flex;
+    flex-direction: row;
+    color: white;
+    align-items: center;
+    justify-content: start;
+    column-gap: 0.6vw;
+    cursor: pointer;
+}
+
+.logo{
+    width: calc(3*var(--index));
+
+}
+
+
+.textContainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.15vh;
+    align-items: start;
+    justify-content: center;
+}
+
+
+.title{
+    font-weight: 700;
+    font-size: calc(1.2*var(--index));
+}
+
+
+
+.caption{
+    font-weight: 250;
+    font-size: calc(0.6*var(--index));
+    letter-spacing: calc(0.05*var(--index));
+}
+
+.navigation{
+    display: flex;
+    flex-direction: row;
+    column-gap: 5vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.navItem{
+    color: white;
+    font-family: Raleway, serif;
+    font-size: calc(0.7*var(--index));
+}
+
+.navItemLink{
+    position: relative;
+    line-height: 1;
+    color: white;
+    font-family: Raleway, serif;
+    text-decoration: none;
+}
+
+
+.navItemLink::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: calc(-0.1*var(--index));
+    height: calc(0.05*var(--index));
+    width: 0;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+a:hover:after,
+a:focus:after {
+	width: 100%;
+}
+
+
+.searchIcon{
+    width: calc(1.2*var(--index));
+    cursor: pointer;
+}
+
+.glassContainer{
+    width: calc(1.6*var(--index));
+    height: calc(1.6*var(--index));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.searchContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.searchInput{
+    width: 0;
+    opacity: 0;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    transition: width 0.4s ease, opacity 0.4s ease;
+    background-color: white;
+    margin-right: 8px;
+    pointer-events: none;
+}
+
+.searchInput:hover {
+    border: 1px solid white;
+    width: 180px;
+    opacity: 1;
+    pointer-events: auto;
+}
