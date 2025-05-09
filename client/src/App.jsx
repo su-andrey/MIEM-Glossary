@@ -10,11 +10,14 @@ import RegisterForm from './components/UI/regForm/RegForm.jsx';
 import LoginForm from './components/UI/logInForm/LoginForm.jsx';
 import StarsDumb from './components/UI/starsDumb/StarsDumb.jsx';
 import Review from './components/review/Review.jsx';
+import Reply from './components/reply/Reply.jsx';
 const data = {
     "category_id": 1,
     "author_id": 1,
     "name": "Здесь имя",
-    "body": "Очень структурированная подача материала, удобно конспектировать. Тем не менее сначала может быть сложно"
+    "body": "Очень структурированная подача материала, удобно конспектировать. Тем не менее сначала может быть сложно",
+    "likes": 3423,
+    "dislikes": 888
 }
 const App = () => {
     return (<>
@@ -27,6 +30,7 @@ const App = () => {
     <LoginForm></LoginForm>
     <StarsDumb defaultRating={3}></StarsDumb>
     <Review data={data}></Review>
+    <Reply data={data}></Reply>
     </>);
 }
 

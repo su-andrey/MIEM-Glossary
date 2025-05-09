@@ -11,6 +11,7 @@
     padding-left: calc(2*var(--index));
     transition: all 0.3s ease-out;
     margin-right: 0;
+    font-size: var(--caption-font);
 }
 
 .field::-webkit-search-cancel-button {

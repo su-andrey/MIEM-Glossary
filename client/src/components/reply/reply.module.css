@@ -1,0 +1,23 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    border: 1px var(--light-grey) solid;
+    border-radius: calc(1.2*var(--index));
+    width: calc(25*var(--index));
+    padding: 3.5vh;
+    gap: 2vh;
+}
+
+
+.name{
+    font-weight: 500;
+    font-size: calc(1.2*var(--index));
+}
+
+
+.body{
+    color: var(--light-grey);
+    font-size: calc(0.8*var(--index));
+}

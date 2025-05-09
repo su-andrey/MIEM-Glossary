@@ -8,6 +8,9 @@
     --yellow: #FFE100;
     --font-family: Raleway, Roboto, sans-serif;
     --index: calc(1vh + 1vw);
+    --primary-font: calc(1.2*var(--index));
+    --caption-font: calc(0.8*var(--index));
+    --subcaption-font: calc(0.7*var(--index));
 }
 
 *{

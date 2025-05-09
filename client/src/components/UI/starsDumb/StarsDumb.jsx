@@ -33,7 +33,7 @@ export default function StarsDumb({ count, defaultRating, icon, color, iconSize 
                 className={styles.star}
                 key={uid()}
                 style={{
-                fontSize: iconSize ? `${iconSize}px` : "2vw",
+                fontSize: iconSize ? `${iconSize}` : "2vw",
                 color: elementColor,
                 filter: `${isActiveColor ? "grayscale(0%)" : "grayscale(100%)"}`,
                 }}
