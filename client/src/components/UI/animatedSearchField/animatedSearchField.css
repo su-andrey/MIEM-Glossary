@@ -1,7 +1,7 @@
 .search-bar {
     --size: calc(1.8*var(--index));
     --padding: calc(0.07*var(--index));
-    --expanded-width: calc(12*var(--index));
+    --expanded-width: 20vw;
     display: flex;
     justify-content: flex-end;
     background-color: #fff;

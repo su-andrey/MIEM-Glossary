@@ -1,5 +1,4 @@
 import "./animatedSearchField.css"
-import "./../../../components/UI/animatedSearchField/animatedSearchField.css"
 import glass from "./../../../assets/vectors/glass.svg"
 const AnimatedSearchField = () => {
     return(
