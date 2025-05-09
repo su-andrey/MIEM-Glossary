@@ -6,6 +6,8 @@ import ActionButton from './components/UI/actionButton/ActionButton.jsx';
 import SearchField from './components/UI/searchField/SearchField.jsx';
 import Stars from './components/UI/stars/Stars.jsx';
 import AnswerField from './components/UI/answerField/AnswerField.jsx';
+import RegisterForm from './components/UI/regForm/RegForm.jsx';
+import LoginForm from './components/UI/logInForm/LoginForm.jsx';
 
 const App = () => {
     return (<>
@@ -14,6 +16,8 @@ const App = () => {
     <SearchField></SearchField>
     <Stars></Stars>
     <AnswerField></AnswerField>
+    <RegisterForm></RegisterForm>
+    <LoginForm></LoginForm>
     </>);
 }
 

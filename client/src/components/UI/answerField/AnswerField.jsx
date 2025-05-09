@@ -1,10 +1,10 @@
 import ActionButton from "../actionButton/ActionButton";
 import styles from "./answerField.module.css"
-import glass from "./glass_grey.svg"
 const AnswerField = () => {
     return (<>
     <div className={styles.wrapper}>
         <form className={styles.fieldForm}>
+            <div className={styles.caption}>Добавьте ответ на вопрос</div>
             <textarea  
                 placeholder="Добавить ответ..." 
                 className={styles.field}

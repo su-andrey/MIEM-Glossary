@@ -2,6 +2,8 @@
     --primary-color: #0E0B60;
     --primary-color-dark: #06011D;
     --primary-color-light: rgb(35, 12, 136);
+    --dark-grey: #464646;
+    --light-grey: #878787;
     --dark-gradient: linear-gradient(270deg,rgba(6, 1, 29, 1) 44%, rgba(11, 9, 76, 1) 100%);
     --yellow: #FFE100;
     --font-family: Raleway, Roboto, sans-serif;

@@ -5,7 +5,7 @@
     background-color: white;
     background-color: #e7e7e7;
     padding: calc(1*var(--index));
-    border-radius: calc(0.75*var(--index));
+    border-radius: calc(0.9*var(--index));
     padding-inline: calc(1.2*var(--index));
     padding-top: calc(1*var(--index));
     transition: all 0.3s ease-out;
@@ -14,12 +14,17 @@
     outline: none;  
 }
 
+.caption{
+    color: var(--light-grey);
+    padding-left: calc(1.2*var(--index));
+}
+
 .fieldForm{
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: start;
-    row-gap: 2vh;
+    row-gap: 1.5vh;
 }
 
 .glass{
