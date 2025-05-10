@@ -14,13 +14,25 @@ import Reply from './components/reply/Reply.jsx';
 import CafeCard from './components/cafeCard/CafeCard.jsx';
 import soup from './assets/jpg/cafe_categories/soup.jpg';
 import CafeListCard from './components/cafeListCard/cafeListCard.jsx';
+import Question from './components/question/Question.jsx';
 const data = {
     "category_id": 1,
     "author_id": 1,
     "name": "Здесь имя",
     "body": "Очень структурированная подача материала, удобно конспектировать. Тем не менее сначала может быть сложно",
     "likes": 3423,
-    "dislikes": 888
+    "dislikes": 888,
+    "comments": 232,
+}
+
+const data2 = {
+    "category_id": 1,
+    "author_id": 1,
+    "name": "Здесь имя",
+    "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
+    "likes": 3423,
+    "dislikes": 888,
+    "comments": 232,
 }
 
 const data1 = {
@@ -71,6 +83,7 @@ const App = () => {
     <Reply data={data}></Reply>
     <CafeCard props={singleCategory}></CafeCard>
     <CafeListCard data={data1}></CafeListCard>
+    <Question data={data2}></Question>
     </>);
 }
 

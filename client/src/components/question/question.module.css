@@ -1,0 +1,98 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: var(--left-padding);
+    border: 1px solid var(--light-grey);
+    border-radius: var(--border-radius);
+    width: 35vw;
+    row-gap: 3vh;
+    transition: all 0.3s ease-out;
+    background-color: white;
+}
+
+.wrapper:hover{
+    transform: translateY(-0.4vh) scale(1.01);
+    transition: all 0.3s ease-out;
+    
+}
+
+.title{
+    font-weight: 500;
+    font-size: var(--primary-font);
+
+}
+
+.body{
+    color: var(--dark-grey);
+    font-size: var(--caption-font);
+
+}
+
+.commentBlock{
+    display:flex;
+    flex-direction: row;
+    gap: 2vw;
+}
+
+.comment{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3vw;
+    color: var(--dark-grey)
+}
+
+.like_counter{
+    font-family: Open Sans, Roboto;
+    font-size: var(--caption-font);
+    cursor: pointer;
+}
+
+.comment_counter{
+    font-family: Open Sans, Roboto;
+    font-size: var(--caption-font);
+    cursor: pointer;
+}
+
+.dislike_counter{
+    font-family: Open Sans, Roboto;
+    font-size: var(--caption-font);
+    cursor: pointer;
+}
+
+
+.like_icon{
+    width: calc(1.3*var(--index));
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.like_icon:hover{
+    transform: scale(115%);
+    transition: all 0.2s ease-out;
+}
+
+.comment_icon{
+    width: calc(1.3*var(--index));
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.comment_icon:hover{
+    transform: scale(115%);
+    transition: all 0.2s ease-out;
+}
+
+.dislike_icon{
+    margin-top: 0.8vh;
+    width: calc(1.2*var(--index));
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.dislike_icon:hover{
+    transform: scale(115%);
+    transition: all 0.2s ease-out;
+}
