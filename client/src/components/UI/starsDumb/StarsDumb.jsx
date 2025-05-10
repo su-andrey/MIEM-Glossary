@@ -8,6 +8,9 @@ const DEFAULT_UNSELECTED_COLOR = "#D9D9D9";
 const DEFAULT_COLOR = "#FFE100";
 
 export default function StarsDumb({ count, defaultRating, icon, color, iconSize }) {
+    if(typeof(defaultRating)===String){
+        defaultRating = Number(defaultRating)
+    }
     const [rating, setRating] = useState(defaultRating);
     const [temporaryRating, setTemporaryRating] = useState(0);
 

@@ -1,0 +1,54 @@
+.wrapper{
+    width:calc(20*var(--index));
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5vh;
+}
+
+
+
+.image{
+    width: 100%;
+    height: calc(20*var(--index));
+    border-radius: var(--border-radius);
+}
+
+
+.image:hover{
+    transform: translateY(-0.4vh) scale(1.01);
+    box-shadow: 0px 15px 20px -12px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease-out;
+}
+
+
+.title{
+    font-size: var(--primary-font);
+    font-weight: 450;
+}
+
+
+.gradeBlock{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5%;
+}
+
+
+.grade{
+    font-weight: 450;
+    font-family: Arial;
+    font-size: calc(1.2*var(--index));
+    margin-top: 2%;
+}
+
+.lower{
+    width: 100%;
+    padding-inline: var(--left-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

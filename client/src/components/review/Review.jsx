@@ -1,10 +1,8 @@
 import StarsDumb from "../UI/starsDumb/StarsDumb";
 import styles from "./review.module.css"
 import useNameGenerator from "../../custom hooks/useNameGenerator";
+import getFiveScale from "../../custom hooks/useGetFiveScale";
 const Review = ({data}) => {
-    const getFiveScale = (data)=>{
-        return Math.round(5*(data.likes/(data.likes+data.dislikes)))
-    }
     return(
     <div className={styles.wrapper}>
         <div className={styles.topBlock}>
@@ -13,7 +11,7 @@ const Review = ({data}) => {
             </div>
             <div className={styles.gradeBlock}>
                 <div className={styles.grade}>
-                    {getFiveScale(data)}.0
+                    {getFiveScale(data, 1)}
                 </div>
                 <StarsDumb defaultRating={getFiveScale(data)} iconSize="1.7vw"></StarsDumb>
             </div>  
