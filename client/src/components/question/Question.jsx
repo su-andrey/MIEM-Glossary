@@ -10,7 +10,7 @@ import dislike from "./assets/dislike/dislike.svg"
 import React, { useRef } from 'react';
 import { loadFireworksPreset } from 'tsparticles-preset-fireworks';
 import { useCallback } from 'react';
-import { useParticles } from 'react-tsparticles';
+
 const Question = ({data}) => {
     const [name, setName] = useState("");
     useEffect(()=>{setName(useNameGenerator())}, []);

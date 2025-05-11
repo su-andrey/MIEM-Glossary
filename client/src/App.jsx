@@ -1,89 +1,40 @@
 import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
-import Header from './components/header/Header';
-import AnimatedSearchField from './components/UI/animatedSearchField/AnimatedSearchField.jsx';
-import ActionButton from './components/UI/actionButton/ActionButton.jsx';
-import SearchField from './components/UI/searchField/SearchField.jsx';
-import Stars from './components/UI/starsActive/Stars.jsx';
-import AnswerField from './components/UI/answerField/AnswerField.jsx';
-import RegisterForm from './components/UI/regForm/RegForm.jsx';
-import LoginForm from './components/UI/logInForm/LoginForm.jsx';
-import StarsDumb from './components/UI/starsDumb/StarsDumb.jsx';
-import Review from './components/review/Review.jsx';
-import Reply from './components/reply/Reply.jsx';
-import CafeCard from './components/cafeCard/CafeCard.jsx';
-import soup from './assets/jpg/cafe_categories/soup.jpg';
-import CafeListCard from './components/cafeListCard/cafeListCard.jsx';
-import Question from './components/question/Question.jsx';
-const data = {
-    "category_id": 1,
-    "author_id": 1,
-    "name": "Здесь имя",
-    "body": "Очень структурированная подача материала, удобно конспектировать. Тем не менее сначала может быть сложно",
-    "likes": 3423,
-    "dislikes": 888,
-    "comments": 232,
-}
+import Layout from './pages/layout/Layout.jsx';
+import HomePage from './pages/homePage/HomePage.jsx';
+import PrepodPage from './pages/prepodPage/PrepodPage.jsx';
+import FoodPage from './pages/foodPage/FoodPage.jsx';
+import FoodCataloguePage from './pages/foodCataloguePage/FoodCataloguePage.jsx';
+import QuestionPage from './pages/questionPage/QuestionPage.jsx';
+import CabinetPage from './pages/cabinetPage/CabinetPage.jsx';
+import NotFoundPage from './pages/notFoundPage/NotFoundPage.jsx';
+import SingleQuestionPage from './pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx';
+import SingleFoodPage from './pages/pageComponents/singleFoodPage/SingleFoodPage.jsx';
+import SinglePrepodPage from './pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx';
 
-const data2 = {
-    "category_id": 1,
-    "author_id": 1,
-    "name": "Здесь имя",
-    "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-    "likes": 3423,
-    "dislikes": 888,
-    "comments": 232,
-}
 
-const data1 = {
-    category_id: 2,
-    author_id: 1,
-    name: "Здесь имя",
-    body: "Jeffrey`s",
-    image: soup,
-    likes: 3423,
-    dislikes: 888,
-}
 
-const cafeCategories = [
-    {
-        title: "Кофе и еда",
-        image: soup,
-    },
-    {
-        title: "Фастфуд и шаурма",
-        image: soup,
-    },
-    {
-        title: "Копирки",
-        image: soup,
-    },
-    {
-        title: "Магазины",
-        image: soup,
-    },
-]
-
-const singleCategory = {
-    title: "Кофе и еда",
-    image: soup,
-}
 
 const App = () => {
     return (<>
-    <Header></Header>
-    <ActionButton text="Нажми меня"></ActionButton>
-    <SearchField></SearchField>
-    <Stars></Stars>
-    <AnswerField></AnswerField>
-    <RegisterForm></RegisterForm>
-    <LoginForm></LoginForm>
-    <StarsDumb defaultRating={3}></StarsDumb>
-    <Review data={data}></Review>
-    <Reply data={data}></Reply>
-    <CafeCard props={singleCategory}></CafeCard>
-    <CafeListCard data={data1}></CafeListCard>
-    <Question data={data2}></Question>
+    <Routes>
+        <Route path="*" element={<NotFoundPage />}></Route>
+        <Route path="/" element={<Layout></Layout>}>
+            <Route index element={<HomePage></HomePage>}></Route>
+
+            <Route path="prepods" element={<PrepodPage />}></Route>
+            <Route path="prepods/:id" element={<SinglePrepodPage/>}></Route>
+
+            <Route path="food" element={<FoodPage />}></Route>
+            <Route path="food/:category" element={<FoodCataloguePage />}></Route>
+            <Route path="food/:category/:id" element={<SingleFoodPage />}></Route>
+
+            <Route path="questions" element={<QuestionPage />}></Route>
+            <Route path="questions/:id" element={<SingleQuestionPage />}></Route>
+
+            <Route path="cabinet" element={<CabinetPage />}></Route>
+        </Route>
+    </Routes>
     </>);
 }
 
