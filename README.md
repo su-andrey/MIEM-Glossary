@@ -71,7 +71,11 @@ ENTER
 │   ├── public                 # Публичные файлы (иконки, статические ресурсы)
 │   ├── src                    # Исходный код клиентского приложения
 │   │   ├── assets             # Медиафайлы и иконки
+│   │   ├── components         # React-компоненты
+│   │   ├── custom hooks       # Кастомные хуки и вспомогательные функции
 │   │   ├── pages              # Компоненты страниц (React Router)
+│   │   ├── queries            # Функции запросов к серверу
+│   │   ├── store              # Директория для работы с Redux Storage
 │   ├── package.json           # Зависимости клиентского приложения
 │   ├── vite.config.js         # Конфигурация Vite
 ├── config                     # Конфигурационные файлы
@@ -131,6 +135,7 @@ ENTER
 1️⃣ Пользователи (users)
 ```
 {
+    "author_id": 1,
     "name": "string",
     "password": "string",
     "is_admin": true
@@ -139,16 +144,20 @@ ENTER
 2️⃣ Категории (categories)
 ```
 {
-    "name": "string"
+    "category_id": 1,
+    "name": "string",
 }
 ```
 3️⃣ Посты (posts)
 ```
 {
+    "post_id": 1,
     "category_id": 1,
     "author_id": 1,
     "name": "string",
-    "body": "string"
+    "body": "string",
+    "likes": 1,
+    "dislikes": 1,
 }
 ```
 4️⃣ Комментарии (comments)
@@ -163,9 +172,12 @@ ENTER
 
 
 
-## Список используемых библиотек:
-[Fiber V3](https://docs.gofiber.io/next/)  
-[GoDotEnv](https://github.com/joho/godotenv)  
-[PGX Pool](	"github.com/jackc/pgx/v5/pgxpool")  
-[React](https://react.dev/)  
-[TanStack Query](https://tanstack.com/query/latest)  
+Список используемых библиотек:
+[Fiber V3](https://docs.gofiber.io/next/)
+[GoDotEnv](https://github.com/joho/godotenv)
+[PGX Pool](	"github.com/jackc/pgx/v5/pgxpool")
+[React](https://react.dev/)
+[TanStack Query](https://tanstack.com/query/latest)
+[Redux-Toolkit](https://redux-toolkit.js.org/)
+[React/Redux](https://react-redux.js.org/)
+[React-Router-Dom](https://reactrouter.com/)
