@@ -73,12 +73,9 @@ const HomePage = () => {
             <SearchField></SearchField>
             <Stars></Stars>
             <AnswerField></AnswerField>
-            <RegisterForm></RegisterForm>
-            <LoginForm></LoginForm>
             <StarsDumb defaultRating={3}></StarsDumb>
             <Review data={data}></Review>
             <Reply data={data}></Reply>
-            <CafeCard props={singleCategory}></CafeCard>
             <CafeListCard data={data1}></CafeListCard>
             <Question data={data2}></Question>
             <PrepodCard data={data1}></PrepodCard>

@@ -13,6 +13,36 @@
     animation: fadeIn 0.3s ease-out;
 }
 
+.regCaption{
+    cursor: pointer;
+    user-select: none;
+    color: var(--light-grey);
+    font-size: var(--caption-font);
+    text-align: center;
+    line-height: 115%;
+}
+
+
+.regMainCaption{
+    font-weight: 500;
+    position: relative;
+}
+
+
+
+.regMainCaption::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 10%;
+    left: 0;
+    bottom: calc(-0.05*var(--index));
+    height: calc(0.09*var(--index));
+    width: 100%;
+    background-color: var(--light-grey);
+    transition: width 0.3s ease;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

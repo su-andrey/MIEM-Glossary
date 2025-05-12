@@ -3,8 +3,9 @@ import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-const LoginForm = () => {
-    const [open, setOpen] = useState(false);
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
+const LoginForm = ({isOpen = true}) => {
+    const [open, setOpen] = useState(isOpen);
     const {
         register,
         formState: {
@@ -27,14 +28,29 @@ const LoginForm = () => {
         reset()
     }
 
+    const location = useLocation();
+    const navigate = useNavigate();
+    let fromPage = location.state?.from?.pathname || "/";
+    if(fromPage=="/register"){
+        fromPage = "/"
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        navigate(fromPage)
+    }
+
+
+    const handleRedirect = ()=>{
+        navigate("/register", { state: { from: location } });
+    }
     const password = watch('password');
 
     return (
         <>
-            <ActionButton text="Вход" onClick={()=>{setOpen(true)}}></ActionButton>
             {open && <div className={style.background}>
                 <div className={style.wrapper}>
-                    <MdOutlineCancel className={style.cancel} onClick={()=>{setOpen(false)}} />
+                    <MdOutlineCancel className={style.cancel} onClick={()=>{handleClose()}} />
                     <div className={style.title}>Вход</div>
                     <form className={style.formContainer} onSubmit={handleSubmit(onSubmit)}>
                         <input 
@@ -81,6 +97,10 @@ const LoginForm = () => {
                         />
                         {errors.password && <div className={style.error_warning}>{errors.password.message}</div>}
                         <ActionButton disabled={errors} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
+                        <div className={style.regCaption} onClick={()=> handleRedirect()}>
+                            Еще нет аккаунта?<br />
+                            <span className={style.regMainCaption}>Регистрация</span>
+                        </div>
                     </form>
                 </div>
             </div>}

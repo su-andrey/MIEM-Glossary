@@ -13,6 +13,8 @@
     --subcaption-font: calc(0.7*var(--index));
     --border-radius: calc(1*var(--index));
     --left-padding: 3.5vh;
+    --page-main-padding: 3vw;
+    --title-font: calc(2*var(--index));
 }
 
 *{

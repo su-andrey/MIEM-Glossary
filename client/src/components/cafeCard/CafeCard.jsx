@@ -1,10 +1,10 @@
 import styles from "./cafeCard.module.css"
-const CafeCard = ({props}) => {
+const CafeCard = ({data}) => {
     return (
         <div className={styles.wrapper}>
-            <img src={props.image} alt="cafe image" className={styles.image} />
+            <img src={data.image} alt="cafe image" className={styles.image} />
             <div className={styles.title}>
-                {props.title}
+                {data.name}
             </div>
         </div>
     );

@@ -4,8 +4,9 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useEffect } from "react";
-const RegisterForm = () => {
-    const [open, setOpen] = useState(false);
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
+const RegisterForm = ({initialOpen = true}) => {
+    const [open, setOpen] = useState(initialOpen);
     const {
         register,
         formState: {
@@ -28,14 +29,29 @@ const RegisterForm = () => {
         reset()
     }
 
+    const location = useLocation();
+    const navigate = useNavigate();
+    let fromPage = location.state?.from?.pathname || "/";
+    if(fromPage=="/login"){
+        fromPage = "/"
+    }
+    const handleClose = () => {
+        setOpen(false)
+        navigate(fromPage)
+    }
+
+    const handleRedirect = ()=>{
+        navigate("/login", { state: { from: location } });
+    }
+
+
     const password = watch('password');
 
     return (
         <>
-            <ActionButton text="Регистрация" onClick={()=>{setOpen(true)}}></ActionButton>
             {open && <div className={style.background}>
                 <div className={style.wrapper}>
-                    <MdOutlineCancel className={style.cancel} onClick={()=>{setOpen(false)}} />
+                    <MdOutlineCancel className={style.cancel} onClick={()=>{handleClose()}} />
                     <div className={style.title}>Регистрация</div>
                     <form className={style.formContainer} onSubmit={handleSubmit(onSubmit)}>
                         <input 
@@ -113,10 +129,14 @@ const RegisterForm = () => {
                                 required: "Поле обязательно к подтверждению",
                             })}
                             />
-                            <label className={style.checkboxCaption} for="myCheckbox">Обязуюсь отказаться от необоснованных оскорблений, оставив только обоснованные.</label>
+                            <label className={style.checkboxCaption} htmlFor="myCheckbox">Обязуюсь отказаться от необоснованных оскорблений, оставив только обоснованные.</label>
                         </div>
                         {errors.joke && <div className={style.error_warning}>{errors.joke.message}</div>}
                         <ActionButton disabled={errors} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
+                            <div className={style.regCaption} onClick={()=> handleRedirect()}>
+                                Уже есть аккаунт?<br />
+                                <span className={style.regMainCaption}>Вход</span>
+                            </div>
                     </form>
                 </div>
             </div>}

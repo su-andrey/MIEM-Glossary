@@ -1,6 +1,6 @@
 .actionButton{
     color: white;
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     font-weight: 550;
     font-size: calc(1.2*var(--index));
     padding: calc(0.65*var(--index));
