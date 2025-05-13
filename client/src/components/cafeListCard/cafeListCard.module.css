@@ -27,6 +27,7 @@
 .title{
     font-size: var(--primary-font);
     font-weight: 450;
+    color: black;
 }
 
 
@@ -40,10 +41,11 @@
 
 
 .grade{
-    font-weight: 450;
-    font-family: Arial;
+    font-weight: 350;
+    font-family: Open Sans;
     font-size: calc(1.2*var(--index));
     margin-top: 2%;
+    color: black;
 }
 
 .lower{
@@ -53,6 +55,7 @@
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease-out;
+    color: black;
 }
 
 .wrapper:hover .lower{

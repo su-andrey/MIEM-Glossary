@@ -11,8 +11,9 @@
 
 .title{
     font-size: var(--title-font);
-    font-weight: 600;
+    font-weight: 650;
     margin-bottom: 1vh;
+    color: black;
 }
 
 .caption{

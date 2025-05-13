@@ -1,5 +1,8 @@
-const getComments = (state, postID) => {
-    return state.comments.filter((comment)=>comment.post_id === postID);
-};
+import { createSelector } from "@reduxjs/toolkit";
 
-export default getComments
+const getComments = createSelector(
+    [(state) => state.main.comments],
+    (comments) => comments
+);
+
+export default getComments;

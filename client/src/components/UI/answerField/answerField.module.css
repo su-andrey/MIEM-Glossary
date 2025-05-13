@@ -13,11 +13,11 @@
     border: none;  
     outline: none;  
     font-size:var(--caption-font);
+    
 }
 
 .caption{
     color: var(--light-grey);
-    padding-left: calc(1.2*var(--index));
     font-size: var(--subcaption-font);
 }
 
@@ -26,7 +26,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: start;
-    row-gap: 1.2vh;
+    row-gap: 2vh;
 }
 
 .glass{

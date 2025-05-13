@@ -1,5 +1,12 @@
-const getPostById = (state, postId) => {
-    return state.posts.find(post => post.post_id === postId);
-};
+import { createSelector } from 'reselect';
 
-export default getPostById
+const getAllPosts = state => state.main.posts;
+
+const getPostsByID = createSelector(
+    [getAllPosts, (_, post_id) => post_id],
+    (posts, post_id) => {
+        return posts.find(post => post.post_id == post_id);
+    }
+);
+
+export default getPostsByID;

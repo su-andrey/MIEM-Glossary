@@ -1,4 +1,4 @@
-import { Routes } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import Layout from './pages/layout/Layout.jsx';
 import LogInPage from './pages/logInPage/LogInPage.jsx';
@@ -13,6 +13,7 @@ import NotFoundPage from './pages/notFoundPage/NotFoundPage.jsx';
 import SingleQuestionPage from './pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx';
 import SingleFoodPage from './pages/pageComponents/singleFoodPage/SingleFoodPage.jsx';
 import SinglePrepodPage from './pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx';
+import { RouterProvider } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsers, setPosts, setComments } from './store/mainSlice.js';
@@ -20,6 +21,10 @@ import requireComments from './queries/GET/requireComments.js';
 import requirePosts from './queries/GET/requirePosts.js';
 import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
+import setupDB from './queries/SETUP/setupDB.js';
+
+
+
 const App = () => {
     const dispatch = useDispatch();
 /*
@@ -27,9 +32,7 @@ const App = () => {
         dispatch(setUsers(requireUsers()))
         dispatch(setPosts(requirePosts()))
         dispatch(setComments(requireUsers()))
-    }, []);
-*/
-
+    }, []);*/
     return (<>
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>

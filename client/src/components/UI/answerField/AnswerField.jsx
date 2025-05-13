@@ -4,7 +4,7 @@ const AnswerField = () => {
     return (<>
     <div className={styles.wrapper}>
         <form className={styles.fieldForm}>
-            <div className={styles.caption}>Добавьте ответ на вопрос</div>
+            <div className={styles.caption}>Добавьте собственное заведение или отзыв</div>
             <textarea  
                 placeholder="Добавить ответ..." 
                 className={styles.field}

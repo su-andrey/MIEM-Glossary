@@ -1,5 +1,12 @@
-const getUserById = (state, userId) => {
-    return state.users.find(user => user.author_id === userId);
-};
+import { createSelector } from 'reselect';
 
-export default getUserById
+const getAllUsers = state => state.main.users;
+
+const getUserByID = createSelector(
+    [getAllUsers, (_, author_id) => author_id],
+    (users, author_id) => {
+        return users.find(user => user.author_id == author_id);
+    }
+);
+
+export default getUserByID;

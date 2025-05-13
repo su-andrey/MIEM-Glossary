@@ -1,10 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+import posts from "./fake/posts";
+import comments from "./fake/comments";
+import users from "./fake/users";
+import image from "./../assets/jpg/cafe_categories/soup.jpg";
+import categories from "./fake/categories";
 const mainSlice = createSlice({
     name: 'main',
     initialState: {
-        users : [],
-        posts : [],
-        comments : [],
+        users : users,
+        posts : posts,
+        comments : comments,
+        categories : categories,
+
         isAuthentificated : false,
         userName : "",
         userID : "",

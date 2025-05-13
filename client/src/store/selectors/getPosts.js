@@ -1,5 +1,5 @@
 const getPosts = (state) => {
-    return state.posts;
+    return state.main.posts;
 };
 
 export default getPosts

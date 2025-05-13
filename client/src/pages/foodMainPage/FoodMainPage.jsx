@@ -3,30 +3,10 @@ import CafeCard from "../../components/cafeCard/CafeCard.jsx";
 import { uid } from "uid";
 import image from "./../../assets/jpg/cafe_categories/soup.jpg"
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import getCategories from "../../store/selectors/getCategories.js";
 const FoodMainPage = () => {
-    const data = [
-        {
-            name: "Кофе и еда",
-            image: image,
-            category_id: 1,
-        },
-        {
-            name: "Фастфуд и шаурма",
-            image: image,
-            category_id: 2,
-        },
-        {
-            name: "Копирки",
-            image: image,
-            category_id: 3,
-        },
-        {
-            name: "Магазины",
-            image: image,
-            category_id: 4,
-        },
-    ]
-    console.log("DATA:", data);
+    const data = useSelector(state => getCategories(state));
     return (
     <>
         <div className={styles.wrapper}>
@@ -39,10 +19,10 @@ const FoodMainPage = () => {
             <div className={styles.container}>
                 {
                     data.map((category) => {
-                        console.log("CATEGORY:", category);
-                        return(
+                        if(category.name == "Кофе и еда" || category.name == "Фастфуд и шаурма" || category.name == "Копирки" || category.name == "Магазины"){
+                            return(
                             <Link to={`/food/${category.category_id}`}><CafeCard key={uid()} data={category} ></CafeCard></Link>
-                        )
+                        )}
                     })
                 }
             </div>

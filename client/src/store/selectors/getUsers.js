@@ -1,5 +1,5 @@
 const getUsers = (state) => {
-    return state.users;
+    return state.main.users;
 };
 
 export default getUsers
