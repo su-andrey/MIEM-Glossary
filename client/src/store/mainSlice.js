@@ -11,11 +11,13 @@ const mainSlice = createSlice({
         posts : posts,
         comments : comments,
         categories : categories,
+        wasChanged : true,
 
-        isAuthentificated : false,
-        userName : "",
-        userID : "",
-        isAdmin : undefined,
+        isAuthentificated : true,
+        email : "segunperkele@gmail.com",
+        password : "Aa20041989+",
+        userID : "1",
+        isAdmin : true,
     },
     reducers:{
         setUsers(state, action){

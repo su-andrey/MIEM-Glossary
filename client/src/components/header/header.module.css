@@ -1,5 +1,6 @@
 .wrapper{
-    width: 100vw;
+    font-family: Raleway, Robobto, Poppins, Open Sans, Arial;
+    width: 100%;
     background: var(--primary-color-dark);
     background: var(--dark-gradient);
     display: flex;
@@ -60,7 +61,7 @@
 
 .navItem{
     color: white;
-    font-family: Raleway, serif;
+    font-family: Raleway,Roboto, Open Sans, serif;
     font-size: calc(0.7*var(--index));
 }
 
@@ -68,7 +69,7 @@
     position: relative;
     line-height: 1;
     color: white;
-    font-family: Raleway, serif;
+    font-family: Raleway,Roboto, Open Sans, serif;
     text-decoration: none;
 }
 

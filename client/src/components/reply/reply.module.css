@@ -18,8 +18,8 @@
 }
 
 .name{
-    font-weight: 500;
-    font-size: calc(1.2*var(--index));
+    font-weight: 450;
+    font-size: var(--subprimary-font);
 }
 
 

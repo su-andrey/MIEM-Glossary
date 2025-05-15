@@ -68,7 +68,7 @@
 
 
 .searchIcon{
-    width: calc(0.9*var(--index));
+    width: 20px;
     cursor: pointer;
     user-select: none;
 }

@@ -1,8 +1,3 @@
-import { createSelector } from "@reduxjs/toolkit";
-
-const getComments = createSelector(
-    [(state) => state.main.comments],
-    (comments) => comments
-);
+const getComments = (state) => state.main.comments
 
 export default getComments;

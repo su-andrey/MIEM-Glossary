@@ -2,18 +2,17 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3000/api";
 
-const createCategory = async (categoryName, category_id) => {
+const createCategory = async (categoryName) => {
     if(!categoryName || !category_id){
         throw new Error("Empty category name");
     }
     const data = 
     {
         name : categoryName,
-        category_id: category_id,
     } 
     try{
         const response = await axios.post(`${BASE_URL}/categories`, data);
-        console.log(response.data);
+        console.log("Category created:", response.data);
         return response.data;
     }
     catch(error) {

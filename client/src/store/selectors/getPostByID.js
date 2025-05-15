@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
-
+import { useSelector } from 'react-redux';
 const getAllPosts = state => state.main.posts;
 
 const getPostsByID = createSelector(
-    [getAllPosts, (_, post_id) => post_id],
-    (posts, post_id) => {
-        return posts.find(post => post.post_id == post_id);
+    [getAllPosts, (_, id) => id],
+    (posts, id) => {
+        return posts.find(post => post.id == id);
     }
 );
+
 
 export default getPostsByID;

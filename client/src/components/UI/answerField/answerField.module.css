@@ -1,7 +1,7 @@
 .field{
     position: relative;
     z-index: 1;
-    width:20vw;
+    width:30vw;
     background-color: white;
     background-color: #e7e7e7;
     padding: calc(1*var(--index));
@@ -9,16 +9,16 @@
     padding-inline: calc(1.2*var(--index));
     padding-top: calc(1*var(--index));
     transition: all 0.3s ease-out;
-    resize: none;         
+    resize: none;   
     border: none;  
     outline: none;  
     font-size:var(--caption-font);
-    
+    height: 25vh;
 }
 
 .caption{
     color: var(--light-grey);
-    font-size: var(--subcaption-font);
+    font-size: var(--caption-font);
 }
 
 .fieldForm{

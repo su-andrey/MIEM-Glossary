@@ -19,7 +19,7 @@ const createComment = async (post_id, author_id, body) => {
                 } 
     try{
         const response = await axios.post(`${BASE_URL}/comments`, data);
-        console.log(response.data);
+        console.log("Comment added:", response.data);
         return response.data;
     }
     catch(error) {

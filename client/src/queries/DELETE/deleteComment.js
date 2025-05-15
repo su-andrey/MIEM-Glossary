@@ -2,13 +2,13 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3000/api";
 
-const deleteComment = async (comment_id) => {
-    if(!comment_id){
+const deleteComment = async (id) => {
+    if(!id){
         throw new Error("Missing required comment fields");
     }
 
     try{
-        const response = await axios.delete(`${BASE_URL}/comments/${comment_id}`);
+        const response = await axios.delete(`${BASE_URL}/comments/${id}`);
         console.log("Comment deleted:", response.data);
         return response.data;
     } 

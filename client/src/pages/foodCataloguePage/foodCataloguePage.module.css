@@ -1,12 +1,11 @@
 .wrapper{
-    padding-top: calc(2*var(--page-main-padding));
+    padding-block: var(--page-vertical-offset);
     display: flex;
     flex-direction: column;
     align-items: left;
     justify-content: start;
-    padding-left: var(--page-main-padding);
-    margin-right: var(--page-main-padding);
-    padding-bottom: calc(5*var(--page-main-padding));
+    padding-inline: var(--page-main-padding);
+    gap: var(--page-vertical-gap);
 }
 
 .topWrapper{
@@ -14,32 +13,77 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: calc(2*var(--page-main-padding));
+}
+
+.textWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 0.2vh;
 }
 
 .title{
     font-size: var(--title-font);
-    font-weight: 650;
-    margin-bottom: 1vh;
+    font-weight: 700;
     color: black;
 }
 
 .caption{
     font-size: var(--caption-font);
     color: var(--dark-grey);
-    
 }
 
 
-.textWrapper{
-    
+
+.sliderWrapper {
+    position: relative;
+    user-select: none;
+    padding-inline: calc(1.5 * var(--page-main-padding));
+    padding-right: calc(-0.2 * var(--page-main-padding));
 }
 
-
-.container{
+.swiperButtonNext,
+.swiperButtonPrev {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: start;
-    gap: 4vw;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.swiperButtonPrev {
+    left: -0.4vw;
+}
+
+.swiperButtonNext {
+    right: -0.4vw;
+}
+
+
+
+.swiperPagination :global(.swiper-pagination-bullet) {
+    background-color: var(--primary-color);
+    margin-inline: 0.3vw;
+    opacity: 0.3;
+}
+
+
+.swiperPagination :global(.swiper-pagination-bullet-active) {
+    background-color:  var(--primary-color);
+    margin-inline: 0.3vw;
+    opacity: 1;
+}
+
+.swiperPagination {
+    margin-top: 1vh;
+    text-align: center;
 }

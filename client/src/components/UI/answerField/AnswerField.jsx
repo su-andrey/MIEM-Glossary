@@ -1,14 +1,17 @@
 import ActionButton from "../actionButton/ActionButton";
 import styles from "./answerField.module.css"
-const AnswerField = () => {
+const AnswerField = ({height, width, placeholder, caption, settings}) => {
     return (<>
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} style={settings}>
         <form className={styles.fieldForm}>
-            <div className={styles.caption}>Добавьте собственное заведение или отзыв</div>
+            <div className={styles.caption}>{caption || "Добавьте собственное заведение или отзыв"}</div>
             <textarea  
-                placeholder="Добавить ответ..." 
+                placeholder={placeholder || "Добавить ответ..."}
                 className={styles.field}
-                rows={6}
+                style={{
+                    height: (height || "25vh"),
+                    width: (width || "30vw"),
+                }}
             />
             <ActionButton text="Отправить"></ActionButton>
         </form>

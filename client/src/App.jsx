@@ -22,17 +22,22 @@ import requirePosts from './queries/GET/requirePosts.js';
 import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
 import setupDB from './queries/SETUP/setupDB.js';
-
+import getDB from './queries/SETUP/getDB.js';
 
 
 const App = () => {
     const dispatch = useDispatch();
+    let wasChanged = useSelector(state => state.main.wasChanged);
 /*
     useEffect(()=>{
-        dispatch(setUsers(requireUsers()))
-        dispatch(setPosts(requirePosts()))
-        dispatch(setComments(requireUsers()))
-    }, []);*/
+        if(wasChanged){
+            dispatch(setUsers(requireUsers()))
+            dispatch(setPosts(requirePosts()))
+            dispatch(setComments(requireUsers()))
+        }
+        wasChanged = false
+    }, [wasChanged]);
+*/
     return (<>
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
@@ -52,7 +57,7 @@ const App = () => {
             <Route path="questions" element={<QuestionPage />}></Route>
             <Route path="questions/:id" element={<SingleQuestionPage />}></Route>
 
-            <Route path="cabinet" element={<CabinetPage />}></Route>
+            <Route path="cabinet" element={<RequireAuth> <CabinetPage /> </RequireAuth>}></Route>
         </Route>
     </Routes>
     </>);

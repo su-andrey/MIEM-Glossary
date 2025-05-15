@@ -5,7 +5,7 @@ const requireUsers = async (id = "") => {
     try{
         const url = id === "" ? `${BASE_URL}/users` : `${BASE_URL}/users/${id}`;
         const response = await axios.get(url);
-        console.log(response.data);
+        console.log("Users received: ",response.data);
         return response.data;
     } 
     catch(error){

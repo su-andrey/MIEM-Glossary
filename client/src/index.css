@@ -6,15 +6,22 @@
     --light-grey: #878787;
     --dark-gradient: linear-gradient(270deg,rgba(6, 1, 29, 1) 44%, rgba(11, 9, 76, 1) 100%);
     --yellow: #FFE100;
+
     --font-family: Raleway, Roboto, sans-serif;
-    --index: calc(1vh + 1vw);
+    --title-font: calc(2*var(--index));
     --primary-font: calc(1.2*var(--index));
+    --subprimary-font: calc(1.0*var(--index));
     --caption-font: calc(0.8*var(--index));
     --subcaption-font: calc(0.7*var(--index));
+
+
+    --index: calc(1vh + 1vw);
+
     --border-radius: calc(1*var(--index));
     --left-padding: 3.5vh;
     --page-main-padding: 3vw;
-    --title-font: calc(2*var(--index));
+    --page-vertical-gap: 6vh;
+    --page-vertical-offset: 10vh;
 }
 
 *{

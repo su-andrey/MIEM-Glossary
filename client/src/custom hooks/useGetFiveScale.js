@@ -1,4 +1,4 @@
-const getFiveScale = (data, signs = 0) => {
+const useGetFiveScale = (data, signs = 0) => {
     const { likes, dislikes } = data;
     const total = likes + dislikes;
     if (total === 0) return "0.0";
@@ -11,4 +11,4 @@ const getFiveScale = (data, signs = 0) => {
     }
 }
 
-export default getFiveScale;
+export default useGetFiveScale;

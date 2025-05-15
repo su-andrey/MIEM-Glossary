@@ -1,0 +1,115 @@
+.wrapper{
+    padding-inline: var(--page-main-padding);
+    padding-block: var(--page-vertical-offset);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--page-vertical-gap);
+}
+
+.title{
+    font-weight: 700;
+    font-size: var(--title-font);
+}
+
+
+.subtitle{
+    font-size: var(--subprimary-font);
+    color: var(--dark-grey);
+}
+
+.hsebutton{
+    width: 30vw;
+    position: absolute;
+    left: 60%;
+}
+
+
+
+.cancel{
+    width: calc(1.1*var(--index));
+    position: relative;
+    margin-top: -5%;
+    left: 52%;
+    cursor: pointer;
+    color: var(--dark-grey);
+    transition: 0.3s ease-in-out;
+}
+
+.cancel:hover{
+    animation: wiggle 0.4s ease;
+    transform: scale(1.15);
+
+}
+
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    100% { 
+        transform: translateX(0);
+    }
+}
+
+
+@keyframes wiggle {
+    0%   { transform: rotate(0deg) scale(1.15); }
+    25%  { transform: rotate(-10deg) scale(1.15); }
+    50%  { transform: rotate(10deg) scale(1.15); }
+    75%  { transform: rotate(-5deg) scale(1.15); }
+    100% { transform: rotate(0deg) scale(1.15); }
+}
+
+.changeForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    row-gap: 3vh;
+    background: white;
+}
+
+.input {
+    border: 0.3px solid rgb(142, 142, 142);
+    background-color: rgb(242, 242, 242);
+    height: calc(2.5*var(--index));
+    width: 40%;
+    padding: calc(1.1*var(--index));
+    border-radius: calc(0.6*var(--index));
+    transition: 0.2s ease-in-out;
+}
+
+.input:hover {
+    transform: scale(103%);
+    transition: 0.2s ease-in-out;
+}
+
+.input:focus {
+    transform: scale(108%);
+    transition: 0.2s ease-in-out;
+}
+
+.input_err {
+    border: 0.3px solid rgb(138, 121, 121);
+    background-color: rgb(253, 192, 192);
+    height: calc(2.5*var(--index));
+    width: 40%;
+    padding: calc(1.1*var(--index));
+    border-radius: calc(0.6*var(--index));
+    transition: 0.2s ease-in-out;
+}
+
+.error_warning {
+    margin-block: -0.7%;
+    color: rgb(227, 22, 22);
+    font-family: Raleway, serif;
+    font-weight: 400;
+    font-size: calc(var(--index)*0.7);
+    transition: 0.15s ease-in-out;
+}
+
+
+

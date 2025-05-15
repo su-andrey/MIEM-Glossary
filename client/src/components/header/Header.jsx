@@ -25,7 +25,6 @@ const Header = () => {
             <span className={styles.navItem}><NavLink to="/questions" className={({isActive}) => !isActive ? styles.navItemLink : styles.navItemLink_active}>Форум</NavLink></span>
             <span className={styles.navItem}><NavLink to="/cabinet" className={({isActive}) => !isActive ? styles.navItemLink : styles.navItemLink_active}>Профиль</NavLink></span>
             <AnimatedSearchField></AnimatedSearchField>
-            
         </div>
     </div>
     </>);

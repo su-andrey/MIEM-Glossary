@@ -6,12 +6,21 @@ import Question from "../../components/question/Question";
 import { Link } from "react-router-dom";
 import { uid } from "uid";
 import AnswerField from "../../components/UI/answerField/AnswerField";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import Scroll from "../../components/UI/scrollButton/Scroll";
 const QuestionPage = () => {
     let categories = useSelector(state => getCategories(state))
-    let category = categories.find((category) => category.name == "Препод")
-    let questions = useSelector(state => getPostsByCategory(state, category.category_id))
+    console.log(categories)
+    let category = categories.find((category) => category.name == "Вопрос")
+    console.log(category)
+    let questions = useSelector(state => getPostsByCategory(state, category.id))
+    console.log(questions)
     return(
         <>
+            <Scroll />
             <div className={styles.wrapper}>
                 <div className={styles.topWrapper}>
                     <div className={styles.textWrapper}>
@@ -23,17 +32,25 @@ const QuestionPage = () => {
                         </div>
                     </div>
                 </div>
-                    <div className={styles.container} style={{marginBottom: "calc(1.5*var(--page-main-padding))"}}>
-                        {questions.map((post)=>{
-                            return(
-                                <Link key={uid()} to={`/questions/${post.post_id}`}>
-                                    <Question data={post}/>
-                                </Link>
-                            );
-                        })}
+                <div className={styles.wholeWrapper}>
+                    <div className={styles.sliderWrapper}>
+                            {questions.map((post) => (
+                                <SwiperSlide key={uid()}>
+                                    <Link to={`/questions/${post.id}`}>
+                                        <Question data={post} />
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
                     </div>
-                    <AnswerField />
+                    <AnswerField 
+                        settings={{marginTop:'-5vh'}}
+                        width={"40vw"} 
+                        height={"30vh"}
+                        placeholder={"Спросите что-нибудь?"}
+                        caption={"Создайте собственное обсуждение"}
+                    />
                 </div>
+            </div>
         </>
 );}
 

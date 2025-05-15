@@ -7,31 +7,24 @@ import comment from "./assets/comment/comment.svg"
 import like_empty from "./assets/like/like_empty.svg"
 import like_filled from "./assets/like/like_filled.svg"
 import dislike from "./assets/dislike/dislike.svg"
-import React, { useRef } from 'react';
-import { loadFireworksPreset } from 'tsparticles-preset-fireworks';
-import { useCallback } from 'react';
 
 const Question = ({data}) => {
     const [name, setName] = useState("");
     useEffect(()=>{setName(useNameGenerator())}, []);
     const [liked, setLiked] = useState(false);
 
-    const particlesRef = useRef(null);
-
-    const particlesInit = useCallback(async engine => {
-        await loadFireworksPreset(engine); // загружаем готовый пресет "фейерверк"
-    }, []);
-
     const handleClick = () => {
         setLiked(!liked)
     };
     return (
         <div className={styles.wrapper}>
-                <div className={styles.title}>
-                    {name}
-                </div>
-                <div className={styles.body}>
-                    {data.body}
+                <div className={styles.textWrapper}>
+                    <div className={styles.title}>
+                        {name}
+                    </div>
+                    <div className={styles.body}>
+                        {data.body}
+                    </div>
                 </div>
                 <div className={styles.commentBlock}>
                     <div onClick={()=>{handleClick()}} className={styles.comment}>

@@ -5,7 +5,7 @@ const requirePosts = async (id = "") => {
     try{
         const url = id === "" ? `${BASE_URL}/posts` : `${BASE_URL}/posts/${id}`;
         const response = await axios.get(url);
-        console.log(response.data);
+        console.log("Posts received: ",response.data);
         return response.data;
     } 
     catch(error){
