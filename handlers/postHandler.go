@@ -17,7 +17,7 @@ func GetPosts(c fiber.Ctx) error {
 	rows, err := database.DB.Query(context.Background(),
 		`SELECT p.id, p.name, p.body, p.likes, p.dislikes, 
 		        c.id, c.name, 
-		        p.author_id 
+		        p.author_id, p.is_moderated 
 		 FROM posts p
 		 JOIN categories c ON p.category_id = c.id`)
 	if err != nil {
@@ -29,7 +29,7 @@ func GetPosts(c fiber.Ctx) error {
 	for rows.Next() {
 		var post models.Post
 		err := rows.Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
-			&post.Category.ID, &post.Category.Name, &post.AuthorID)
+			&post.Category.ID, &post.Category.Name, &post.AuthorID, &post.IsModerated)
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
@@ -47,12 +47,12 @@ func GetPost(c fiber.Ctx) error {
 	err := database.DB.QueryRow(context.Background(),
 		`SELECT p.id, p.name, p.body, p.likes, p.dislikes, 
 		        c.id, c.name, 
-		        p.author_id
+		        p.author_id, p.is_moderated
 		 FROM posts p
 		 JOIN categories c ON p.category_id = c.id
 		 WHERE p.id = $1`, id).
 		Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
-			&post.Category.ID, &post.Category.Name, &post.AuthorID)
+			&post.Category.ID, &post.Category.Name, &post.AuthorID, &post.IsModerated)
 
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
@@ -91,8 +91,8 @@ func CreatePost(c fiber.Ctx) error {
 	// Вставляем пост в базу
 	err = database.DB.QueryRow(
 		context.Background(),
-		`INSERT INTO posts (name, body, category_id, author_id, likes, dislikes)
-		 VALUES ($1, $2, $3, $4, 0, 0) RETURNING id`,
+		`INSERT INTO posts (name, body, category_id, author_id)
+		 VALUES ($1, $2, $3, $4) RETURNING id`,
 		input.Name, input.Body, input.CategoryID, input.AuthorID,
 	).Scan(&input.CategoryID) // Получаем ID созданного поста
 
@@ -102,13 +102,14 @@ func CreatePost(c fiber.Ctx) error {
 
 	// Формируем объект Post с вложенной категорией
 	post := models.Post{
-		ID:       input.CategoryID, // Возвращенный ID поста
-		Category: category,         // Заполненный объект категории
-		AuthorID: input.AuthorID,
-		Name:     input.Name,
-		Body:     input.Body,
-		Likes:    0,
-		Dislikes: 0,
+		ID:          input.CategoryID, // Возвращенный ID поста
+		Category:    category,         // Заполненный объект категории
+		AuthorID:    input.AuthorID,
+		Name:        input.Name,
+		Body:        input.Body,
+		Likes:       0,
+		Dislikes:    0,
+		IsModerated: false,
 	}
 
 	return c.JSON(post)
@@ -124,8 +125,8 @@ func UpdatePost(c fiber.Ctx) error {
 	}
 
 	_, err := database.DB.Exec(context.Background(),
-		"UPDATE posts SET name = $1, body = $2, likes = $3, dislikes = $4 WHERE id = $5",
-		post.Name, post.Body, post.Likes, post.Dislikes, id)
+		"UPDATE posts SET name = $1, body = $2, likes = $3, dislikes = $4, is_moderated = $5 WHERE id = $6",
+		post.Name, post.Body, post.Likes, post.Dislikes, post.IsModerated, id)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
