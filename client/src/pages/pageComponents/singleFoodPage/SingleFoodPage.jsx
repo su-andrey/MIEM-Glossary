@@ -1,0 +1,143 @@
+import styles from "./SingleFoodPage.module.css"
+import { useSelector } from "react-redux";
+import { uid } from "uid";
+import AnswerField from "../../../components/UI/answerField/AnswerField";
+import { useParams } from "react-router-dom";
+import Review from "../../../components/review/Review";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, Parallax, FreeMode, Keyboard, Mousewheel, EffectCoverflow } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import Stars from "../../../components/UI/starsActive/Stars";
+import useGetFiveScale from "../../../custom hooks/useGetFiveScale";
+import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
+import getFoodReviewByID from "../../../store/selectors/forSinglePages/getFoodReviewByID";
+import getPostsByID from "../../../store/selectors/getPostByID";
+import Scroll from "../../../components/UI/scrollButton/Scroll";
+const SingleFoodPage = () => {
+    let categoryID = useParams().category;
+    let postID = useParams().id;
+    const food = useSelector(state => getPostsByID(state, postID))
+    const reviews = useSelector(state => getFoodReviewByID(state, postID)) 
+    return(
+        <>
+            <Scroll />
+            <div className={styles.wrapper}>
+                        <div className={styles.topContainer}>
+                            <div className={styles.topWrapper}>
+                                <div className={styles.title}>
+                                    {food.name}
+                                </div>
+                                <div className={styles.caption}>
+                                    {food.body}
+                                </div>
+                                <div className={styles.gradeBlock}>
+                                    <div className={styles.grade}>
+                                        {useGetFiveScale(food, 1)}
+                                    </div>
+                                    <Stars defaultRating={useGetFiveScale(food)}/>
+                                </div>
+                            </div>
+                            <div className={styles.imageContainer}>
+                                <Swiper
+                                    className={styles.swiper}
+                                    modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel, Autoplay, EffectCoverflow]}
+                                    spaceBetween={20}
+                                    slidesPerView={3}
+                                    loop={true}
+                                    navigation={{
+                                        nextEl: `.${styles.swiperButtonNext}`,
+                                        prevEl: `.${styles.swiperButtonPrev}`
+                                    }}
+                                    pagination={{
+                                        el: `.${styles.swiperPagination}`,
+                                        clickable: true
+                                    }}
+                                    centeredSlides={true}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                        pauseOnMouseEnter: true,
+                                    }}
+                                    freeMode={{
+                                        enabled: true,
+                                        momentumBounceRatio: 1.5,
+                                        momentumRatio: 3,
+                                        momentumVelocityRatio: 1,
+                                    }}
+                                    keyboard={{
+                                        enabled: true,
+                                    }}
+                                    parallax={{
+                                        enabled: true,
+                                    }}
+                                    effect="coverflow"
+                                    coverflowEffect={{
+                                        rotate: 30,
+                                        stretch: 0,
+                                        depth: 100,
+                                        modifier: 1,
+                                        slideShadows: false,
+                                    }}
+
+                                >
+                                    <SwiperSlide>
+                                        <img src={image} className={styles.image}></img>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <img src={image} className={styles.image}></img>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <img src={image} className={styles.image}></img>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <img src={image} className={styles.image}></img>
+                                    </SwiperSlide>
+                                </Swiper>
+                                <div className={styles.swiperButtonPrev}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                </div>
+
+                                <div className={styles.swiperButtonNext}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.swiperPagination}></div>                                
+                            </div>
+                        </div>
+                        
+                <div className={styles.wholeWrapper}>
+                    <div className={styles.topWrapper}>
+                        <div className={styles.textWrapper}>
+                            <div className={styles.subtitle}>
+                                Отзывы:
+                            </div>
+                            <div className={styles.sliderWrapper}>
+                                {
+                                    reviews.map((review)=>{
+                                        return(
+                                            <Review key={uid()} data={review}></Review>
+                                        );
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <AnswerField
+                        settings={{marginTop:'1vh'}}
+                        width={"40vw"} 
+                        height={"30vh"}
+                        placeholder={"Поделитесь мнением?"}
+                        caption={"Добавте отзыв о преподе"}
+                    />
+                </div>
+            </div>
+        </>
+);}
+
+
+export default SingleFoodPage;

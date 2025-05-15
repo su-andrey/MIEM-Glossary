@@ -1,0 +1,52 @@
+.wrapper{
+    padding-inline: var(--page-main-padding);
+    padding-block: var(--page-vertical-offset);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7vh;
+}
+.metatitle{
+    font-weight: 700;
+    font-size: calc(1.1*var(--title-font));
+}
+
+.title{
+    font-weight: 700;
+    font-size: var(--title-font);
+    margin-bottom: 2vh;
+}
+
+.subtitle{
+    font-weight: 600;
+    font-size: var(--primary-font);
+}
+
+.paragraf{
+    font-weight: 450;
+    font-size: var(--primary-font);
+    color: var(--dark-grey);
+}
+
+.crystal{
+    width: 35vw;
+    transform: scale(105%);
+}
+
+.crystal2{
+    transform: scale(125%);
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.textContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}

@@ -1,0 +1,80 @@
+.wrapper{
+    padding-block: var(--page-vertical-offset);
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    padding-inline: var(--page-main-padding);
+    gap: var(--page-vertical-gap);
+}
+
+.topWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: var(--title-font);
+    font-weight: 700;
+    color: black;
+}
+
+.caption {
+    font-size: var(--caption-font);
+    color: var(--dark-grey);
+}
+
+.sliderWrapper {
+    position: relative;
+    user-select: none;
+    padding-inline: calc(1.5 * var(--page-main-padding));
+    padding-right: calc(-0.2 * var(--page-main-padding));
+}
+
+.swiperButtonNext,
+.swiperButtonPrev {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.swiperButtonPrev {
+    left: -0.4vw;
+}
+
+.swiperButtonNext {
+    right: -0.4vw;
+}
+
+
+
+.swiperPagination :global(.swiper-pagination-bullet) {
+    background-color: var(--primary-color);
+    margin-inline: 0.3vw;
+    opacity: 0.3;
+}
+
+
+.swiperPagination :global(.swiper-pagination-bullet-active) {
+    background-color:  var(--primary-color);
+    margin-inline: 0.3vw;
+    opacity: 1;
+}
+
+.swiperPagination {
+    margin-top: 1vh;
+    text-align: center;
+}

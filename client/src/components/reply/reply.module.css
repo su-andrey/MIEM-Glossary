@@ -1,0 +1,29 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    border: 1px var(--light-grey) solid;
+    border-radius: calc(1.2*var(--index));
+    width: calc(25*var(--index));
+    padding: 3.5vh;
+    gap: 2vh;
+    transition: all 0.3s ease-out;
+    background-color: white;
+}
+
+.wrapper:hover{
+    transform: translateY(-0.4vh) scale(1.01);
+    transition: all 0.3s ease-out;
+}
+
+.name{
+    font-weight: 450;
+    font-size: var(--subprimary-font);
+}
+
+
+.body{
+    color: var(--light-grey);
+    font-size: calc(0.8*var(--index));
+}

@@ -1,0 +1,47 @@
+.wrapper{
+    padding-block: var(--page-vertical-offset);
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    padding-inline: var(--page-main-padding);
+    gap: var(--page-vertical-gap);
+}
+
+.topWrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.title{
+    font-size: var(--title-font);
+    font-weight: 700;
+    color: black;
+}
+
+.caption{
+    font-size: var(--caption-font);
+    color: var(--dark-grey);
+    
+}
+
+
+.wholeWrapper{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+
+}
+
+.sliderWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+}
+
