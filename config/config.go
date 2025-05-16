@@ -9,11 +9,13 @@ import (
 
 // задаем конфигурацию для всего приложения, указываем порты всех сервисов
 type Config struct {
-	Port      string
-	DbUrl     string
-	AppUrl    string
-	ReactPort string
-	ENV       string
+	Port          string
+	DbUrl         string
+	AppUrl        string
+	ReactPort     string
+	ENV           string
+	AdminName     string
+	AdminPassword string
 }
 
 func LoadConfig() Config {
@@ -33,10 +35,12 @@ func LoadConfig() Config {
 	}
 
 	return Config{
-		Port:      port,
-		DbUrl:     os.Getenv("DB_URL"),
-		AppUrl:    os.Getenv("APP_URL"),
-		ReactPort: os.Getenv("REACT_PORT"),
-		ENV:       os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
+		Port:          port,
+		DbUrl:         os.Getenv("DB_URL"),
+		AppUrl:        os.Getenv("APP_URL"),
+		ReactPort:     os.Getenv("REACT_PORT"),
+		AdminName:     os.Getenv("ADMIN_NAME"),
+		AdminPassword: os.Getenv("ADMIN_PASSWORD"),
+		ENV:           os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
 	}
 }
