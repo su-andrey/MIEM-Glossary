@@ -184,8 +184,8 @@ npm install --legacy-peer-deps
         "password": "string",
         "is_admin": true
     }
+    ```
 
-    ```db
     2️⃣ Категории (categories)
 
     ```db
@@ -193,7 +193,8 @@ npm install --legacy-peer-deps
         "name": "string"
     }
 
-    ```db
+    ```
+
     3️⃣ Посты (posts)
 
     ```db
