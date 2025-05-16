@@ -26,7 +26,7 @@ func Login(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnauthorized, "Password doesn't match the hash")
 	}
 
-	token, err := GenerateJWT(user.ID)
+	token, err := GenerateJWT(user.ID, user.IsAdmin)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}

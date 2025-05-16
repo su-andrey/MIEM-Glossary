@@ -66,7 +66,6 @@ func CreatePost(c fiber.Ctx) error {
 	// Создаем временную структуру для парсинга входных данных
 	var input struct {
 		CategoryID int    `json:"category_id"`
-		AuthorID   int    `json:"author_id"`
 		Name       string `json:"name"`
 		Body       string `json:"body"`
 	}
@@ -88,12 +87,18 @@ func CreatePost(c fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Категория не найдена"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
+	userIDRaw := c.Locals("userID")
+	if userIDRaw == nil {
+		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+	}
+	userID := userIDRaw.(int)
+
 	// Вставляем пост в базу
 	err = database.DB.QueryRow(
 		context.Background(),
 		`INSERT INTO posts (name, body, category_id, author_id)
 		 VALUES ($1, $2, $3, $4) RETURNING id`,
-		input.Name, input.Body, input.CategoryID, input.AuthorID,
+		input.Name, input.Body, input.CategoryID, userID,
 	).Scan(&input.CategoryID) // Получаем ID созданного поста
 
 	if err != nil {
@@ -104,7 +109,7 @@ func CreatePost(c fiber.Ctx) error {
 	post := models.Post{
 		ID:          input.CategoryID, // Возвращенный ID поста
 		Category:    category,         // Заполненный объект категории
-		AuthorID:    input.AuthorID,
+		AuthorID:    userID,
 		Name:        input.Name,
 		Body:        input.Body,
 		Likes:       0,

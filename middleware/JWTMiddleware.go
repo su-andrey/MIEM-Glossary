@@ -29,8 +29,16 @@ func JWTMiddlewate() fiber.Handler {
 
 		claims := token.Claims.(jwt.MapClaims)
 		userID := int(claims["user_id"].(float64))
+		isAdmin := false
+		if v, ok := claims["is_admin"].(bool); ok {
+			isAdmin = v
+		} else if v, ok := claims["is_admin"].(float64); ok {
+			isAdmin = v == 1
+		}
 
 		c.Locals("userID", userID)
+		c.Locals("isAdmin", isAdmin)
+
 		return c.Next()
 	}
 }

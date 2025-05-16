@@ -77,9 +77,8 @@ func GetComment(c fiber.Ctx) error {
 func CreateComment(c fiber.Ctx) error {
 	// Создаем временную структуру для парсинга входных данных
 	var input struct {
-		PostID   int    `json:"post_id"`
-		AuthorID int    `json:"author_id"`
-		Body     string `json:"body"`
+		PostID int    `json:"post_id"`
+		Body   string `json:"body"`
 	}
 
 	// Парсим тело запроса
@@ -110,13 +109,19 @@ func CreateComment(c fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка загрузки категории поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
+	userIDRaw := c.Locals("userID")
+	if userIDRaw == nil {
+		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+	}
+	userID := userIDRaw.(int)
+
 	// Вставляем комментарий в базу
 	var commentID int
 	err = database.DB.QueryRow(
 		context.Background(),
 		`INSERT INTO comments (post_id, body, author_id, likes, dislikes)
 		 VALUES ($1, $2, $3, 0, 0) RETURNING id`,
-		input.PostID, input.Body, input.AuthorID,
+		input.PostID, input.Body, userID,
 	).Scan(&commentID) // Получаем ID созданного комментария
 
 	if err != nil {
@@ -125,9 +130,9 @@ func CreateComment(c fiber.Ctx) error {
 
 	// Формируем объект Comment с вложенным постом
 	comment := models.Comment{
-		ID:       commentID,      // ID созданного комментария
-		Post:     post,           // Заполненный объект поста
-		AuthorID: input.AuthorID, // Объект автора
+		ID:       commentID, // ID созданного комментария
+		Post:     post,      // Заполненный объект поста
+		AuthorID: userID,    // Объект автора
 		Body:     input.Body,
 		Likes:    0, // По умолчанию все реакцию нулим
 		Dislikes: 0,
