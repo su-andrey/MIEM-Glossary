@@ -11,6 +11,7 @@ func Migrate(db *pgxpool.Pool) {
 	CreateCategoriesTable(db)
 	CreatePostsTable(db)
 	CreateCommentsTable(db)
+	CreateReactionsTable(db)
 
 	seeders.SeedCategoriesTable(db)
 	seeders.SeedUsersTable(db)
