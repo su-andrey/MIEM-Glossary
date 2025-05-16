@@ -32,7 +32,8 @@ func CreatePostsTable(DB *pgxpool.Pool) {
 				name TEXT NOT NULL,
 				body TEXT NOT NULL,
 				likes INTEGER DEFAULT 0,
-				dislikes INTEGER DEFAULT 0
+				dislikes INTEGER DEFAULT 0,
+				is_moderated BOOL DEFAULT FALSE
 			);
 		`)
 		if err != nil {
