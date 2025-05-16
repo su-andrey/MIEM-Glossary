@@ -24,8 +24,8 @@ func FindUserByEmail(email string) (models.User, error) {
 
 	if userExists {
 		err = database.DB.QueryRow(ctx, `
-			SELECT id, email, password FROM users WHERE email=$1`, email).
-			Scan(&existedUser.ID, &existedUser.Email, &existedUser.Password)
+			SELECT id, email, password, is_admin FROM users WHERE email=$1`, email).
+			Scan(&existedUser.ID, &existedUser.Email, &existedUser.Password, &existedUser.IsAdmin)
 
 		if err != nil {
 			log.Println("Error checking users password: ", err)
