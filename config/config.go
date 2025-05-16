@@ -14,8 +14,9 @@ type Config struct {
 	AppUrl        string
 	ReactPort     string
 	ENV           string
-	AdminName     string
+	AdminEmail    string
 	AdminPassword string
+	JWTSecret     string
 }
 
 func LoadConfig() Config {
@@ -39,8 +40,9 @@ func LoadConfig() Config {
 		DbUrl:         os.Getenv("DB_URL"),
 		AppUrl:        os.Getenv("APP_URL"),
 		ReactPort:     os.Getenv("REACT_PORT"),
-		AdminName:     os.Getenv("ADMIN_NAME"),
+		AdminEmail:    os.Getenv("ADMIN_EMAIL"),
 		AdminPassword: os.Getenv("ADMIN_PASSWORD"),
+		JWTSecret:     os.Getenv("JWT_SECRET"),
 		ENV:           os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
 	}
 }

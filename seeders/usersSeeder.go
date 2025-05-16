@@ -6,18 +6,15 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/su-andrey/kr_aip/config"
+	"github.com/su-andrey/kr_aip/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func SeedUsersTable(db *pgxpool.Pool) {
 	cfg := config.LoadConfig()
 
-	users := []struct {
-		Name     string
-		Password string
-		IsAdmin  bool
-	}{
-		{Name: cfg.AdminName, Password: cfg.AdminPassword, IsAdmin: true},
+	users := []models.User{
+		{Email: cfg.AdminEmail, Password: cfg.AdminPassword, IsAdmin: true},
 	}
 	ctx := context.Background()
 
@@ -27,8 +24,8 @@ func SeedUsersTable(db *pgxpool.Pool) {
 		var userExists bool
 
 		err := db.QueryRow(ctx,
-			"SELECT EXISTS (SELECT 1 FROM users WHERE name = $1);",
-			user.Name).Scan(&userExists)
+			"SELECT EXISTS (SELECT 1 FROM users WHERE email = $1);",
+			user.Email).Scan(&userExists)
 
 		if err != nil {
 			log.Fatal("Ошибка проверки существования пользователя: ", err)
@@ -41,8 +38,8 @@ func SeedUsersTable(db *pgxpool.Pool) {
 			}
 
 			_, err = db.Exec(ctx,
-				"INSERT INTO users (name, password, is_admin) VALUES ($1, $2, $3)",
-				user.Name, hashedPassword, user.IsAdmin,
+				"INSERT INTO users (email, password, is_admin) VALUES ($1, $2, $3)",
+				user.Email, hashedPassword, user.IsAdmin,
 			)
 
 			if err != nil {

@@ -1,11 +1,21 @@
 package routes
 
 import (
+	"context"
+
 	"github.com/gofiber/fiber/v3"
+	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/handlers"
+	"github.com/su-andrey/kr_aip/middleware"
+	"github.com/su-andrey/kr_aip/models"
 )
 
 func SetupRoutes(app *fiber.App) { //Вызывае мобработчики из ./handlers
+	auth := app.Group("/auth")
+
+	auth.Post("/register", middleware.Register)
+	auth.Post("/login", middleware.Login)
+
 	// Группировка API-роутов
 	api := app.Group("/api")
 
@@ -16,6 +26,21 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	users.Post("/", handlers.CreateUser)      // Создание пользователя
 	users.Put("/:id", handlers.UpdateUser)    // Обновление пользователя
 	users.Delete("/:id", handlers.DeleteUser) // Удаление пользователя
+
+	app.Get("/me", func(c fiber.Ctx) error {
+		id := c.Locals("userID").(int)
+
+		var user models.User
+		err := database.DB.QueryRow(context.Background(),
+			"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
+			Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin)
+
+		if err != nil {
+			return c.Status(404).JSON(fiber.Map{"error": "Пользователь не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		}
+
+		return c.JSON(user)
+	}, middleware.JWTMiddlewate())
 
 	// Группировка комментариев
 	categories := api.Group("/categories")

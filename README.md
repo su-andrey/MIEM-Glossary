@@ -180,12 +180,12 @@ npm install --legacy-peer-deps
 
     ```db
     {
-        "name": "string",
+        "email": "string",
         "password": "string",
         "is_admin": true
     }
+    ```
 
-    ```db
     2️⃣ Категории (categories)
 
     ```db
@@ -193,7 +193,8 @@ npm install --legacy-peer-deps
         "name": "string"
     }
 
-    ```db
+    ```
+
     3️⃣ Посты (posts)
 
     ```db
@@ -222,7 +223,7 @@ npm install --legacy-peer-deps
     ```structure
     {
         "id": 1, - id пользователя
-        "name": "string", - почта пользователя
+        "email": "string", - почта пользователя
         "password": "string", - пароль пользователя
         "is_admin": true - является ли админом
     }

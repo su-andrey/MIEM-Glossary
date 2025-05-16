@@ -29,7 +29,7 @@ func CreateUsersTable(DB *pgxpool.Pool) {
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE users (
 				id SERIAL PRIMARY KEY,
-				name TEXT NOT NULL,
+				email TEXT NOT NULL,
 				password TEXT NOT NULL,
 				is_admin BOOLEAN DEFAULT false
 			);
