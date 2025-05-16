@@ -13,7 +13,7 @@ import (
 // При успехе обрабатываем полученные данные, если результат объект - возвращаем его, иначе выводим сообщение. При удалении не возвращаем удаленный объект
 // GetUsers возвращает всех пользователей
 func GetUsers(c fiber.Ctx) error {
-	rows, err := database.DB.Query(context.Background(), "SELECT id, name, password, is_admin FROM users")
+	rows, err := database.DB.Query(context.Background(), "SELECT id, email, password, is_admin FROM users")
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
@@ -22,7 +22,7 @@ func GetUsers(c fiber.Ctx) error {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.ID, &user.Name, &user.Password, &user.IsAdmin); err != nil {
+		if err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin); err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 		users = append(users, user)
@@ -37,8 +37,8 @@ func GetUser(c fiber.Ctx) error {
 
 	var user models.User
 	err := database.DB.QueryRow(context.Background(),
-		"SELECT id, name, password, is_admin FROM users WHERE id = $1", id).
-		Scan(&user.ID, &user.Name, &user.Password, &user.IsAdmin)
+		"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
+		Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin)
 
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "Пользователь не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
@@ -55,8 +55,8 @@ func CreateUser(c fiber.Ctx) error {
 	}
 
 	_, err := database.DB.Exec(context.Background(),
-		"INSERT INTO users (name, password, is_admin) VALUES ($1, $2, $3)",
-		user.Name, user.Password, user.IsAdmin)
+		"INSERT INTO users (email, password, is_admin) VALUES ($1, $2, $3)",
+		user.Email, user.Password, user.IsAdmin)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления пользователя"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
@@ -74,8 +74,8 @@ func UpdateUser(c fiber.Ctx) error {
 	}
 
 	_, err := database.DB.Exec(context.Background(),
-		"UPDATE users SET name = $1, password = $2, is_admin = $3 WHERE id = $4",
-		user.Name, user.Password, user.IsAdmin, id)
+		"UPDATE users SET email = $1, password = $2, is_admin = $3 WHERE id = $4",
+		user.Email, user.Password, user.IsAdmin, id)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления пользователя"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
