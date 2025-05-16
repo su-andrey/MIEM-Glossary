@@ -21,11 +21,11 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 
 	// Группировка пользователей
 	users := api.Group("/users")
-	users.Get("/", handlers.GetUsers)         // Получение всех пользователей
-	users.Get("/:id", handlers.GetUser)       // Получение пользователя по ID
-	users.Post("/", handlers.CreateUser)      // Создание пользователя
-	users.Put("/:id", handlers.UpdateUser)    // Обновление пользователя
-	users.Delete("/:id", handlers.DeleteUser) // Удаление пользователя
+	users.Get("/", handlers.GetUsers, middleware.JWTMiddlewate(), middleware.IsAdmin())               // Получение всех пользователей
+	users.Get("/:id", handlers.GetUser, middleware.JWTMiddlewate(), middleware.IsSelfOrAdmin())       // Получение пользователя по ID
+	users.Post("/", handlers.CreateUser, middleware.JWTMiddlewate(), middleware.IsAdmin())            // Создание пользователя
+	users.Put("/:id", handlers.UpdateUser, middleware.JWTMiddlewate(), middleware.IsSelfOrAdmin())    // Обновление пользователя
+	users.Delete("/:id", handlers.DeleteUser, middleware.JWTMiddlewate(), middleware.IsSelfOrAdmin()) // Удаление пользователя
 
 	app.Get("/me", func(c fiber.Ctx) error {
 		id := c.Locals("userID").(int)
@@ -44,25 +44,25 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 
 	// Группировка комментариев
 	categories := api.Group("/categories")
-	categories.Get("/", handlers.GetCategories)        // Получение всех категорий
-	categories.Get("/:id", handlers.GetCategory)       // Получение категории по ID
-	categories.Post("/", handlers.CreateCategory)      // Создание категории
-	categories.Put("/:id", handlers.UpdateCategory)    // Обновление категории
-	categories.Delete("/:id", handlers.DeleteCategory) // Удаление категории
+	categories.Get("/", handlers.GetCategories)                                                          // Получение всех категорий
+	categories.Get("/:id", handlers.GetCategory)                                                         // Получение категории по ID
+	categories.Post("/", handlers.CreateCategory, middleware.JWTMiddlewate(), middleware.IsAdmin())      // Создание категории
+	categories.Put("/:id", handlers.UpdateCategory, middleware.JWTMiddlewate(), middleware.IsAdmin())    // Обновление категории
+	categories.Delete("/:id", handlers.DeleteCategory, middleware.JWTMiddlewate(), middleware.IsAdmin()) // Удаление категории
 
 	// Группировка постов
 	posts := api.Group("/posts")
-	posts.Get("/", handlers.GetPosts)         // Получение всех постов
-	posts.Get("/:id", handlers.GetPost)       // Получение поста по ID
-	posts.Post("/", handlers.CreatePost)      // Создание поста
-	posts.Put("/:id", handlers.UpdatePost)    // Обновление поста
-	posts.Delete("/:id", handlers.DeletePost) // Удаление поста
+	posts.Get("/", handlers.GetPosts)                                                                                             // Получение всех постов
+	posts.Get("/:id", handlers.GetPost)                                                                                           // Получение поста по ID
+	posts.Post("/", handlers.CreatePost, middleware.JWTMiddlewate())                                                              // Создание поста
+	posts.Put("/:id", handlers.UpdatePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID))    // Обновление поста
+	posts.Delete("/:id", handlers.DeletePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID)) // Удаление поста
 
 	// Группировка комментариев
 	comments := api.Group("/comments")
-	comments.Get("/", handlers.GetComments)         // ПОлучение всех комментариев
-	comments.Get("/:id", handlers.GetComment)       // Получение комментария по ID
-	comments.Post("/", handlers.CreateComment)      // Создание комментария
-	comments.Put("/:id", handlers.UpdateComment)    // Обновление комментария
-	comments.Delete("/:id", handlers.DeleteComment) // Удаления комментария
+	comments.Get("/", handlers.GetComments)                                                                                             // Получение всех комментариев
+	comments.Get("/:id", handlers.GetComment)                                                                                           // Получение комментария по ID
+	comments.Post("/", handlers.CreateComment, middleware.JWTMiddlewate())                                                              // Создание комментария
+	comments.Put("/:id", handlers.UpdateComment, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetCommentAuthorID)) // Обновление комментария
+	comments.Delete("/:id", handlers.DeleteComment, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID)) // Удаления комментария
 } // В каждой из группировок для удаления или обновления обязательно требуется ID
