@@ -52,6 +52,10 @@ func SetReaction(c fiber.Ctx) error {
 		"SELECT is_like FROM reactions WHERE user_id = $1 AND post_id = $2",
 		userID, postID).Scan(&currentReaction)
 
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Error getting reaction from table: " + err.Error()})
+	}
+
 	// Обрабатываем реакцию
 	if currentReaction == nil {
 		// Новая реакция
