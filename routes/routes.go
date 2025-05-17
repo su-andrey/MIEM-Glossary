@@ -67,6 +67,6 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	comments.Delete("/:id", handlers.DeleteComment, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID)) // Удаления комментария
 
 	reactions := api.Group("/reactions")
-	reactions.Post("/:id", handlers.SetReaction)
-	reactions.Get("/:id", handlers.GetReaction)
+	reactions.Post("/:id", handlers.SetReaction, middleware.JWTMiddlewate())
+	reactions.Get("/:id", handlers.GetReaction, middleware.JWTMiddlewate())
 } // В каждой из группировок для удаления или обновления обязательно требуется ID

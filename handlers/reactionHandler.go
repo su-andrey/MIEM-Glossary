@@ -11,12 +11,12 @@ import (
 // SetReaction устанавливает реакцию пользователя на пост
 func SetReaction(c fiber.Ctx) error {
 	// Получаем ID пользователя из контекста (middleware)
-	userID, ok := c.Locals("userID").(int)
-	if !ok {
-		return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
-	}
+	userID, _ := c.Locals("userID").(int)
+	// if !ok {
+	// 	return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
+	// }
 
-	// Получаем ID поста из параметров URL
+	//Получаем ID поста из параметров URL
 	postIDRaw := c.Params("id")
 	if postIDRaw == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Отсутствует ID поста"})
@@ -107,10 +107,10 @@ func SetReaction(c fiber.Ctx) error {
 // GetReaction возвращает реакцию текущего пользователя на пост
 func GetReaction(c fiber.Ctx) error {
 	// Получаем ID пользователя из контекста (middleware)
-	userID, ok := c.Locals("userID").(int)
-	if !ok {
-		return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
-	}
+	userID, _ := c.Locals("userID").(int)
+	// if !ok {
+	// 	return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
+	// }
 
 	// Получаем ID поста из параметров URL
 	postIDRaw := c.Params("id")
