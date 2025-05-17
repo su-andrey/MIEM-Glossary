@@ -1,5 +1,6 @@
 import styles from "./foodCataloguePage.module.css";
 import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { uid } from "uid";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +14,7 @@ import getCategories from "../../store/selectors/getCategories";
 import CafeListCard from "../../components/cafeListCard/CafeListCard";
 import SearchField from "../../components/UI/searchField/SearchField";
 import AnswerField from "../../components/UI/answerField/AnswerField";
+import Loader from "../../components/UI/loader/Loader";
 
 const FoodCataloguePage = () => {
     const { category } = useParams();
@@ -21,7 +23,18 @@ const FoodCataloguePage = () => {
     console.log(posts)
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.category_id == category)?.name || "Заведения";
-
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return (
         <>
             <div className={styles.wrapper}>

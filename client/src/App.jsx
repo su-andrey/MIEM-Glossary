@@ -1,18 +1,20 @@
 import { createBrowserRouter, createRoutesFromElements, Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
-import Layout from './pages/layout/Layout.jsx';
-import LogInPage from './pages/logInPage/LogInPage.jsx';
-import RegisterPage from './pages/registerPage/RegisterPage.jsx';
-import HomePage from './pages/homePage/HomePage.jsx';
-import PrepodPage from './pages/prepodPage/PrepodPage.jsx';
-import FoodMainPage from './pages/foodMainPage/FoodMainPage.jsx';
-import FoodCataloguePage from './pages/foodCataloguePage/FoodCataloguePage.jsx';
-import QuestionPage from './pages/questionPage/QuestionPage.jsx';
-import CabinetPage from './pages/cabinetPage/CabinetPage.jsx';
-import NotFoundPage from './pages/notFoundPage/NotFoundPage.jsx';
-import SingleQuestionPage from './pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx';
-import SingleFoodPage from './pages/pageComponents/singleFoodPage/SingleFoodPage.jsx';
-import SinglePrepodPage from './pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx';
+import { Suspense, lazy } from 'react';
+const Layout = lazy(() => import('./pages/layout/Layout.jsx'));
+const LogInPage = lazy(() => import('./pages/logInPage/LogInPage.jsx'));
+const RegisterPage = lazy(() => import('./pages/registerPage/RegisterPage.jsx'));
+const HomePage = lazy(() => import('./pages/homePage/HomePage.jsx'));
+const PrepodPage = lazy(() => import('./pages/prepodPage/PrepodPage.jsx'));
+const FoodMainPage = lazy(() => import('./pages/foodMainPage/FoodMainPage.jsx'));
+const FoodCataloguePage = lazy(() => import('./pages/foodCataloguePage/FoodCataloguePage.jsx'));
+const QuestionPage = lazy(() => import('./pages/questionPage/QuestionPage.jsx'));
+const CabinetPage = lazy(() => import('./pages/cabinetPage/CabinetPage.jsx'));
+const NotFoundPage = lazy(() => import('./pages/notFoundPage/NotFoundPage.jsx'));
+const SingleQuestionPage = lazy(() => import('./pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx'));
+const SingleFoodPage = lazy(() => import('./pages/pageComponents/singleFoodPage/SingleFoodPage.jsx'));
+const SinglePrepodPage = lazy(() => import('./pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx'));
+import Loader from './components/UI/loader/Loader.jsx';
 import { RouterProvider } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +25,8 @@ import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
 import setupDB from './queries/SETUP/setupDB.js';
 import getDB from './queries/SETUP/getDB.js';
+import useSmoothScroll from './custom hooks/useSmoothScroll.js';
+
 
 
 const App = () => {
@@ -38,26 +42,27 @@ const App = () => {
         wasChanged = false
     }, [wasChanged]);
 */
+    useSmoothScroll()
     return (<>
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/" element={<Layout></Layout>}>
-            <Route index element={<HomePage></HomePage>}></Route>
+            <Route index element={<Suspense fallback={<Loader />}><HomePage></HomePage></Suspense>}></Route>
 
             <Route path="/login" element={<LogInPage></LogInPage>}></Route>
             <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
 
-            <Route path="prepods" element={<PrepodPage />}></Route>
-            <Route path="prepods/:id" element={<SinglePrepodPage/>}></Route>
+            <Route path="prepods" element={<Suspense fallback={<Loader />}><PrepodPage /></Suspense>}></Route>
+            <Route path="prepods/:id" element={<Suspense fallback={<Loader />}><SinglePrepodPage/></Suspense>}></Route>
 
-            <Route path="food" element={<FoodMainPage />}></Route>
-            <Route path="food/:category" element={<FoodCataloguePage />}></Route>
-            <Route path="food/:category/:id" element={<SingleFoodPage />}></Route>
+            <Route path="food" element={<Suspense fallback={<Loader />}><FoodMainPage /></Suspense>}></Route>
+            <Route path="food/:category" element={<Suspense fallback={<Loader />}><FoodCataloguePage /></Suspense>}></Route>
+            <Route path="food/:category/:id" element={<Suspense fallback={<Loader />}><SingleFoodPage /></Suspense>}></Route>
 
-            <Route path="questions" element={<QuestionPage />}></Route>
-            <Route path="questions/:id" element={<SingleQuestionPage />}></Route>
+            <Route path="questions" element={<Suspense fallback={<Loader />}><QuestionPage /></Suspense>}></Route>
+            <Route path="questions/:id" element={<Suspense fallback={<Loader />}><SingleQuestionPage /></Suspense>}></Route>
 
-            <Route path="cabinet" element={<RequireAuth> <CabinetPage /> </RequireAuth>}></Route>
+            <Route path="cabinet" element={<Suspense fallback={<Loader />}><RequireAuth> <CabinetPage /> </RequireAuth></Suspense>}></Route>
         </Route>
     </Routes>
     </>);

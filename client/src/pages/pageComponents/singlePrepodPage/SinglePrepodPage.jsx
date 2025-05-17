@@ -1,5 +1,6 @@
 import styles from "./SinglePrepodPage.module.css"
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import Question from "../../../components/question/Question";
 import { Link } from "react-router-dom";
 import { uid } from "uid";
@@ -19,6 +20,7 @@ import useGetFiveScale from "../../../custom hooks/useGetFiveScale";
 import getPrepodReviewsByID from "../../../store/selectors/forSinglePages/getPrepodReviewsByID";
 import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
 import Scroll from "../../../components/UI/scrollButton/Scroll";
+import Loader from "../../../components/UI/loader/Loader";
 
 const SinglePrepodPage = () => {
     let categories = useSelector(state => getCategories(state));
@@ -26,9 +28,22 @@ const SinglePrepodPage = () => {
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = useParams().id;
     const prepod = useSelector(state => getPrepodByID(state, post_id));
+    console.log(prepod)
     const reviews = useSelector(state => getPrepodReviewsByID(state, prepod.id))
     console.log(post_id)
     console.log("Препод: ", prepod)
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return(
         <>
             <Scroll />

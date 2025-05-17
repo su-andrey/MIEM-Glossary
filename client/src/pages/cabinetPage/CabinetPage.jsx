@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import Loader from "../../components/UI/loader/Loader.jsx";
 const CabinetPage = () => {
     const dispatch = useDispatch;
     let isAuth = useSelector(state => state.main.isAuthentificated);
@@ -51,7 +52,20 @@ const CabinetPage = () => {
     }
 
     const password = watch('password');
-
+    const [ready, setReady] = useState(false);
+    
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
+    
     return(
         <>
         <div className={styles.wrapper}>

@@ -12,14 +12,28 @@ import 'swiper/css/pagination';
 import Stars from "../../../components/UI/starsActive/Stars";
 import useGetFiveScale from "../../../custom hooks/useGetFiveScale";
 import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
-import getFoodReviewByID from "../../../store/selectors/forSinglePages/getFoodReviewByID";
+import getFoodReviewsByID from "../../../store/selectors/forSinglePages/getFoodReviewsByID";
 import getPostsByID from "../../../store/selectors/getPostByID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
+import Loader from "../../../components/UI/loader/Loader";
+import { useState, useEffect } from "react";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = useParams().id;
     const food = useSelector(state => getPostsByID(state, postID))
-    const reviews = useSelector(state => getFoodReviewByID(state, postID)) 
+    const reviews = useSelector(state => getFoodReviewsByID(state, postID)) 
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return(
         <>
             <Scroll />

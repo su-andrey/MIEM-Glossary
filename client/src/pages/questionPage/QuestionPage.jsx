@@ -11,6 +11,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Scroll from "../../components/UI/scrollButton/Scroll";
+import Loader from "../../components/UI/loader/Loader";
+import { useState, useEffect } from "react";
 const QuestionPage = () => {
     let categories = useSelector(state => getCategories(state))
     console.log(categories)
@@ -18,6 +20,18 @@ const QuestionPage = () => {
     console.log(category)
     let questions = useSelector(state => getPostsByCategory(state, category.id))
     console.log(questions)
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return(
         <>
             <Scroll />

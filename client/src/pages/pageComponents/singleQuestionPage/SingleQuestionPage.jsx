@@ -1,5 +1,6 @@
 import styles from "./singleQuestionPage.module.css"
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import Question from "../../../components/question/Question";
 import { Link } from "react-router-dom";
 import { uid } from "uid";
@@ -11,6 +12,7 @@ import getCommentsByQuestionID from "../../../store/selectors/forSinglePages/get
 import getCategories from "../../../store/selectors/getCategories";
 import getPostsByCategory from "../../../store/selectors/getPostsByCategoryID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
+import Loader from "../../../components/UI/loader/Loader";
 const SingleQuestionPage = () => {
     const data2 = [{
         "author_id": 1,
@@ -178,6 +180,18 @@ const SingleQuestionPage = () => {
     const comments = useSelector(state => getCommentsByQuestionID(state, questionID))
     console.log(comments)
     */
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return(
         <>
             <Scroll />
@@ -206,7 +220,7 @@ const SingleQuestionPage = () => {
                                 {
                                     data2.map((comment)=>{
                                         return(
-                                            <Reply data={comment}></Reply>
+                                            <Reply key={uid()} data={comment}></Reply>
                                         );
                                     })
                                 }

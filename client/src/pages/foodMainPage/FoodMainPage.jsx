@@ -5,8 +5,22 @@ import image from "./../../assets/jpg/cafe_categories/soup.jpg"
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import getCategories from "../../store/selectors/getCategories.js";
+import Loader from "../../components/UI/loader/Loader.jsx";
+import { useState, useEffect } from "react";
 const FoodMainPage = () => {
     const data = useSelector(state => getCategories(state));
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return (
     <>
         <div className={styles.wrapper}>
