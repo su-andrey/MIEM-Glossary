@@ -10,6 +10,7 @@ func Migrate(db *pgxpool.Pool) {
 	CreateUsersTable(db)
 	CreateCategoriesTable(db)
 	CreatePostsTable(db)
+	CreatePhotosTable(db)
 	CreateCommentsTable(db)
 	CreateReactionsTable(db)
 
