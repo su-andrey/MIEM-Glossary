@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/database"
@@ -16,9 +17,14 @@ func SetReaction(c fiber.Ctx) error {
 	}
 
 	// Получаем ID поста из параметров URL
-	postID, err := c.ParamsInt("id")
+	postIDRaw := c.Params("id")
+	if postIDRaw == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Отсутствует ID поста"})
+	}
+
+	postID, err := strconv.Atoi(postIDRaw)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный ID поста"})
+		return c.Status(400).JSON(fiber.Map{"error": "Некорректный ID поста"})
 	}
 
 	// Парсим тип реакции из тела запроса
@@ -107,9 +113,14 @@ func GetReaction(c fiber.Ctx) error {
 	}
 
 	// Получаем ID поста из параметров URL
-	postID, err := c.ParamsInt("id")
+	postIDRaw := c.Params("id")
+	if postIDRaw == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Отсутствует ID поста"})
+	}
+
+	postID, err := strconv.Atoi(postIDRaw)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный ID поста"})
+		return c.Status(400).JSON(fiber.Map{"error": "Некорректный ID поста"})
 	}
 
 	var isLike bool
