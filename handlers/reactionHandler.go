@@ -81,19 +81,23 @@ func SetReaction(c fiber.Ctx) error {
 
 	// Обновляем счетчики в посте
 	var updateQuery string
-	if err == pgx.ErrNoRows || currentReaction == nil {
+	// Определяем действие на основе ИСХОДНОГО состояния (currentReaction) и нового (input.IsLike)
+	if currentReaction == nil {
+		// Новая реакция
 		if input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes + 1 WHERE id = $1"
 		} else {
 			updateQuery = "UPDATE posts SET dislikes = dislikes + 1 WHERE id = $1"
 		}
 	} else if *currentReaction == input.IsLike {
+		// Удаление реакции
 		if input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes - 1 WHERE id = $1"
 		} else {
 			updateQuery = "UPDATE posts SET dislikes = dislikes - 1 WHERE id = $1"
 		}
 	} else {
+		// Изменение реакции
 		if input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes + 1, dislikes = dislikes - 1 WHERE id = $1"
 		} else {
@@ -112,10 +116,10 @@ func SetReaction(c fiber.Ctx) error {
 // GetReaction возвращает реакцию текущего пользователя на пост
 func GetReaction(c fiber.Ctx) error {
 	// Получаем ID пользователя из контекста (middleware)
-	userID, _ := c.Locals("userID").(int)
-	// if !ok {
-	// 	return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
-	// }
+	userID, ok := c.Locals("userID").(int)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "Необходима авторизация"})
+	}
 
 	// Получаем ID поста из параметров URL
 	postIDRaw := c.Params("id")
