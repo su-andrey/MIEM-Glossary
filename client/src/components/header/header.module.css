@@ -63,6 +63,7 @@
     color: white;
     font-family: Raleway,Roboto, Open Sans, serif;
     font-size: calc(0.7*var(--index));
+    position: relative;
 }
 
 .navItemLink{
@@ -81,35 +82,6 @@
     text-decoration: none;
 }
 
-
-.navItemLink::after {
-    content: "";
-    display: block;
-    position: absolute;
-    left: 0;
-    bottom: calc(-0.1*var(--index));
-    height: calc(0.05*var(--index));
-    width: 0;
-    background-color: white;
-    transition: width 0.3s ease;
-}
-
-a:hover:after,
-a:focus:after {
-    width: 100%;
-}
-
-.navItemLink_active::after {
-    content: "";
-    display: block;
-    position: absolute;
-    left: 0;
-    bottom: calc(-0.1*var(--index));
-    height: calc(0.05*var(--index));
-    width: 0;
-    background-color: white;
-    transition: width 0.3s ease;
-}
 
 .searchIcon{
     width: calc(1.2*var(--index));
