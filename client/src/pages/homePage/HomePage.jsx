@@ -1,7 +1,7 @@
 import styles from "./homePage.module.css"
 import crystal1 from "./../../assets/png/crystals/crystal1.png"
-import crystal2 from "./../../assets/png/crystals/crystal2.png"
-import crystal3 from "./../../assets/png/crystals/crystal4.png"
+import crystal2 from "./../../assets/png/crystals/crystal3.png"
+import crystal3 from "./../../assets/png/crystals/crystal2.png"
 const HomePage = () => {
     return (<>
         <div className={styles.wrapper}>
@@ -13,12 +13,12 @@ const HomePage = () => {
                     <div className={styles.title}>Мы - Глоссарий МИЭМ</div>
                     <div className={styles.paragraf}>Анонимность, честность, конфиденциальность</div>
                 </div>
-                <img src={crystal1} alt="MIEM logo" className={styles.crystal}/>
+                <img src={crystal1} alt="MIEM logo" className={styles.crystal} />
             </div>
 
             
             <div className={styles.container}>
-                <img src={crystal2} alt="MIEM logo" className={styles.crystal + " " + styles.crystal2}/>
+                <img src={crystal2} alt="MIEM logo" className={styles.crystal + " " + styles.crystal2} loading="lazy"/>
                 <div className={styles.textContainer}>
                     <div className={styles.title}>Здесь вы можете...</div>
                     <div className={styles.paragraf}>Искать правдивые ответы и отзывы</div>
@@ -35,7 +35,7 @@ const HomePage = () => {
                     <div className={styles.paragraf}>Может и должен критиковать</div>
                     <div className={styles.paragraf}>Может помогать другим узнать истину</div>
                 </div>
-                <img src={crystal3} alt="MIEM logo" className={styles.crystal}/>
+                <img src={crystal3} alt="MIEM logo" className={styles.crystal} loading="lazy"/>
             </div>
         </div>
     </>);

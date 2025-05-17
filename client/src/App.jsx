@@ -23,6 +23,8 @@ import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
 import setupDB from './queries/SETUP/setupDB.js';
 import getDB from './queries/SETUP/getDB.js';
+import useSmoothScroll from './custom hooks/useSmoothScroll.js';
+
 
 
 const App = () => {
@@ -38,6 +40,7 @@ const App = () => {
         wasChanged = false
     }, [wasChanged]);
 */
+    useSmoothScroll()
     return (<>
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
