@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import Loader from "../../components/UI/loader/Loader.jsx";
 const CabinetPage = () => {
-    
     const dispatch = useDispatch;
     let isAuth = useSelector(state => state.main.isAuthentificated);
     let isAdmin = useSelector(state => state.main.isAdmin);
@@ -54,6 +53,7 @@ const CabinetPage = () => {
 
     const password = watch('password');
     const [ready, setReady] = useState(false);
+    
     useEffect(() => {
         const handleLoad = () => setReady(true);
     if (document.readyState === 'complete') {

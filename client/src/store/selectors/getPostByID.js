@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { useSelector } from 'react-redux';
 const getAllPosts = state => state.main.posts;
 
 const getPostsByID = createSelector(

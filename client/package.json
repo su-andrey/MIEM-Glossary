@@ -29,6 +29,7 @@
     "react-tsparticles": "^2.12.2",
     "redux-devtools-extension": "^2.13.9",
     "rellax": "^1.12.1",
+    "reselect": "^5.1.1",
     "swiper": "^11.2.6",
     "tsparticles": "^3.8.1",
     "tsparticles-preset-fireworks": "^2.12.0",

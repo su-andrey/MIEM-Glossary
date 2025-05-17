@@ -1,7 +1,15 @@
-const getFoodReviewByID = (state, postID)=>{
-    const categories = state.main.categories;
-    const reviewCategory = categories.find(category => category.name == "Отзыв")
-    return state.main.posts.filter(post => (post.category.id == reviewCategory.id && post.category.name == "Отзыв" && post.name == postID))
-}
+import { createSelector } from "reselect";
 
-export default getFoodReviewByID;
+const getPosts = state => state.main.posts;
+const getCategory = state =>
+    state.categories.find(category => category.name === "Отзывы");
+const getPostID = (_, postID) => postID;
+
+const getFoodReviewsByID = createSelector(
+    [getPosts, getPostID, getCategory],
+    (posts, postID, reviewCategory)=>{
+        return posts.filter(post => (post.category?.id == reviewCategory.id && post.category?.name == "Отзывы" && post.id == postID))
+    }
+);
+
+export default getFoodReviewsByID;

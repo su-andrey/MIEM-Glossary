@@ -220,7 +220,7 @@ const SingleQuestionPage = () => {
                                 {
                                     data2.map((comment)=>{
                                         return(
-                                            <Reply data={comment}></Reply>
+                                            <Reply key={uid()} data={comment}></Reply>
                                         );
                                     })
                                 }

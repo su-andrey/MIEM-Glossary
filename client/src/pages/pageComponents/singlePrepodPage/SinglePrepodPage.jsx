@@ -28,6 +28,7 @@ const SinglePrepodPage = () => {
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = useParams().id;
     const prepod = useSelector(state => getPrepodByID(state, post_id));
+    console.log(prepod)
     const reviews = useSelector(state => getPrepodReviewsByID(state, prepod.id))
     console.log(post_id)
     console.log("Препод: ", prepod)
