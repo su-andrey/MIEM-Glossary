@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/jackc/pgx/v5"
 	"github.com/su-andrey/kr_aip/database"
 )
 
@@ -29,7 +30,7 @@ func SetReaction(c fiber.Ctx) error {
 
 	// Парсим тип реакции из тела запроса
 	var input struct {
-		IsLike bool `json:"is_like"`
+		IsLike bool `json:"reaction"`
 	}
 	if err := c.Bind().Body(&input); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
@@ -49,18 +50,18 @@ func SetReaction(c fiber.Ctx) error {
 	// Проверяем текущую реакцию пользователя
 	var currentReaction *bool
 	err = database.DB.QueryRow(ctx,
-		"SELECT is_like FROM reactions WHERE user_id = $1 AND post_id = $2",
+		"SELECT reaction FROM reactions WHERE user_id = $1 AND post_id = $2",
 		userID, postID).Scan(&currentReaction)
 
-	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Error getting reaction from table: " + err.Error()})
+	if err != nil && err != pgx.ErrNoRows {
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка проверки реакции: " + err.Error()})
 	}
 
 	// Обрабатываем реакцию
 	if currentReaction == nil {
 		// Новая реакция
 		_, err = database.DB.Exec(ctx,
-			"INSERT INTO reactions (user_id, post_id, is_like) VALUES ($1, $2, $3)",
+			"INSERT INTO reactions (user_id, post_id, reaction) VALUES ($1, $2, $3)",
 			userID, postID, input.IsLike)
 	} else if *currentReaction == input.IsLike {
 		// Удаляем реакцию (отмена)
@@ -70,7 +71,7 @@ func SetReaction(c fiber.Ctx) error {
 	} else {
 		// Изменяем реакцию
 		_, err = database.DB.Exec(ctx,
-			"UPDATE reactions SET is_like = $1 WHERE user_id = $2 AND post_id = $3",
+			"UPDATE reactions SET reaction = $1 WHERE user_id = $2 AND post_id = $3",
 			input.IsLike, userID, postID)
 	}
 
@@ -80,7 +81,7 @@ func SetReaction(c fiber.Ctx) error {
 
 	// Обновляем счетчики в посте
 	var updateQuery string
-	if currentReaction == nil {
+	if err == pgx.ErrNoRows || currentReaction == nil {
 		if input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes + 1 WHERE id = $1"
 		} else {
@@ -129,7 +130,7 @@ func GetReaction(c fiber.Ctx) error {
 
 	var isLike bool
 	err = database.DB.QueryRow(context.Background(),
-		"SELECT is_like FROM reactions WHERE user_id = $1 AND post_id = $2",
+		"SELECT reaction FROM reactions WHERE user_id = $1 AND post_id = $2",
 		userID, postID).Scan(&isLike)
 
 	if err != nil {
@@ -137,5 +138,5 @@ func GetReaction(c fiber.Ctx) error {
 		return c.JSON(nil)
 	}
 
-	return c.JSON(fiber.Map{"is_like": isLike})
+	return c.JSON(fiber.Map{"reaction": isLike})
 }
