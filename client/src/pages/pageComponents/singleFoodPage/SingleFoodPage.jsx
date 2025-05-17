@@ -15,11 +15,25 @@ import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
 import getFoodReviewByID from "../../../store/selectors/forSinglePages/getFoodReviewByID";
 import getPostsByID from "../../../store/selectors/getPostByID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
+import Loader from "../../../components/UI/loader/Loader";
+import { useState, useEffect } from "react";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = useParams().id;
     const food = useSelector(state => getPostsByID(state, postID))
     const reviews = useSelector(state => getFoodReviewByID(state, postID)) 
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return(
         <>
             <Scroll />

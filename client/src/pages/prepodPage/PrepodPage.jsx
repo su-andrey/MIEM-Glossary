@@ -2,6 +2,7 @@ import styles from "./prepodPage.module.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { uid } from "uid";
+import { useState, useEffect } from "react";
 
 import getPostsByCategory from "../../store/selectors/getPostsByCategoryID";
 import getCategories from "../../store/selectors/getCategories";
@@ -13,13 +14,24 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import PrepodCard from "../../components/prepodCard/PrepodCard";
-
+import Loader from "../../components/UI/loader/Loader";
 const PrepodPage = () => {
     const categories = useSelector(state => getCategories(state));
     const category = categories.find((category) => category.name === "Препод");
     const posts = useSelector(state => getPostsByCategory(state, category?.id));
     console.log(posts)
-    
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
     return (
         <div className={styles.wrapper}>
             <div className={styles.topWrapper}>
