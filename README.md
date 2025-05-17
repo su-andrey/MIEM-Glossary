@@ -25,7 +25,7 @@ GRANT USAGE ON SCHEMA public TO <SELECTED NAME>;
 Для работы с БД также понадобится сброс таблиц, команда: (исполняется внутри psql <db_name>)
 
 ```bash
-DROP TABLE categories, comments, posts, users;
+DROP TABLE users, reactions, posts, comments, categories;
 ```
 
 ### Запуск на Windows
@@ -209,6 +209,13 @@ npm install --legacy-peer-deps
         DELETE  /categories/{id}    удалить категорию по id         (***)
         ```
 
+        🔹 Реакции (лайки и дизлайки):
+
+        ```requests
+        GET     /reactions/{id}     реакции залогиненного юзера по id поста (**) (p.s.: владалец реакции, а не поста)
+        POST    /reactions/{id}     поставить реакцию на пост id            (*)
+        ```
+
     1. Аутентификация `SUFFIX: /auth`
 
         ```structure
@@ -258,7 +265,15 @@ npm install --legacy-peer-deps
     }
     ```
 
-    5️⃣ Регистрация / вход в аккаунт (register / login)
+    5️⃣ Реакции (reactions)
+
+    ```db
+    {
+        "reaction": true // or false
+    }
+    ```
+
+    6️⃣ Регистрация / вход в аккаунт (register / login)
 
     ```db
     {
@@ -338,7 +353,15 @@ npm install --legacy-peer-deps
         }
     ```
 
-    5️⃣ Регистрация / вход в аккаунт (register / login)
+    5️⃣ Реакции (reactions)
+
+    ```db
+    {
+        "reaction": true - true - лайк, false - dislike
+    }
+    ```
+
+    6️⃣ Регистрация / вход в аккаунт (register / login)
 
     ```db
     {
