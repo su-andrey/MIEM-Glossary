@@ -58,6 +58,7 @@
     justify-content: center;
     cursor: pointer;
     user-select: none;
+
 }
 
 .swiperButtonPrev {
@@ -87,3 +88,4 @@
     margin-top: 1vh;
     text-align: center;
 }
+

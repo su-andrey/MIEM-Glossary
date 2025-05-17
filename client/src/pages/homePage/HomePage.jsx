@@ -2,12 +2,24 @@ import styles from "./homePage.module.css"
 import crystal1 from "./../../assets/png/crystals/crystal1.png"
 import crystal2 from "./../../assets/png/crystals/crystal3.png"
 import crystal3 from "./../../assets/png/crystals/crystal2.png"
+import Loader from "../../components/UI/loader/Loader"
+import { useState, useEffect } from "react"
 const HomePage = () => {
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader/>;
+
     return (<>
-        <div className={styles.wrapper}>
-            
-            
-            
+        <div className={styles.wrapper}>      
             <div className={styles.container}>
                 <div className={styles.textContainer}>
                     <div className={styles.title}>Мы - Глоссарий МИЭМ</div>
