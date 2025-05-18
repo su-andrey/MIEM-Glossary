@@ -1,4 +1,5 @@
 .actionButton{
+    width: max-content;
     color: white;
     background: var(--primary-color);
     font-weight: 550;

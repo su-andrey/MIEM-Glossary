@@ -125,7 +125,6 @@
 
 .check {
     transition: all 0.15s ease-in-out;
-    min-width: 2vw;
     width: clamp(16px, 2vw, 24px);
     height: clamp(16px, 2vw, 24px);
     cursor: pointer;
