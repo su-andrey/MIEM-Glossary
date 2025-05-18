@@ -319,7 +319,15 @@ npm install --legacy-peer-deps
         "name": "string", - служебное поле с именем
         "body": "string", - основная информация
         "likes": 1, 
-        "dislikes": 1 
+        "dislikes": 1,
+        "comments": [
+            {
+                "id": 1, - id коммента
+                "post_id": 1 - id поста
+                "body": "string", - тело комментария
+                "author_id" : 1 - id автора комментария  
+            }
+        ]
     }
     ```
 
@@ -332,22 +340,7 @@ npm install --legacy-peer-deps
     ```structure
     {
         "id": 1, - id коммента
-        "post": - данные о посте
-            {
-                "id": 1,
-                "body": "string",
-                "category": 
-                    {
-                        "id": 2, 
-                        "name": "string"
-                    },
-                "dislikes": 1,
-                "likes": 3,
-                "isModerated": true,
-                "name": "string",
-                "body": "string",
-            },
-        "name": "string", - служебное поле комментария
+        "post_id": 1 - id поста
         "body": "string", - тело комментария
         "author_id" : 1 - id автора комментария
         }
