@@ -30,5 +30,12 @@
     align-items: center;
     justify-content: center;
     gap: 4vw;
+}
 
+.container > * {
+    transition: opacity 0.45s ease;
+}
+
+.container:hover > :not(:hover) {
+    opacity: 0.5;
 }

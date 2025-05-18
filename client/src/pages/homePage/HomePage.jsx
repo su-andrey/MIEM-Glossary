@@ -138,7 +138,6 @@ const HomePage = () => {
 
     useEffect(() => {
     if (ready) {
-        // Принудительно триггерим scroll событие
         window.scrollTo(window.scrollX, window.scrollY + 1);
         window.scrollTo(window.scrollX, window.scrollY);
     }
@@ -168,14 +167,13 @@ const HomePage = () => {
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ amount: 0.8, margin: "100px 0px" }}
                         className={styles.textContainer}
                         custom={2}
                         variants={topLeftTextAnimation}
                     >
-                        <motion.div custom={3} variants={topLeftTextAnimation} className={styles.title} style={{ marginBottom: "0.5vh" }}>Мы - Глоссарий МИЭМ</motion.div>
-                        <motion.div custom={4} variants={topLeftTextAnimation} className={styles.paragraf}>Анонимность, честность, конфиденциальность</motion.div>
-                        <motion.div custom={5} variants={topLeftTextAnimation} className={styles.paragraf}> - это наши фундаментальные принципы</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={3} variants={topLeftTextAnimation} className={styles.title} style={{ marginBottom: "2vh" }}>Мы - Глоссарий МИЭМ</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={4} variants={topLeftTextAnimation} className={styles.paragraf}>Анонимность, честность, конфиденциальность</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={5} variants={topLeftTextAnimation} className={styles.paragraf}> - это наши фундаментальные принципы</motion.div>
                     </motion.div>
                     <motion.img
                         ref={crystal1Ref}

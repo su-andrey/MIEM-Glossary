@@ -129,8 +129,8 @@
 
 .gh_logo:hover{
     transition: all 0.25s ease-in-out;
-    transform: scale(200%);
-    transform: translateY(-1vh);
+    scale: 105%;
+    transform: translateY(-2vh);
 }
 
 .profile1 {

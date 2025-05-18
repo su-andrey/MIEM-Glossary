@@ -1,6 +1,6 @@
 import styles from "./footer.module.css"
 import gh_logo from "./../../assets/vectors/socials/gh.svg"
-import gsap from "gsap";
+import {motion} from "framer-motion"
 import React, { useEffect, useRef, useState } from "react";
 const Footer = () => {
     const [open, setOpen] = useState(false);
@@ -10,13 +10,37 @@ const Footer = () => {
     const handleClick = ()=>{
         setOpen(true)
     }
-    
+
+    const middleTextAnimation = {
+        hidden: {
+            opacity: 0,
+            y: 40,
+        },
+        visible: custom => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
+
     return (
-    <div className={styles.wrapper}>
-        <div className={styles.header}>MIEM Glossary<span style={{fontSize:"35%"}}>©</span></div>
-        <div className={styles.subheader}>Наша команда</div>
-        <div className={styles.caption}>Переходите и следите за нашими другими проектами</div>
-        <div className={styles.socials}>
+    <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        custom={0}
+        variants={middleTextAnimation}
+        className={styles.wrapper}
+    >
+        <motion.div custom={2} variants={middleTextAnimation} className={styles.header}>MIEM Glossary<span style={{fontSize:"35%"}}>©</span></motion.div>
+        <motion.div custom={3} variants={middleTextAnimation} className={styles.subheader}>Наша команда</motion.div>
+        <motion.div custom={4} variants={middleTextAnimation} className={styles.caption}>Переходите и следите за нашими другими проектами</motion.div>
+        <motion.div custom={5} variants={middleTextAnimation} className={styles.socials}>
             {!open && 
                 <div className={styles.gh_container}>
                     <img src={gh_logo} alt="github" className={styles.gh_logo} onClick={()=>handleClick()}/>
@@ -49,8 +73,8 @@ const Footer = () => {
                         </div>
                     </a>
                 </>}
-        </div>
-    </div>);
+        </motion.div>
+    </motion.div>);
 }
 
 export default Footer;
