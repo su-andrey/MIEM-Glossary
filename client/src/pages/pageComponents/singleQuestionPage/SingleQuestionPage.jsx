@@ -13,6 +13,7 @@ import getCategories from "../../../store/selectors/getCategories";
 import getPostsByCategory from "../../../store/selectors/getPostsByCategoryID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
+import {motion} from "framer-motion"
 const SingleQuestionPage = () => {
     const data2 = [{
         "author_id": 1,
@@ -176,6 +177,22 @@ const SingleQuestionPage = () => {
     const question = useSelector(state => getPostsByID(state, questionID));
     console.log(questionID)
     console.log("Вопрос: ", question)
+
+    const leftItemAnimation = {
+        hidden: {
+            opacity: 0,
+            x: -100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            x: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
     /*
     const comments = useSelector(state => getCommentsByQuestionID(state, questionID))
     console.log(comments)
@@ -220,7 +237,17 @@ const SingleQuestionPage = () => {
                                 {
                                     data2.map((comment)=>{
                                         return(
-                                            <Reply key={uid()} data={comment}></Reply>
+                                            <motion.div
+                                                custom={1}
+                                                variants={leftItemAnimation}
+                                                initial="hidden"
+                                                whileInView="visible"
+                                                viewport={{ once: true, amount: 0.5 }}
+                                                className={styles.metatitle}
+                                                key={uid()}
+                                            >
+                                                <Reply key={uid()} data={comment}></Reply>
+                                            </motion.div>
                                         );
                                     })
                                 }
