@@ -187,6 +187,13 @@ npm install --legacy-peer-deps
         POST    /posts              создать пост                    (*)
         PUT     /posts/{id}         обновить пост по id             (**)(***)
         DELETE  /posts/{id}         удалить пост по id              (**)(***)
+        POST    /posts/{id}/photos  добавить фото поста             (**)
+        ```
+
+        🔹 Фотографии:
+
+        ```requests
+        DELETE /photos/{id}         удалить фото по ID
         ```
 
         🔹 Комментарии:
@@ -304,7 +311,24 @@ npm install --legacy-peer-deps
         "name": "string", - служебное поле с именем
         "body": "string", - основная информация
         "likes": 1, 
-        "dislikes": 1 
+        "dislikes": 1,
+        "photos": [ - массив фотографий
+            {
+                "id": 1,
+                "post_id": 1,
+                "url": "string"
+            },
+            {
+                "id": 2,
+                "post_id": 1,
+                "url": "string"
+            },
+            {
+                "id": 3,
+                "post_id": 1,
+                "url": "string"
+            }
+        ]
     }
     ```
 
