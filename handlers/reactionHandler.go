@@ -30,7 +30,12 @@ func SetReaction(c fiber.Ctx) error {
 
 	// Парсим тип реакции из тела запроса
 	var input struct {
-		IsLike bool `json:"reaction"`
+		IsLike *bool `json:"reaction"`
+	}
+	print(input.IsLike)
+	if input.IsLike == nil {
+		// Тело запроса было пустым или поле reaction отсутствовало
+		return c.Status(400).JSON(fiber.Map{"error": "Не указана реакция"})
 	}
 	if err := c.Bind().Body(&input); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
@@ -62,8 +67,8 @@ func SetReaction(c fiber.Ctx) error {
 		// Новая реакция
 		_, err = database.DB.Exec(ctx,
 			"INSERT INTO reactions (user_id, post_id, reaction) VALUES ($1, $2, $3)",
-			userID, postID, input.IsLike)
-	} else if *currentReaction == input.IsLike {
+			userID, postID, *input.IsLike)
+	} else if *currentReaction == *input.IsLike {
 		// Удаляем реакцию (отмена)
 		_, err = database.DB.Exec(ctx,
 			"DELETE FROM reactions WHERE user_id = $1 AND post_id = $2",
@@ -72,7 +77,7 @@ func SetReaction(c fiber.Ctx) error {
 		// Изменяем реакцию
 		_, err = database.DB.Exec(ctx,
 			"UPDATE reactions SET reaction = $1 WHERE user_id = $2 AND post_id = $3",
-			input.IsLike, userID, postID)
+			*input.IsLike, userID, postID)
 	}
 
 	if err != nil {
@@ -84,21 +89,21 @@ func SetReaction(c fiber.Ctx) error {
 	// Определяем действие на основе ИСХОДНОГО состояния (currentReaction) и нового (input.IsLike)
 	if currentReaction == nil {
 		// Новая реакция
-		if input.IsLike {
+		if *input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes + 1 WHERE id = $1"
 		} else {
 			updateQuery = "UPDATE posts SET dislikes = dislikes + 1 WHERE id = $1"
 		}
-	} else if *currentReaction == input.IsLike {
+	} else if *currentReaction == *input.IsLike {
 		// Удаление реакции
-		if input.IsLike {
+		if *input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes - 1 WHERE id = $1"
 		} else {
 			updateQuery = "UPDATE posts SET dislikes = dislikes - 1 WHERE id = $1"
 		}
 	} else {
 		// Изменение реакции
-		if input.IsLike {
+		if *input.IsLike {
 			updateQuery = "UPDATE posts SET likes = likes + 1, dislikes = dislikes - 1 WHERE id = $1"
 		} else {
 			updateQuery = "UPDATE posts SET likes = likes - 1, dislikes = dislikes + 1 WHERE id = $1"

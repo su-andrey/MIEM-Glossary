@@ -1,8 +1,8 @@
 package models
 
-type shortComment struct {
+type ShortComment struct {
 	ID       int    `json:"id"`
-	Post_id  int    `json:"post"`      // Объект поста
+	PostID   int    `json:"post"`      // Объект поста
 	AuthorID int    `json:"author_id"` // ID автора (анонимность)
 	Body     string `json:"body"`      // Содержание комментария
 	Likes    int    `json:"likes"`
