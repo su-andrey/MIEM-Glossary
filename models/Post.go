@@ -6,6 +6,7 @@ type Post struct {
 	AuthorID    int      `json:"author_id"` // ID автора (анонимность)
 	Name        string   `json:"name"`      // Заголовок/название
 	Body        string   `json:"body"`      // Содержание, пока строка, в дальнейшем возможно масштабирование
+	Photos      []Photo  `json:"photos"`
 	Likes       int      `json:"likes"`
 	Dislikes    int      `json:"dislikes"`     // Оценки (положительные или отрицательные)
 	IsModerated bool     `json:"is_moderated"` // Проверен ли пост модератором перед публикацией
