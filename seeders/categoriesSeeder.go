@@ -16,7 +16,7 @@ func SeedCategoriesTable(db *pgxpool.Pool) {
 		{Name: "Копирки"},
 		{Name: "Магазины"},
 		{Name: "Преподаватели"},
-		{Name: "Ответы"},
+		{Name: "Вопросы"},
 		{Name: "Отзывы"},
 	}
 	ctx := context.Background()
