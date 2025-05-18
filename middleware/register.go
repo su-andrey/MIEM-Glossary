@@ -32,16 +32,16 @@ func Register(c fiber.Ctx) error {
 		return err
 	}
 
-	var existingUser models.User
+	var user models.User
 	err = database.DB.QueryRow(ctx,
 		`SELECT id, email, password FROM users WHERE email=$1`, input.Email).
-		Scan(&existingUser.ID, &existingUser.Email, &existingUser.Password)
+		Scan(&user.ID, &user.Email, &user.Password)
 
 	if err != nil {
 		if err.Error() == "no rows in result set" {
-			_, err = database.DB.Exec(ctx, `
+			err = database.DB.QueryRow(ctx, `
 				INSERT INTO users (email, password)
-				VALUES ($1, $2)`, input.Email, hashedPassword)
+				VALUES ($1, $2) RETURNING id`, input.Email, hashedPassword).Scan(&user.ID)
 			if err != nil {
 				log.Println("Error creating new user: ", err)
 				return err
@@ -53,6 +53,11 @@ func Register(c fiber.Ctx) error {
 		return err
 	}
 
+	token, err := GenerateJWT(user.ID, false)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
 	log.Println("User is already created")
-	return nil
+	return c.JSON(fiber.Map{"token": token})
 }
