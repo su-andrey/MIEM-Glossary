@@ -25,11 +25,7 @@ GRANT USAGE ON SCHEMA public TO <SELECTED NAME>;
 Для работы с БД также понадобится сброс таблиц, команда: (исполняется внутри psql <db_name>)
 
 ```bash
-<<<<<<< HEAD
-DROP TABLE users, reactions, posts, comments, categories;
-=======
 DROP TABLE categories, comments, posts, users, photos, reactions;
->>>>>>> origin/posts-photos
 ```
 
 ### Запуск на Windows
