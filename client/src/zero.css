@@ -2,6 +2,7 @@
 	padding: 0px;
 	margin: 0px;
 	border: none;
+	font-size: inherit;
 }
 
 *,
@@ -19,8 +20,6 @@ a, a:link, a:visited, Link, Link:link, Link:visited {
 a:hover, Link, Link:link, Link:visited  {
     text-decoration: none;
 }
-
-/* Common */
 
 aside, nav, footer, header, section, main {
 	display: block;
@@ -42,17 +41,18 @@ img {
 img, svg {
 	max-width: 100%;
 	height: auto;
+	min-width: 1em;
 }
 
 address {
 	font-style: normal;
 }
 
-/* Form */
 
 input, textarea, button, select {
 	font-family: inherit;
     font-size: inherit;
+	font-size: 1em;
     color: inherit;
     background-color: transparent;
 }

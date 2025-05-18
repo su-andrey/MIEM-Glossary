@@ -115,6 +115,7 @@
 }
 
 .input {
+    font-size: var(--caption-font);
     border: 0.3px solid rgb(142, 142, 142);
     background-color: rgb(242, 242, 242);
     height: calc(2.5*var(--index));
@@ -142,6 +143,7 @@
     padding: calc(1.1*var(--index));
     border-radius: calc(0.6*var(--index));
     transition: 0.2s ease-in-out;
+    font-size: var(--caption-font);
 }
 
 .title {

@@ -13,7 +13,24 @@ import 'swiper/css/pagination';
 import Scroll from "../../components/UI/scrollButton/Scroll";
 import Loader from "../../components/UI/loader/Loader";
 import { useState, useEffect } from "react";
+import {motion} from "framer-motion"
 const QuestionPage = () => {
+    const leftItemAnimation = {
+        hidden: {
+            opacity: 0,
+            x: -100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            x: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
+
     let categories = useSelector(state => getCategories(state))
     console.log(categories)
     let category = categories.find((category) => category.name == "Вопрос")
@@ -49,11 +66,19 @@ const QuestionPage = () => {
                 <div className={styles.wholeWrapper}>
                     <div className={styles.sliderWrapper}>
                             {questions.map((post) => (
-                                <SwiperSlide key={uid()}>
-                                    <Link to={`/questions/${post.id}`}>
+                                <motion.div
+                                    custom={1}
+                                    variants={leftItemAnimation}
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, amount: 0.5 }}
+                                    className={styles.metatitle}
+                                    key={uid()}
+                                >
+                                    <Link to={`/questions/${post.id}`} >
                                         <Question data={post} />
                                     </Link>
-                                </SwiperSlide>
+                                </motion.div>
                             ))}
                     </div>
                     <AnswerField 

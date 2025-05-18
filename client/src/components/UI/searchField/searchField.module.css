@@ -25,6 +25,9 @@
 
 .glass{
     position: relative;
+    width: 1.7vw;
+    min-width: 1em;
+    min-height: 1em;
     top:1.2vh;
     left:-19.25vw;
     z-index: 3;
