@@ -222,7 +222,7 @@ const HomePage = () => {
                         <motion.div custom={1} variants={leftTextAnimation} className={styles.title}>Тут каждый студент...</motion.div>
                         <motion.div custom={2} variants={leftTextAnimation} className={styles.paragraf}>Остается полностью анонимным</motion.div>
                         <motion.div custom={3} variants={leftTextAnimation} className={styles.paragraf}>Может и должен критиковать</motion.div>
-                        <motion.div custom={4} variants={leftTextAnimation} className={styles.paragraf}>Может помогать другим узнать истину</motion.div>
+                        <motion.div custom={4} variants={leftTextAnimation} className={styles.paragraf}>Поможет другим узнать истину</motion.div>
                     </motion.div>
                     <motion.img
                         ref={crystal3Ref}

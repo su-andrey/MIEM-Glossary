@@ -32,7 +32,7 @@ import useSmoothScroll from './custom hooks/useSmoothScroll.js';
 const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
-/*
+
     useEffect(()=>{
         if(wasChanged){
             dispatch(setUsers(requireUsers()))
@@ -41,7 +41,7 @@ const App = () => {
         }
         wasChanged = false
     }, [wasChanged]);
-*/
+
     useSmoothScroll()
     return (<>
     <Routes>
