@@ -25,7 +25,11 @@ GRANT USAGE ON SCHEMA public TO <SELECTED NAME>;
 Для работы с БД также понадобится сброс таблиц, команда: (исполняется внутри psql <db_name>)
 
 ```bash
+<<<<<<< HEAD
 DROP TABLE users, reactions, posts, comments, categories;
+=======
+DROP TABLE categories, comments, posts, users, photos, reactions;
+>>>>>>> origin/posts-photos
 ```
 
 ### Запуск на Windows
@@ -187,6 +191,13 @@ npm install --legacy-peer-deps
         POST    /posts              создать пост                    (*)
         PUT     /posts/{id}         обновить пост по id             (**)(***)
         DELETE  /posts/{id}         удалить пост по id              (**)(***)
+        POST    /posts/{id}/photos  добавить фото поста             (**)
+        ```
+
+        🔹 Фотографии:
+
+        ```requests
+        DELETE /photos/{id}         удалить фото по ID
         ```
 
         🔹 Комментарии:
@@ -320,12 +331,29 @@ npm install --legacy-peer-deps
         "body": "string", - основная информация
         "likes": 1, 
         "dislikes": 1,
-        "comments": [
+        "comments": [ - массив комментариев к посту
             {
                 "id": 1, - id коммента
                 "post_id": 1 - id поста
                 "body": "string", - тело комментария
-                "author_id" : 1 - id автора комментария  
+                "author_id" : 1 - id автора комментария
+            }
+        ]
+        "photos": [ - массив фотографий
+            {
+                "id": 1,
+                "post_id": 1,
+                "url": "string"
+            },
+            {
+                "id": 2,
+                "post_id": 1,
+                "url": "string"
+            },
+            {
+                "id": 3,
+                "post_id": 1,
+                "url": "string"
             }
         ]
     }

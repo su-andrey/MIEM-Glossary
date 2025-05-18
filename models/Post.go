@@ -10,4 +10,5 @@ type Post struct {
 	Dislikes    int       `json:"dislikes"`     // Оценки (положительные или отрицательные)
 	IsModerated bool      `json:"is_moderated"` // Проверен ли пост модератором перед публикацией
 	Comments    []Comment `json:"comments"`
+	Photos      []Photo   `json:"photos"`
 }

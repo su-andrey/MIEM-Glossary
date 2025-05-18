@@ -9,14 +9,17 @@ import (
 
 // задаем конфигурацию для всего приложения, указываем порты всех сервисов
 type Config struct {
-	Port          string
-	DbUrl         string
-	AppUrl        string
-	ReactPort     string
-	ENV           string
-	AdminEmail    string
-	AdminPassword string
-	JWTSecret     string
+	Port                string
+	DbUrl               string
+	AppUrl              string
+	ReactPort           string
+	ENV                 string
+	AdminEmail          string
+	AdminPassword       string
+	JWTSecret           string
+	CloudinaryCloudName string
+	CloudinaryAPIKey    string
+	CloudinaryAPISecret string
 }
 
 func LoadConfig() Config {
@@ -36,13 +39,16 @@ func LoadConfig() Config {
 	}
 
 	return Config{
-		Port:          port,
-		DbUrl:         os.Getenv("DB_URL"),
-		AppUrl:        os.Getenv("APP_URL"),
-		ReactPort:     os.Getenv("REACT_PORT"),
-		AdminEmail:    os.Getenv("ADMIN_EMAIL"),
-		AdminPassword: os.Getenv("ADMIN_PASSWORD"),
-		JWTSecret:     os.Getenv("JWT_SECRET"),
-		ENV:           os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
+		Port:                port,
+		DbUrl:               os.Getenv("DB_URL"),
+		AppUrl:              os.Getenv("APP_URL"),
+		ReactPort:           os.Getenv("REACT_PORT"),
+		AdminEmail:          os.Getenv("ADMIN_EMAIL"),
+		AdminPassword:       os.Getenv("ADMIN_PASSWORD"),
+		JWTSecret:           os.Getenv("JWT_SECRET"),
+		CloudinaryCloudName: os.Getenv("CLOUDINARY_CLOUD_NAME"),
+		CloudinaryAPIKey:    os.Getenv("CLOUDINARY_API_KEY"),
+		CloudinaryAPISecret: os.Getenv("CLOUDINARY_API_SECRET"),
+		ENV:                 os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
 	}
 }

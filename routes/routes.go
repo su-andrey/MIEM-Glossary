@@ -56,7 +56,11 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	posts.Get("/:id", handlers.GetPost)                                                                                           // Получение поста по ID
 	posts.Post("/", handlers.CreatePost, middleware.JWTMiddlewate())                                                              // Создание поста
 	posts.Put("/:id", handlers.UpdatePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID))    // Обновление поста
-	posts.Delete("/:id", handlers.DeletePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID)) // Удаление поста                                                                         // Получение комментраиев к посту по id
+	posts.Delete("/:id", handlers.DeletePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPostAuthorID)) // Удаление поста
+	posts.Post("/:id/photos", handlers.UploadPostPhotos, middleware.JWTMiddlewate(), middleware.IsAuthor(middleware.GetCreatingPostID))
+
+	photos := api.Group("/photos")
+	photos.Delete("/:id", handlers.DeletePhoto, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(middleware.GetPhotoPostAuthorID))
 
 	// Группировка комментариев
 	comments := api.Group("/comments")
