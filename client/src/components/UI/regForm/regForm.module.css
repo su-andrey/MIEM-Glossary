@@ -86,6 +86,7 @@
 
 .input {
     border: 0.3px solid rgb(142, 142, 142);
+    font-size: var(--caption-font);
     background-color: rgb(242, 242, 242);
     height: calc(2.5*var(--index));
     width: 90%;
@@ -105,6 +106,7 @@
 }
 
 .input_err {
+    font-size: var(--caption-font);
     border: 0.3px solid rgb(138, 121, 121);
     background-color: rgb(253, 192, 192);
     height: calc(2.5*var(--index));
@@ -122,13 +124,19 @@
 }
 
 .check {
-    transition: 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    min-width: 2vw;
+    width: clamp(16px, 2vw, 24px);
+    height: clamp(16px, 2vw, 24px);
+    cursor: pointer;
 }
 
 .check:hover {
     transition: 0.15s ease-in-out;
     transform: scale(125%);
 }
+
+
 
 .checkboxContainer {
     width: 90%;
@@ -149,6 +157,7 @@
 }
 
 .checkboxCaption{
+    font-size: var(--subcaption-font);
     margin-left: calc(0.5*var(--index));
     color: var(--light-grey);
 }

@@ -34,6 +34,7 @@
 
 .swiperButtonNext,
 .swiperButtonPrev {
+    min-width: 1em;
     position: absolute;
     top: 40%;
     transform: translateY(-50%);
@@ -51,11 +52,18 @@
     user-select: none;
 }
 
+.swiperButtonNext svg,
+.swiperButtonPrev svg{
+    min-width: 2em;
+}
+
 .swiperButtonPrev {
+    min-width: 1em;
     left: -0.4vw;
 }
 
 .swiperButtonNext {
+    min-width: 1em;
     right: -0.4vw;
 }
 
@@ -65,6 +73,8 @@
     background-color: var(--primary-color);
     margin-inline: 0.3vw;
     opacity: 0.3;
+    min-width: 2em;
+    min-height: 2em;
 }
 
 
@@ -75,6 +85,6 @@
 }
 
 .swiperPagination {
-    margin-top: 1vh;
+    margin-top: 2vh;
     text-align: center;
 }
