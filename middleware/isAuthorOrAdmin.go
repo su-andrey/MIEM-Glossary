@@ -97,3 +97,23 @@ func IsSelf() fiber.Handler {
 		return fiber.ErrForbidden
 	}
 }
+
+func IsAuthor(getAuthorID func(c fiber.Ctx) (int, error)) fiber.Handler {
+	return func(c fiber.Ctx) error {
+		userIDRaw := c.Locals("userID")
+		if userIDRaw == nil {
+			return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+		}
+		userID := userIDRaw.(int)
+
+		authorID, err := getAuthorID(c)
+		if err != nil {
+			return fiber.NewError(fiber.StatusForbidden, "can't get author id")
+		}
+		if userID == authorID {
+			return c.Next()
+		}
+
+		return fiber.ErrForbidden
+	}
+}
