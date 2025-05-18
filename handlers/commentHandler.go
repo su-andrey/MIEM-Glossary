@@ -74,12 +74,12 @@ func CreateComment(c fiber.Ctx) error {
 	err := database.DB.QueryRow(
 		context.Background(),
 		`INSERT INTO comments (post_id, body, author_id)
-		 VALUES ($1, $2, $3, 0, 0) RETURNING id`,
+		 VALUES ($1, $2, $3) RETURNING id`,
 		input.PostID, input.Body, userID,
 	).Scan(&commentID) // Получаем ID созданного комментария
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления комментария"})
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления комментария: " + err.Error()})
 	}
 
 	// Формируем объект Comment с вложенным постом
