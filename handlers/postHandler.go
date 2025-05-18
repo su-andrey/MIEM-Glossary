@@ -33,6 +33,27 @@ func GetPosts(c fiber.Ctx) error {
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
+
+		var comments []models.Comment
+		rowsComments, err := database.DB.Query(context.Background(),
+			`SELECT id, post_id, author_id, body FROM comments WHERE post_id = $1`, post.ID)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка получения комменатриев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		}
+		defer rows.Close()
+		for rowsComments.Next() {
+			var comment models.Comment
+			err := rowsComments.Scan(
+				&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body,
+			)
+
+			if err != nil {
+				return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки комментариев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+			}
+			comments = append(comments, comment)
+		}
+		post.Comments = comments
+
 		posts = append(posts, post)
 	}
 
@@ -56,17 +77,17 @@ func GetPost(c fiber.Ctx) error {
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
-	var comments []models.ShortComment
+	var comments []models.Comment
 	rows, err := database.DB.Query(context.Background(),
-		`SELECT * FROM COMMENTS WHERE post_id = $1`, id)
+		`SELECT id, post_id, author_id, body FROM comments WHERE post_id = $1`, id)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка получения комменатриев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var comment models.ShortComment
+		var comment models.Comment
 		err := rows.Scan(
-			&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body, &comment.Likes, &comment.Dislikes,
+			&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body,
 		)
 
 		if err != nil {
