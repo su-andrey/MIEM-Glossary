@@ -3,6 +3,8 @@ package handlers
 import (
 	"context"
 	"mime/multipart"
+	"path"
+	"strings"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -51,4 +53,43 @@ func UploadPostPhotos(c fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"urls": urls})
+}
+
+func DeletePhotoFromClodinary(cfg config.Config, url string) error {
+	cld, _ := cloudinary.NewFromParams(cfg.CloudinaryCloudName, cfg.CloudinaryAPIKey, cfg.CloudinaryAPISecret)
+	parts := strings.Split(url, "/")
+	publicIDWithExt := parts[len(parts)-1]
+	publicID := strings.TrimSuffix(publicIDWithExt, path.Ext(publicIDWithExt))
+
+	_, err := cld.Upload.Destroy(context.Background(), uploader.DestroyParams{PublicID: publicID})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeletePhoto(c fiber.Ctx) error {
+	photoID := c.Params("id")
+
+	var url string
+	err := database.DB.QueryRow(context.Background(), `
+		SELECT url FROM photos WHERE id = $1`, photoID).Scan(&url)
+
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "photo not found"})
+	}
+
+	cfg := config.LoadConfig()
+	err = DeletePhotoFromClodinary(cfg, url)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "error deleting photo from cloudinary"})
+	}
+
+	_, err = database.DB.Exec(context.Background(), "DELETE FROM photos WHERE id = $1", photoID)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "error deleting from DB"})
+	}
+
+	return c.JSON(fiber.Map{"message": "photo deleted"})
 }
