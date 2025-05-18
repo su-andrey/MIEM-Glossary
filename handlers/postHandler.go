@@ -53,11 +53,28 @@ func GetPost(c fiber.Ctx) error {
 		 WHERE p.id = $1`, id).
 		Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
 			&post.Category.ID, &post.Category.Name, &post.AuthorID, &post.IsModerated)
-
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
+	var comments []models.ShortComment
+	rows, err := database.DB.Query(context.Background(),
+		`SELECT * FROM COMMENTS WHERE post_id = $1`, id)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка получения комменатриев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var comment models.ShortComment
+		err := rows.Scan(
+			&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body, &comment.Likes, &comment.Dislikes,
+		)
 
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки комментариев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		}
+		comments = append(comments, comment)
+	}
+	post.Comments = comments
 	return c.JSON(post)
 }
 
@@ -150,27 +167,4 @@ func DeletePost(c fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"message": "Пост удален"})
-}
-
-func GetPostComments(c fiber.Ctx) error {
-	id := c.Params("id")
-	var comments []models.ShortComment
-	rows, err := database.DB.Query(context.Background(),
-		`SELECT * FROM COMMENTS WHERE post_id = $1`, id)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка получения комменатриев"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var comment models.ShortComment
-		err := rows.Scan(
-			&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body, &comment.Likes, &comment.Dislikes,
-		)
-
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-		}
-		comments = append(comments, comment)
-	}
-	return c.JSON(comments)
 }
