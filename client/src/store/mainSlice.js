@@ -1,18 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
-import posts from "./fake/posts";
-import comments from "./fake/comments";
-import users from "./fake/users";
 import image from "./../assets/jpg/cafe_categories/soup.jpg";
-import categories from "./fake/categories";
+
 const mainSlice = createSlice({
     name: 'main',
     initialState: {
-        users : users,
-        posts : posts,
-        comments : comments,
-        categories : categories,
+        users : [],
+        posts : [],
+        comments : [],
+        categories : [
+                        {
+                            "id": 1,
+                            "name": "Кофе"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Фастфуд и шаурма"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Копирки"
+                        },
+                        {
+                            "id": 4,
+                            "name": "Магазины"
+                        },
+                        {
+                            "id": 5,
+                            "name": "Преподаватели"
+                        },
+                        {
+                            "id": 6,
+                            "name": "Ответы"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Отзывы"
+                        }
+                    ],
         wasChanged : true,
-
         isAuthentificated : true,
         email : "segunperkele@gmail.com",
         password : "Aa20041989+",
