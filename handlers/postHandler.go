@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/models"
 )
@@ -33,6 +34,27 @@ func GetPosts(c fiber.Ctx) error {
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
+
+		rowsPhotos, err := database.DB.Query(context.Background(),
+			`SELECT id, post_id, url FROM photos WHERE post_id = $1`, post.ID)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных фотографий"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		}
+		defer rowsPhotos.Close()
+
+		var photos []models.Photo
+		for rowsPhotos.Next() {
+			var photo models.Photo
+			err := rowsPhotos.Scan(&photo.ID, &photo.PostID, &photo.Url)
+			if err != nil {
+				return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных фотографий"})
+			}
+
+			photos = append(photos, photo)
+		}
+
+		post.Photos = photos
+
 		posts = append(posts, post)
 	}
 
@@ -57,6 +79,26 @@ func GetPost(c fiber.Ctx) error {
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
+
+	rowsPhotos, err := database.DB.Query(context.Background(),
+		`SELECT id, post_id, url FROM photos WHERE post_id = $1`, post.ID)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных фотографий"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+	defer rowsPhotos.Close()
+
+	var photos []models.Photo
+	for rowsPhotos.Next() {
+		var photo models.Photo
+		err := rowsPhotos.Scan(&photo.ID, &photo.PostID, &photo.Url)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных фотографий"})
+		}
+
+		photos = append(photos, photo)
+	}
+
+	post.Photos = photos
 
 	return c.JSON(post)
 }
@@ -143,7 +185,30 @@ func UpdatePost(c fiber.Ctx) error {
 func DeletePost(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	_, err := database.DB.Exec(context.Background(),
+	rows, err := database.DB.Query(context.Background(),
+		"SELECT url FROM photos WHERE post_id = $1", id)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "error checking post photos"})
+	}
+	defer rows.Close()
+
+	var urls []string
+	for rows.Next() {
+		var url string
+		if err := rows.Scan(&url); err == nil {
+			urls = append(urls, url)
+		}
+	}
+
+	cfg := config.LoadConfig()
+	for _, url := range urls {
+		err = DeletePhotoFromClodinary(cfg, url)
+		if err != nil {
+			return c.Status(400).JSON(fiber.Map{"error": "error deleting photo from cloudinary"})
+		}
+	}
+
+	_, err = database.DB.Exec(context.Background(),
 		"DELETE FROM posts WHERE id = $1", id)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
