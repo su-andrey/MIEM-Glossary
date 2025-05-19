@@ -20,7 +20,7 @@ import (
 // 	}
 //  fmt.Println(response)
 
-func get_link_by_name(name string, surname string, patronic string) (string, error) {
+func get_link_by_name(surname string, name string, patronic string) (string, error) {
 	url := fmt.Sprintf("https://www.hse.ru/org/persons/?search_person=%s+%s+%s", name, surname, patronic) // базовый url поиска
 	client := &http.Client{
 		Timeout: 10 * time.Second,
