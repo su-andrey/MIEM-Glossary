@@ -73,4 +73,7 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	reactions := api.Group("/reactions")
 	reactions.Get("/:id", handlers.GetReaction, middleware.JWTMiddlewate())
 	reactions.Post("/:id", handlers.SetReaction, middleware.JWTMiddlewate())
+
+	find := api.Group("/findteacher")
+	find.Post("/", handlers.FindUser)
 } // В каждой из группировок для удаления или обновления обязательно требуется ID
