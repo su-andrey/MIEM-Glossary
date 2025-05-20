@@ -223,6 +223,11 @@ npm install --legacy-peer-deps
         POST    /reactions/{id}     поставить реакцию на пост id            (*)
         ```
 
+        🔹 Ссылки (на преподавателей):
+
+        ```requests
+        POST    /find_teacher/     найти преподавателя по Фамилии Имени и Отчеству          
+        ```
     1. Аутентификация `SUFFIX: /auth`
 
         ```structure
@@ -286,6 +291,14 @@ npm install --legacy-peer-deps
     {
         "email": "email@mail.com",
         "password": "password123"
+    }
+    ```
+    
+    7️⃣ Поиск преподавателя
+    
+    ```db
+    {
+        "target": "Surname Name Patronymic"
     }
     ```
 
@@ -383,6 +396,14 @@ npm install --legacy-peer-deps
     ```db
     {
         "token": "string" - JWT-токен
+    }
+    ```
+
+    7️⃣ Поиск преподавателя
+
+    ```db
+    {
+        "link": "https://www.hse.ru/org/persons/999999999"
     }
     ```
 
