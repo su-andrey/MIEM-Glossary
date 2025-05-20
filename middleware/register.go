@@ -1,13 +1,12 @@
 package middleware
 
 import (
-	"context"
+	"errors"
 	"log"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/database"
-	"github.com/su-andrey/kr_aip/models"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/jackc/pgx/v5"
+	"github.com/su-andrey/kr_aip/services"
 )
 
 func Register(c fiber.Ctx) error {
@@ -25,32 +24,17 @@ func Register(c fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	ctx := context.Background()
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-	if err != nil {
-		log.Println("Error hashing password: ", err)
-		return err
-	}
-
-	var user models.User
-	err = database.DB.QueryRow(ctx,
-		`SELECT id, email, password FROM users WHERE email=$1`, input.Email).
-		Scan(&user.ID, &user.Email, &user.Password)
+	user, err := services.GetUserByEmail(c.Context(), input.Email)
 
 	if err != nil {
-		if err.Error() == "no rows in result set" {
-			err = database.DB.QueryRow(ctx, `
-				INSERT INTO users (email, password)
-				VALUES ($1, $2) RETURNING id`, input.Email, hashedPassword).Scan(&user.ID)
+		if errors.Is(err, pgx.ErrNoRows) {
+			_, err = services.CreateUser(c.Context(), input.Email, input.Password, false)
 			if err != nil {
-				log.Println("Error creating new user: ", err)
-				return err
+				return errors.New("error creating new user")
 			}
-			log.Println("User created successfully!")
 			return nil
 		}
-		log.Println("Error checking user: ", err)
-		return err
+		return errors.New("error checking")
 	}
 
 	token, err := GenerateJWT(user.ID, false)

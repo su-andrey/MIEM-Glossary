@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"context"
+	"errors"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/models"
+	"github.com/su-andrey/kr_aip/services"
 )
 
 // Общая структура всех функций в данном файле (схожа с другими хэндлерами)
@@ -13,19 +14,9 @@ import (
 // При успехе обрабатываем полученные данные, если результат объект - возвращаем его, иначе выводим сообщение. При удалении не возвращаем удаленный объект
 // GetUsers возвращает всех пользователей
 func GetUsers(c fiber.Ctx) error {
-	rows, err := database.DB.Query(context.Background(), "SELECT id, email, password, is_admin FROM users")
+	users, err := services.GetUsers(c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-	defer rows.Close()
-
-	var users []models.User
-	for rows.Next() {
-		var user models.User
-		if err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin); err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-		}
-		users = append(users, user)
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения пользователей")
 	}
 
 	return c.JSON(users)
@@ -33,15 +24,15 @@ func GetUsers(c fiber.Ctx) error {
 
 // GetUser возвращает одного пользователя по ID
 func GetUser(c fiber.Ctx) error {
-	id := c.Params("id")
-
-	var user models.User
-	err := database.DB.QueryRow(context.Background(),
-		"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
-		Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin)
-
+	idRaw := c.Params("id")
+	id, err := strconv.Atoi(idRaw)
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Пользователь не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "некорректный формат id")
+	}
+
+	user, err := services.GetUserByID(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения пользователя")
 	}
 
 	return c.JSON(user)
@@ -49,16 +40,18 @@ func GetUser(c fiber.Ctx) error {
 
 // CreateUser создает нового пользователя
 func CreateUser(c fiber.Ctx) error {
-	user := new(models.User)
-	if err := c.Bind().Body(user); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	var input struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		IsAdmin  bool   `json:"is_admin"`
+	}
+	if err := c.Bind().Body(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
 	}
 
-	_, err := database.DB.Exec(context.Background(),
-		"INSERT INTO users (email, password, is_admin) VALUES ($1, $2, $3)",
-		user.Email, user.Password, user.IsAdmin)
+	user, err := services.CreateUser(c.Context(), input.Email, input.Password, input.IsAdmin)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления пользователя"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка добавления пользователя")
 	}
 
 	return c.JSON(user)
@@ -67,17 +60,15 @@ func CreateUser(c fiber.Ctx) error {
 // UpdateUser обновляет данные пользователя
 func UpdateUser(c fiber.Ctx) error {
 	id := c.Params("id")
-	user := new(models.User)
+	var input models.User
 
-	if err := c.Bind().Body(user); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	if err := c.Bind().Body(input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	_, err := database.DB.Exec(context.Background(),
-		"UPDATE users SET email = $1, password = $2, is_admin = $3 WHERE id = $4",
-		user.Email, user.Password, user.IsAdmin, id)
+	err := services.UpdateUser(c.Context(), id, input.Email, input.Password, input.IsAdmin)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления пользователя"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления пользователя")
 	}
 
 	return c.JSON(fiber.Map{"message": "Пользователь обновлен"})
@@ -87,9 +78,9 @@ func UpdateUser(c fiber.Ctx) error {
 func DeleteUser(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	_, err := database.DB.Exec(context.Background(), "DELETE FROM users WHERE id = $1", id)
+	err := services.DeleteUser(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления пользователя"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return errors.New("ошибка удаления пользователя")
 	}
 
 	return c.JSON(fiber.Map{"message": "Пользователь удален"})
