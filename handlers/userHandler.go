@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/models"
@@ -23,7 +24,11 @@ func GetUsers(c fiber.Ctx) error {
 
 // GetUser возвращает одного пользователя по ID
 func GetUser(c fiber.Ctx) error {
-	id := c.Params("id")
+	idRaw := c.Params("id")
+	id, err := strconv.Atoi(idRaw)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "некорректный формат id")
+	}
 
 	user, err := services.GetUserByID(c.Context(), id)
 	if err != nil {

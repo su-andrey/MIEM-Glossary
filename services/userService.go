@@ -29,7 +29,7 @@ func GetUsers(ctx context.Context, optConditions ...EqualCondition) ([]models.Us
 	return users, nil
 }
 
-func GetUserByID(ctx context.Context, id string) (models.User, error) {
+func GetUserByID(ctx context.Context, id int) (models.User, error) {
 	var user models.User
 	err := database.DB.QueryRow(context.Background(),
 		"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
