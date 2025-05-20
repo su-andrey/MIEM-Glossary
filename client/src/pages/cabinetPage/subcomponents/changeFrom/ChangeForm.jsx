@@ -5,13 +5,14 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import EyeIcon from "../eyeIcon/EyeIcon.jsx";
 import { useState } from "react";
+import { resetState } from "../../../../store/mainSlice.js";
 
 const ChangeForm = () => {
     const dispatch = useDispatch();
     let isAuth = useSelector(state => state.main.isAuthentificated);
     let isAdmin = useSelector(state => state.main.isAdmin);
-    const userEmail = useSelector(state => state.main.email);
-    const userPassword = useSelector(state => state.main.password);
+    const userEmail = useSelector(state => state.main.email) || localStorage.getItem("email");
+    const userPassword = useSelector(state => state.main.password) || localStorage.getItem("password");
 
     const [input1Type, changeInput1Type] = useState(false);
     const [input2Type, changeInput2Type] = useState(false);
@@ -63,6 +64,11 @@ const ChangeForm = () => {
 
     const password = watch('password');
     
+    const handleExit = ()=>{
+        navigate("/", { state: { from: "/" } });
+        dispatch(resetState())
+    }
+
     return ( 
         <form className={styles.changeForm} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.subtitle}>
@@ -149,7 +155,13 @@ const ChangeForm = () => {
                 text={isSubmitting ? "Загрузка..." : "Изменить"} 
                 type="submit"
             />
+
+            <ActionButton 
+                onClick={handleExit}
+                text={"Выйти"} 
+            />
         </form>
+
     );
 }
 

@@ -24,11 +24,16 @@ import Loader from "../../../components/UI/loader/Loader";
 
 const SinglePrepodPage = () => {
     let categories = useSelector(state => getCategories(state));
-    let category = categories.find((category) => category.name == "Препод");
+    let category = categories.find((category) => category.name == "Преподаватели");
+    console.warn(category)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = useParams().id;
+
     const prepod = useSelector(state => getPrepodByID(state, post_id));
     console.log(prepod)
+    if (!prepod) {
+        return <Loader />;
+    }
     const reviews = useSelector(state => getPrepodReviewsByID(state, prepod.id))
     console.log(post_id)
     console.log("Препод: ", prepod)

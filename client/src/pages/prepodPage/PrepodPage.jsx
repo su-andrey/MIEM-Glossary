@@ -17,7 +17,7 @@ import PrepodCard from "../../components/prepodCard/PrepodCard";
 import Loader from "../../components/UI/loader/Loader";
 const PrepodPage = () => {
     const categories = useSelector(state => getCategories(state));
-    const category = categories.find((category) => category.name === "Препод");
+    const category = categories.find((category) => category.name === "Преподаватели");
     const posts = useSelector(state => getPostsByCategory(state, category?.id));
     console.log(posts)
     const [ready, setReady] = useState(false);

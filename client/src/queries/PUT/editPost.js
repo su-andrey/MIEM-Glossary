@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const editPost = async (name, author_id, body, category_id, id) => {
     if (!name || !author_id || !body || !category_id || !id) {
@@ -10,10 +9,23 @@ const editPost = async (name, author_id, body, category_id, id) => {
     const data = { name, author_id, body, category_id };
 
     try {
-        const response = await axios.put(`${BASE_URL}/posts/${id}`, data);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.put(
+            `${BASE_URL}/api/posts/${id}`, 
+            data,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("Post edited:", response.data);
         return response.data;
-    } catch (error) {
+    } 
+    catch(error){
         console.error("Error editing post:", error.response?.data?.error || error.message);
         throw error;
     }

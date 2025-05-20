@@ -1,16 +1,27 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const editCategory = async (category_name, category_id) => {
     if (!category_name || !category_id ){
         throw new Error("Missing required category fields");
     }
 
-    const data = { category_name };
+    const data = { name:category_name };
 
     try {
-        const response = await axios.put(`${BASE_URL}/categories/${category_id}`, data);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.put(
+            `${BASE_URL}/api/categories/${category_id}`,
+            data,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("Category edited:", response.data);
         return response.data;
     } catch (error) {

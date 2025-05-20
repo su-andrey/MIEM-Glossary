@@ -1,10 +1,12 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const requirePosts = async (id = "") => {
     try{
-        const url = id === "" ? `${BASE_URL}/posts` : `${BASE_URL}/posts/${id}`;
-        const response = await axios.get(url);
+        const url = !id  ? `${BASE_URL}/api/posts` : `${BASE_URL}/posts/${id}`;
+        const response = await axios.get(
+            url
+        );
         console.log("Posts received: ",response.data);
         return response.data;
     } 

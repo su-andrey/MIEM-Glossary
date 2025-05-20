@@ -1,16 +1,27 @@
 import axios from "axios";
+import BASE_URL from "../../baseURL";
 
-const BASE_URL = "http://localhost:3000/api";
-
-const editUser = async (email, id, password) => {
+const editUser = async (email, id, password, is_admin) => {
     if (!email || !id || !password) {
         throw new Error("Missing required user fields");
     }
 
-    const data = { email, password };
+    const data = { email, password, is_admin: is_admin };
 
     try {
-        const response = await axios.put(`${BASE_URL}/users/${id}`, data);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.put(
+            `${BASE_URL}/api/users/${id}`, 
+            data,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("User edited:", response.data);
         return response.data;
     } catch (error) {

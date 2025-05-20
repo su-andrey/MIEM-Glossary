@@ -1,9 +1,9 @@
 import axios from "axios";
 import BASE_URL from "../../baseURL";
 
-const requireCategory = async (id = "") => {
+const requireCategory = async () => {
     try{
-        const url = id === "" ? `${BASE_URL}/api/categories` : `${BASE_URL}/api/categories/${id}`;
+        const url = `${BASE_URL}/api/categories`;
         const response = await axios.get(url);
         console.log("Categories received: ", response.data);
         return response.data;

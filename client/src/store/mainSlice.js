@@ -45,6 +45,10 @@ const mainSlice = createSlice({
         isAdmin : undefined,
     },
     reducers:{
+        setChanged(state, action){
+            state.wasChanged = action.payload
+        },
+
         setUsers(state, action){
             state.users = action.payload.data
         },
@@ -70,10 +74,21 @@ const mainSlice = createSlice({
             state.email = action.payload?.email
             state.password = action.payload?.password
             state.userID = action.payload?.userID
+        },
+
+        resetState(state){
+            state.isAuthentificated = false
+            state.email = ""
+            state.password = ""
+            state.userID = undefined
+            state.isAdmin = undefined
+            localStorage.removeItem("email")
+            localStorage.removeItem("password")
+            localStorage.removeItem("token")
         }
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, handleLogIn} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, handleLogIn, resetState, setChanged} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;
