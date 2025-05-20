@@ -40,29 +40,16 @@ func GetPosts(ctx context.Context, optCondition ...EqualCondition) ([]models.Pos
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
-		var comments []models.Comment
-		rowsComments, err := database.DB.Query(context.Background(),
-			`SELECT id, post_id, author_id, body FROM comments WHERE post_id = $1`, post.ID)
+		comments, err := GetComments(ctx, EqualCondition{Name: "post_id", Value: post.ID})
 		if err != nil {
 			return posts, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
-		defer rows.Close()
-		for rowsComments.Next() {
-			var comment models.Comment
-			err := rowsComments.Scan(
-				&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body,
-			)
 
-			if err != nil {
-				return posts, errors.New("ошибка обработки комментариев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-			}
-			comments = append(comments, comment)
-		}
 		post.Comments = comments
 
 		photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: post.ID})
 		if err != nil {
-			return posts, errors.New("error geting post photos")
+			return posts, errors.New("ошибка получения фотографий поста")
 		}
 
 		post.Photos = photos
@@ -75,6 +62,7 @@ func GetPosts(ctx context.Context, optCondition ...EqualCondition) ([]models.Pos
 
 func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 	var post models.Post
+
 	err := database.DB.QueryRow(context.Background(),
 		`SELECT p.id, p.name, p.body, p.likes, p.dislikes, 
 		        c.id, c.name, 
@@ -87,29 +75,16 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 	if err != nil {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
-	var comments []models.Comment
-	rowsComments, err := database.DB.Query(context.Background(),
-		`SELECT id, post_id, author_id, body FROM comments WHERE post_id = $1`, id)
+
+	comments, err := GetComments(ctx, EqualCondition{Name: "post_id", Value: post.ID})
 	if err != nil {
 		return post, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-	defer rowsComments.Close()
-	for rowsComments.Next() {
-		var comment models.Comment
-		err := rowsComments.Scan(
-			&comment.ID, &comment.PostID, &comment.AuthorID, &comment.Body,
-		)
-
-		if err != nil {
-			return post, errors.New("ошибка обработки комментариев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-		}
-		comments = append(comments, comment)
 	}
 	post.Comments = comments
 
 	photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: post.ID})
 	if err != nil {
-		return post, errors.New("error geting post photos")
+		return post, errors.New("ошибка получения фотографий поста")
 	}
 
 	post.Photos = photos
@@ -118,33 +93,28 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 }
 
 func CreatePost(ctx context.Context, categoryID int, name, body string, userID int) (models.Post, error) {
+	post := models.Post{
+		AuthorID: userID,
+		Name:     name,
+		Body:     body,
+	}
+
 	category, err := GetCategoryByID(ctx, strconv.Itoa(categoryID))
 	if err != nil {
-		return models.Post{}, errors.New("категория не найдена") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return post, errors.New("категория не найдена") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
+
+	post.Category = category
 	// Вставляем пост в базу
-	var postID int
 	err = database.DB.QueryRow(
 		ctx,
 		`INSERT INTO posts (name, body, category_id, author_id)
 		 VALUES ($1, $2, $3, $4) RETURNING id`,
 		name, body, categoryID, userID,
-	).Scan(&postID) // Получаем ID созданного поста
+	).Scan(&post.ID) // Получаем ID созданного поста
 
 	if err != nil {
-		return models.Post{}, errors.New("ошибка добавления поста") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-
-	// Формируем объект Post с вложенной категорией
-	post := models.Post{
-		ID:          postID,   // Возвращенный ID поста
-		Category:    category, // Заполненный объект категории
-		AuthorID:    userID,
-		Name:        name,
-		Body:        body,
-		Likes:       0,
-		Dislikes:    0,
-		IsModerated: false,
+		return post, errors.New("ошибка добавления поста") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
 	return post, nil
@@ -162,24 +132,23 @@ func UpdatePost(ctx context.Context, id, name, body string, likes, dislikes int,
 }
 
 func DeletePost(ctx context.Context, id string) error {
-	rows, err := database.DB.Query(ctx,
-		"SELECT url FROM photos WHERE post_id = $1", id)
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM posts WHERE id = $1)", id).Scan(&exists)
 	if err != nil {
-		return errors.New("error checking post photos")
+		return errors.New("ошибка проверки существования пользователя")
 	}
-	defer rows.Close()
+	if !exists {
+		return errors.New("пользователь не найден")
+	}
 
-	var urls []string
-	for rows.Next() {
-		var url string
-		if err := rows.Scan(&url); err == nil {
-			urls = append(urls, url)
-		}
+	photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: id})
+	if err != nil {
+		return errors.New("ошибка получения фотографий поста")
 	}
 
 	cfg := config.LoadConfig()
-	for _, url := range urls {
-		err = DeletePhotoFromClodinary(cfg, url)
+	for _, photo := range photos {
+		err = DeletePhotoFromClodinary(cfg, photo.Url)
 		if err != nil {
 			return errors.New("error deleting photo from cloudinary")
 		}
