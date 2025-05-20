@@ -4,8 +4,13 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useEffect } from "react";
+import HandleRegisterUser from "./../../../store/middleware functions/HandleRegisterUser";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
 const RegisterForm = ({initialOpen = true}) => {
+    const [regError, setRegError] = useState("");
+    const [input1Type, changeInput1Type] = useState(false);
+    const [input2Type, changeInput2Type] = useState(false);
     const [open, setOpen] = useState(initialOpen);
     const {
         register,
@@ -19,14 +24,22 @@ const RegisterForm = ({initialOpen = true}) => {
     } = useForm({mode: "all",})
 
     const onSubmit = async (data)=> {
+        console.log("Отправили вот это", data)
         try{
-            console.log(data)
+            await HandleRegisterUser(data.email, data.password)
             setOpen(false);
+            reset();
+            handleRedirect();
         }
         catch(error){
-            console.error(error)
+            console.log("Popalsa")
+            if (error.response?.status == 401) {
+                setRegError("Такой пользователь уже существует");
+            } else {
+                setRegError("Ошибка регистрации. Попробуйте позже.");
+            }
+            console.error(error);
         }
-        reset()
     }
 
     const location = useLocation();
@@ -65,7 +78,7 @@ const RegisterForm = ({initialOpen = true}) => {
                                 message: "Слишком короткая почта"
                             },
                             maxLength: {
-                                value: 40,
+                                value: 100,
                                 message: "Слишком длинная почта"
                             },
                             pattern: {
@@ -76,49 +89,57 @@ const RegisterForm = ({initialOpen = true}) => {
                         })}
                         />
                         {errors.email && <div className={style.error_warning}>{errors.email.message}</div>}
-                        <input 
-                        className={errors.password ? style.input_err : style.input} 
-                        type="password" 
-                        placeholder="Создайте пароль..."
-                        {...register('password', {
-                            required: "Поле обязательно к заполнению",
-                            minLength: {
-                                value: 8,
-                                message: "Слишком короткий пароль"
-                            },
-                            maxLength: {
-                                value: 40,
-                                message: "Слишком длинный пароль"
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
-                                message: "Неверный формат пароля"
-                            },
-                        })}
-                        />
+                        <div className={style.inputContainer}>
+                            <input 
+                            style={{width:"100%"}}
+                            className={errors.password ? style.input_err : style.input} 
+                            placeholder="Создайте пароль..."
+                            type={input1Type ? "text" : "password"}
+                            {...register('password', {
+                                required: "Поле обязательно к заполнению",
+                                minLength: {
+                                    value: 8,
+                                    message: "Слишком короткий пароль"
+                                },
+                                maxLength: {
+                                    value: 100,
+                                    message: "Слишком длинный пароль"
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
+                                    message: "Неверный формат пароля"
+                                },
+                            })}
+                            />
+                            <EyeIcon handleVisible={changeInput1Type}/>
+                        </div>
                         {errors.password && <div className={style.error_warning}>{errors.password.message}</div>}
-                        <input 
-                        className={errors.confirm ? style.input_err : style.input} 
-                        type="password" 
-                        placeholder="Подтвердите ваш пароль..." 
-                        {...register('confirm', {
-                            required: "Поле обязательно к заполнению",
-                            minLength: {
-                                value: 8,
-                                message: "Слишком короткий пароль"
-                            },
-                            maxLength: {
-                                value: 40,
-                                message: "Слишком длинный пароль"
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
-                                message: "Неверный формат пароля"
-                            },
-                            validate: (value) =>
-                                value === password || "Пароли не совпадают"
-                        })}
-                        />
+                        <div className={style.inputContainer}>
+                            <input 
+                            style={{width:"100%"}}
+                            className={errors.confirm ? style.input_err : style.input} 
+                            type={input2Type ? "text" : "password"}
+                            placeholder="Подтвердите ваш пароль..." 
+                            {...register('confirm', {
+                                required: "Поле обязательно к заполнению",
+                                minLength: {
+                                    value: 8,
+                                    message: "Слишком короткий пароль"
+                                },
+                                maxLength: {
+                                    value: 100,
+                                    message: "Слишком длинный пароль"
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
+                                    message: "Неверный формат пароля"
+                                },
+                                validate: (value) =>
+                                    value === password || "Пароли не совпадают"
+                            })}
+                            />
+                            <EyeIcon handleVisible={changeInput2Type} />
+                        </div>
                         {errors.confirm && <div className={style.error_warning}>{errors.confirm.message}</div>}
                         <div className={style.checkboxContainer}>
                             <input 
@@ -132,7 +153,8 @@ const RegisterForm = ({initialOpen = true}) => {
                             <label className={style.checkboxCaption} htmlFor="myCheckbox">Обязуюсь отказаться от необоснованных оскорблений, оставив только обоснованные.</label>
                         </div>
                         {errors.joke && <div className={style.error_warning}>{errors.joke.message}</div>}
-                        <ActionButton disabled={errors} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
+                        {regError && <div className={style.error_warning}>{regError}</div>}
+                        <ActionButton disabled={Object.keys(errors).length > 0 || isSubmitting} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
                             <div className={style.regCaption} onClick={()=> handleRedirect()}>
                                 Уже есть аккаунт?<br />
                                 <span className={style.regMainCaption}>Вход</span>

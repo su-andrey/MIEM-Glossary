@@ -2,12 +2,12 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3000/api";
 
-const editUser = async (name, id, password) => {
-    if (!name || !id || !password) {
+const editUser = async (email, id, password) => {
+    if (!email || !id || !password) {
         throw new Error("Missing required user fields");
     }
 
-    const data = { name, password };
+    const data = { email, password };
 
     try {
         const response = await axios.put(`${BASE_URL}/users/${id}`, data);
