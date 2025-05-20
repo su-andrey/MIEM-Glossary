@@ -30,7 +30,7 @@ const mainSlice = createSlice({
                         },
                         {
                             "id": 6,
-                            "name": "Ответы"
+                            "name": "Вопросы"
                         },
                         {
                             "id": 7,
@@ -38,11 +38,11 @@ const mainSlice = createSlice({
                         }
                     ],
         wasChanged : true,
-        isAuthentificated : true,
-        email : "segunperkele@gmail.com",
-        password : "Aa20041989+",
-        userID : "1",
-        isAdmin : true,
+        isAuthentificated : false,
+        email : "",
+        password : "",
+        userID : undefined,
+        isAdmin : undefined,
     },
     reducers:{
         setUsers(state, action){
@@ -63,9 +63,17 @@ const mainSlice = createSlice({
         setComments(state, action){
             state.comments = action.payload.data
         },
+
+        handleLogIn(state, action){
+            state.isAdmin = action.payload?.isAdmin
+            state.isAuthentificated = true
+            state.email = action.payload?.email
+            state.password = action.payload?.password
+            state.userID = action.payload?.userID
+        }
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, } = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, handleLogIn} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

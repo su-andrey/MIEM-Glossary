@@ -3,9 +3,17 @@ import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import logInUser from "../../../queries/USER/logInUser";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
+import { handleLogIn } from "../../../store/mainSlice";
+import getMe from "../../../queries/USER/getMe";
 const LoginForm = ({isOpen = true}) => {
+    const dispatch = useDispatch();
+    const [input1Type, changeInput1Type] = useState(false);
     const [open, setOpen] = useState(isOpen);
+    const [loginError, setLoginError] = useState("");
     const {
         register,
         formState: {
@@ -19,13 +27,29 @@ const LoginForm = ({isOpen = true}) => {
 
     const onSubmit = async (data)=> {
         try{
+            setLoginError("");
             console.log(data)
+            await logInUser(data.email, data.password)
+            setLoginError("");
+            let me = await getMe()
+            dispatch(handleLogIn({
+                email: data.email,
+                password: data.password,
+                isAdmin: me.is_admin,
+                userID: me.id,
+            }))
             setOpen(false);
+            navigate("/")
         }
-        catch(error){
-            console.error(error)
+        catch (error) {
+            if (error.response?.status === 401) {
+                setLoginError("Неверный логин или пароль");
+            } 
+            else {
+                setLoginError("Ошибка входа. Попробуйте позже.");
+            }
+            console.error(error);
         }
-        reset()
     }
 
     const location = useLocation();
@@ -53,6 +77,7 @@ const LoginForm = ({isOpen = true}) => {
                     <MdOutlineCancel className={style.cancel} onClick={()=>{handleClose()}} />
                     <div className={style.title}>Вход</div>
                     <form className={style.formContainer} onSubmit={handleSubmit(onSubmit)}>
+                        
                         <input 
                         className={errors.email ? style.input_err : style.input} 
                         type="email" 
@@ -75,28 +100,33 @@ const LoginForm = ({isOpen = true}) => {
                         })}
                         />
                         {errors.email && <div className={style.error_warning}>{errors.email.message}</div>}
-                        <input 
-                        className={errors.password ? style.input_err : style.input} 
-                        type="password" 
-                        placeholder="Введите пароль..."
-                        {...register('password', {
-                            required: "Поле обязательно к заполнению",
-                            minLength: {
-                                value: 8,
-                                message: "Слишком короткий пароль"
-                            },
-                            maxLength: {
-                                value: 40,
-                                message: "Слишком длинный пароль"
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
-                                message: "Неверный формат пароля"
-                            },
-                        })}
-                        />
+                        <div className={style.inputContainer}>
+                            <input 
+                            className={errors.password ? style.input_err : style.input} 
+                            type={input1Type ? "text" : "password"} 
+                            placeholder="Введите пароль..."
+                            style={{width:"100%"}}
+                            {...register('password', {
+                                required: "Поле обязательно к заполнению",
+                                minLength: {
+                                    value: 8,
+                                    message: "Слишком короткий пароль"
+                                },
+                                maxLength: {
+                                    value: 60,
+                                    message: "Слишком длинный пароль"
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9!@#\$%\^&*()_\-+=\[\]{}:;'",.<>/?\\|`~]{1,}$/,
+                                    message: "Неверный формат пароля"
+                                }
+                            })}
+                            />
+                            <EyeIcon handleVisible={changeInput1Type}/>
+                        </div>
                         {errors.password && <div className={style.error_warning}>{errors.password.message}</div>}
-                        <ActionButton disabled={errors} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
+                        {loginError && <div className={style.error_warning}>{loginError}</div>}
+                        <ActionButton disabled={Object.keys(errors).length > 0 || isSubmitting} text={isSubmitting ? "Загрузка..." : "Отправить"} type="submit"></ActionButton>
                         <div className={style.regCaption} onClick={()=> handleRedirect()}>
                             Еще нет аккаунта?<br />
                             <span className={style.regMainCaption}>Регистрация</span>

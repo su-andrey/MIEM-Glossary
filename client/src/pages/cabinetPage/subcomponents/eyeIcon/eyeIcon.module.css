@@ -1,0 +1,15 @@
+.wrapper{
+    width: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    bottom: 30%;
+    left: 90%;
+}
+
+.eye{
+    width: 2vw;
+    transition: all 0.3s ease-out;
+}

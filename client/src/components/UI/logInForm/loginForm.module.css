@@ -19,7 +19,7 @@
     color: var(--light-grey);
     font-size: var(--caption-font);
     text-align: center;
-    line-height: 115%;
+    line-height: 130%;
 }
 
 
@@ -183,6 +183,11 @@
 .checkboxCaption{
     margin-left: calc(0.5*var(--index));
     color: var(--light-grey);
+}
+
+.inputContainer{
+    width: 90%;
+    position: relative;
 }
 
 @media(max-width: 1175px){

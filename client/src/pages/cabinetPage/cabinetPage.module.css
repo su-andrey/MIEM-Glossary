@@ -112,5 +112,12 @@
     transition: 0.15s ease-in-out;
 }
 
+.inputContainer{
+    width: 40%;
+    position: relative;
+}
+
+
+
 
 
