@@ -11,11 +11,11 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
-func GetPosts(ctx context.Context, optCondition ...EqualCondition) ([]models.Post, error) {
+func GetPosts(ctx context.Context, optCondition ...Condition) ([]models.Post, error) {
 	whereStatement := ""
 	args := []any{}
 	if len(optCondition) > 0 {
-		whereStatement = fmt.Sprintf(" WHERE %s = $1", optCondition[0].Name)
+		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
 		args = append(args, optCondition[0].Value)
 	}
 
@@ -40,14 +40,14 @@ func GetPosts(ctx context.Context, optCondition ...EqualCondition) ([]models.Pos
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
-		comments, err := GetComments(ctx, EqualCondition{Name: "post_id", Value: post.ID})
+		comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
 		if err != nil {
 			return posts, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
 		post.Comments = comments
 
-		photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: post.ID})
+		photos, err := GetPhotos(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
 		if err != nil {
 			return posts, errors.New("ошибка получения фотографий поста")
 		}
@@ -76,13 +76,13 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	comments, err := GetComments(ctx, EqualCondition{Name: "post_id", Value: post.ID})
+	comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
 	if err != nil {
 		return post, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 	post.Comments = comments
 
-	photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: post.ID})
+	photos, err := GetPhotos(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
 	if err != nil {
 		return post, errors.New("ошибка получения фотографий поста")
 	}
@@ -141,7 +141,7 @@ func DeletePost(ctx context.Context, id string) error {
 		return errors.New("пользователь не найден")
 	}
 
-	photos, err := GetPhotos(ctx, EqualCondition{Name: "post_id", Value: id})
+	photos, err := GetPhotos(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: id})
 	if err != nil {
 		return errors.New("ошибка получения фотографий поста")
 	}

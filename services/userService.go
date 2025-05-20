@@ -3,16 +3,24 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GetUsers(ctx context.Context, optConditions ...EqualCondition) ([]models.User, error) {
+func GetUsers(ctx context.Context, optCondition ...Condition) ([]models.User, error) {
+	whereStatement := ""
+	args := []any{}
+	if len(optCondition) > 0 {
+		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
+		args = append(args, optCondition[0].Value)
+	}
 	var users []models.User
 
-	rows, err := database.DB.Query(ctx, "SELECT id, email, password, is_admin FROM users")
+	rows, err := database.DB.Query(ctx,
+		"SELECT id, email, password, is_admin FROM users"+whereStatement, args...)
 	if err != nil {
 		return users, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
