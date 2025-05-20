@@ -51,8 +51,9 @@ func GetCategoryByID(ctx context.Context, id string) (models.Category, error) {
 }
 
 func CreateCategory(ctx context.Context, name string) (models.Category, error) {
-	var category models.Category
-	category.Name = name
+	category := models.Category{
+		Name: name,
+	}
 
 	err := database.DB.QueryRow(ctx,
 		"INSERT INTO categories (name) VALUES ($1) RETURNING id", name).Scan(&category.ID)
@@ -74,7 +75,16 @@ func UpdateCategory(ctx context.Context, id string, name string) error {
 }
 
 func DeleteCategory(ctx context.Context, id string) error {
-	_, err := database.DB.Exec(ctx, "DELETE FROM categories WHERE id = $1", id)
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM categories WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования пользователя")
+	}
+	if !exists {
+		return errors.New("пользователь не найден")
+	}
+
+	_, err = database.DB.Exec(ctx, "DELETE FROM categories WHERE id = $1", id)
 	if err != nil {
 		return errors.New("ошибка удаления категории") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}

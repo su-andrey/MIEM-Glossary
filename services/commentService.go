@@ -52,25 +52,21 @@ func GetCommentById(ctx context.Context, id string) (models.Comment, error) {
 }
 
 func CreateComment(ctx context.Context, userID, postID int, body string) (models.Comment, error) {
-	var commentID int
+	comment := models.Comment{
+		PostID:   postID, // Заполненный объект поста
+		AuthorID: userID, // Объект автора
+		Body:     body,
+	}
 
 	// Вставляем комментарий в базу
 	err := database.DB.QueryRow(ctx,
 		`INSERT INTO comments (post_id, body, author_id)
 		 VALUES ($1, $2, $3) RETURNING id`,
 		postID, body, userID,
-	).Scan(&commentID) // Получаем ID созданного комментария
+	).Scan(&comment.ID) // Получаем ID созданного комментария
 
 	if err != nil {
 		return models.Comment{}, errors.New("ошибка добавления комментария")
-	}
-
-	// Формируем объект Comment
-	comment := models.Comment{
-		ID:       commentID, // ID созданного комментария
-		PostID:   postID,    // Заполненный объект поста
-		AuthorID: userID,    // Объект автора
-		Body:     body,
 	}
 
 	return comment, nil
@@ -88,7 +84,16 @@ func UpdateComment(ctx context.Context, id, body string) error {
 }
 
 func DeleteComment(ctx context.Context, id string) error {
-	_, err := database.DB.Exec(context.Background(),
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM comments WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования пользователя")
+	}
+	if !exists {
+		return errors.New("пользователь не найден")
+	}
+
+	_, err = database.DB.Exec(context.Background(),
 		"DELETE FROM comments WHERE id = $1", id)
 	if err != nil {
 		return errors.New("ошибка удаления комментария")
