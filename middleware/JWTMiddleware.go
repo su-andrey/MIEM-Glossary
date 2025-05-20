@@ -14,12 +14,12 @@ func JWTMiddlewate() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		auth := c.Get("Authorization")
 		if auth == "" || !strings.HasPrefix(auth, "Bearer ") {
-			return fiber.NewError(fiber.StatusUnauthorized, "Error getting token")
+			return fiber.NewError(fiber.StatusUnauthorized, "error getting token")
 		}
 
 		tokenStr := strings.TrimPrefix(auth, "Bearer ")
 
-		token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (any, error) {
 			return []byte(cfg.JWTSecret), nil
 		})
 
