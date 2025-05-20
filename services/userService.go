@@ -42,6 +42,23 @@ func GetUserByID(ctx context.Context, id int) (models.User, error) {
 	return user, nil
 }
 
+func GetUserByEmail(ctx context.Context, email string) (models.User, error) {
+	var user models.User
+
+	err := database.DB.QueryRow(ctx, `
+		SELECT id, email, password, is_admin FROM users WHERE email=$1`, email).
+		Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin)
+
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return user, err
+		}
+		return user, errors.New("error checking users password")
+	}
+
+	return user, nil
+}
+
 func CreateUser(ctx context.Context, email, password string, isAdmin bool) (models.User, error) {
 	user := models.User{
 		Email:    email,
