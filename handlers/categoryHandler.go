@@ -13,7 +13,7 @@ import (
 func GetCategories(c fiber.Ctx) error {
 	categories, err := services.GetCategories(c.Context())
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Ошибка получения категорий"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения категории")
 	}
 
 	return c.JSON(categories)
@@ -25,7 +25,7 @@ func GetCategory(c fiber.Ctx) error {
 
 	category, err := services.GetCategoryByID(c.Context(), id)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Ошибка получения категории"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения категории")
 	}
 
 	return c.JSON(category)
@@ -38,12 +38,12 @@ func CreateCategory(c fiber.Ctx) error {
 	}
 
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
 	}
 
 	category, err := services.CreateCategory(c.Context(), input.Name)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка создания категории"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка добавления категории")
 	}
 
 	return c.JSON(category)
@@ -57,12 +57,12 @@ func UpdateCategory(c fiber.Ctx) error {
 	}
 
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
 	}
 
 	err := services.UpdateCategory(c.Context(), id, input.Name)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления категории"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления категории")
 	}
 
 	return c.JSON(fiber.Map{"message": "Категория обновлена"})
@@ -74,7 +74,7 @@ func DeleteCategory(c fiber.Ctx) error {
 
 	err := services.DeleteCategory(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления категории"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка удаления категории")
 	}
 
 	return c.JSON(fiber.Map{"message": "Категория удалена"})

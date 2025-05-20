@@ -10,14 +10,14 @@ func UploadPostPhotos(c fiber.Ctx) error {
 	postID := c.Params("id")
 	form, err := c.MultipartForm()
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "error parsing form"})
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
 	}
 	files := form.File["photos[]"]
 	cfg := config.LoadConfig()
 
 	urls, err := services.UploadPostPhotos(c.Context(), cfg, postID, files)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "error uploading photos"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка добавления фотографий")
 	}
 
 	return c.JSON(fiber.Map{"urls": urls})
@@ -28,8 +28,8 @@ func DeletePhoto(c fiber.Ctx) error {
 
 	err := services.DeletePhoto(c.Context(), photoID)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Error deleting photo"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка удаления фотографии")
 	}
 
-	return c.JSON(fiber.Map{"message": "photo deleted"})
+	return c.JSON(fiber.Map{"message": "Фото удалено"})
 }
