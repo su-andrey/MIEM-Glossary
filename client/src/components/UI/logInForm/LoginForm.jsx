@@ -89,7 +89,7 @@ const LoginForm = ({isOpen = true}) => {
                                 message: "Слишком короткая почта"
                             },
                             maxLength: {
-                                value: 40,
+                                value: 100,
                                 message: "Слишком длинная почта"
                             },
                             pattern: {
@@ -113,7 +113,7 @@ const LoginForm = ({isOpen = true}) => {
                                     message: "Слишком короткий пароль"
                                 },
                                 maxLength: {
-                                    value: 60,
+                                    value: 100,
                                     message: "Слишком длинный пароль"
                                 },
                                 pattern: {

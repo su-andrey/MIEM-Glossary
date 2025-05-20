@@ -78,7 +78,7 @@ const RegisterForm = ({initialOpen = true}) => {
                                 message: "Слишком короткая почта"
                             },
                             maxLength: {
-                                value: 40,
+                                value: 100,
                                 message: "Слишком длинная почта"
                             },
                             pattern: {
@@ -102,7 +102,7 @@ const RegisterForm = ({initialOpen = true}) => {
                                     message: "Слишком короткий пароль"
                                 },
                                 maxLength: {
-                                    value: 40,
+                                    value: 100,
                                     message: "Слишком длинный пароль"
                                 },
                                 pattern: {
@@ -127,7 +127,7 @@ const RegisterForm = ({initialOpen = true}) => {
                                     message: "Слишком короткий пароль"
                                 },
                                 maxLength: {
-                                    value: 40,
+                                    value: 100,
                                     message: "Слишком длинный пароль"
                                 },
                                 pattern: {
