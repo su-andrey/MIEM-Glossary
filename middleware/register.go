@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"log"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
@@ -32,16 +31,16 @@ func Register(c fiber.Ctx) error {
 			if err != nil {
 				return errors.New("error creating new user")
 			}
-			return nil
+
+			token, err := GenerateJWT(user.ID, false)
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+			}
+
+			return c.JSON(fiber.Map{"token": token})
 		}
 		return errors.New("error checking")
 	}
 
-	token, err := GenerateJWT(user.ID, false)
-	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
-	}
-
-	log.Println("User is already created")
-	return c.JSON(fiber.Map{"token": token})
+	return fiber.NewError(fiber.StatusConflict, "пользователь с данным email уже создан")
 }
