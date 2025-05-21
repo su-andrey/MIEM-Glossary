@@ -17,6 +17,13 @@ const CabinetPage = () => {
     const [email, setEmail] = useState(useSelector(state => state.main.email))
     const [initialPassword, setPassword] = useState(useSelector(state => state.main.password))
     const [initialConfirm, setConfirm] = useState(useSelector(state => state.main.password))
+
+    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Профиль"
+    name = name.split('@')[0];
+    if(name.length > 12){
+        name = name.slice(0, 13)
+    }
+
     const {
         register,
         formState: {
@@ -77,6 +84,15 @@ const CabinetPage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
+
+    useEffect(()=>{
+        if(!email || !initialPassword || !initialConfirm){
+            setEmail(localStorage.getItem("email"))
+            setPassword(localStorage.getItem("password"))
+            setConfirm(localStorage.getItem("confirm"))
+        }
+    }, [])
+    
     if (!ready) return <Loader/>;
     
     return(
@@ -91,6 +107,7 @@ const CabinetPage = () => {
             }
             {isAuth && 
                 <>
+                    <div className={styles.subtitle} style={{marginTop:"calc(-1*var(--page-vertical-gap))"}}>Здравствуйте, {name} </div>
                     <ChangeForm />
                 </>
             }

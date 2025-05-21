@@ -1,16 +1,27 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const editComment = async (body, id, post_id, author_id) => {
-    if(!id || !body){
+    if(!id || !body || !post_id || !author_id){
         throw new Error("Missing required comment fields");
     }
 
     const data = { body, post_id, author_id };
 
     try{
-        const response = await axios.put(`${BASE_URL}/comments/${id}`, data);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.put(
+            `${BASE_URL}/api/comments/${id}`, 
+            data,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("Comment edited:", response.data);
         return response.data;
     } 

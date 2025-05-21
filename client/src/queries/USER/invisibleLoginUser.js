@@ -1,13 +1,13 @@
 import axios from "axios";
 import BASE_URL from "../../baseURL";
 
-const logInUser = async (email, password) => {
+const invisibleLoginUser = async () => {
+    let email = localStorage.getItem("email")
+    let password = localStorage.getItem("password")
     if (!email || !password) {
-        throw new Error("Missing required user fields");
+        throw new Error("Missing requested localstorage fields");
     }
-
     const data = { email, password };
-
     try {
         const response = await axios.post(`${BASE_URL}/auth/login`, data);
         console.log(`User logged in. Token received: ${response.data.token}`);
@@ -17,10 +17,6 @@ const logInUser = async (email, password) => {
         }
         localStorage.removeItem("token");
         localStorage.setItem("token", token);
-        localStorage.removeItem("email")
-        localStorage.removeItem("password")
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
         return response.data;
     }
     catch (error) {
@@ -29,4 +25,4 @@ const logInUser = async (email, password) => {
     }
 };
 
-export default logInUser;
+export default invisibleLoginUser;

@@ -7,8 +7,14 @@ import AnimatedSearchField from "../UI/animatedSearchField/AnimatedSearchField";
 import {motion, LayoutGroup, AnimatePresence} from 'framer-motion'
 import { useLocation } from "react-router-dom";
 import Line from "./subcomponents/Line";
+import { useSelector } from "react-redux";
 const Header = () => {
     const [activeIndex, setActiveIndex] = useState(-1);
+    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Профиль"
+    name = name.split('@')[0];
+    if(name.length > 12){
+        name = name.slice(0, 13)
+    }
     const handleClick = (ind)=> {
         setActiveIndex(ind);
     }
@@ -63,7 +69,7 @@ const Header = () => {
                     <AnimatePresence >
                         {activeCurrentIndex == 3 && <Line />}
                     </AnimatePresence>
-                    <div onClick={()=>handleClick(3)} className={styles.navItem}>Профиль</div>
+                    <div onClick={()=>handleClick(3)} className={styles.navItem}>{name}</div>
                 </NavLink>
                 <AnimatedSearchField></AnimatedSearchField>
             </div>

@@ -1,14 +1,22 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const deletePost = async (id) => {
     if (!id) {
-        throw new Error("Missing required post fields");
+        throw new Error("Не передан ID поста для удаления");
     }
-
     try{
-        const response = await axios.delete(`${BASE_URL}/posts/${id}`);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.delete(
+            `${BASE_URL}/api/posts/${id}`,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            });
         console.log("Post deleted:", response.data);
         return response.data;
     } 

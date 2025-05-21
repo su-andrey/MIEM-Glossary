@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, use } from 'react';
 const Layout = lazy(() => import('./pages/layout/Layout.jsx'));
 const LogInPage = lazy(() => import('./pages/logInPage/LogInPage.jsx'));
 const RegisterPage = lazy(() => import('./pages/registerPage/RegisterPage.jsx'));
@@ -23,9 +23,12 @@ import requireComments from './queries/GET/requireComments.js';
 import requirePosts from './queries/GET/requirePosts.js';
 import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
-import setupDB from './queries/SETUP/setupDB.js';
-import getDB from './queries/SETUP/getDB.js';
+import getMe from './queries/USER/getMe.js';
 import useSmoothScroll from './custom hooks/useSmoothScroll.js';
+import invisibleLoginUser from './queries/USER/invisibleLoginUser.js';
+import { handleLogIn } from './store/mainSlice.js';
+import { setChanged } from './store/mainSlice.js';
+import setupDB from './store/fake/setupDB.js';
 
 
 
@@ -33,16 +36,54 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-    useEffect(()=>{
-        if(wasChanged){
-            dispatch(setUsers(requireUsers()))
-            dispatch(setPosts(requirePosts()))
-            dispatch(setComments(requireUsers()))
+        useEffect(
+        ()=>{
+            setupDB()
+        },
+        []
+    )
+
+    useEffect(() => {
+        if(wasChanged) {
+            const updateData = async () => {
+                try {
+                    const posts = await requirePosts();
+                    const comments = await requireComments();
+                    dispatch(setPosts({data: posts}));
+                    dispatch(setComments({data:comments}));
+                    console.log("Storage rebuilt");
+                } catch (error) {
+                    console.error("Ошибка при обновлении данных:", error);
+                }
+            };
+            updateData();
+            dispatch(setChanged(false));
         }
-        wasChanged = false
     }, [wasChanged]);
 
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                const data = await invisibleLoginUser();
+                const me = await getMe();
+                dispatch(handleLogIn({
+                    email: data.email,
+                    password: data.password,
+                    isAdmin: me.is_admin,
+                    userID: me.id,
+                }));
+            } catch (error) {
+                console.error("Невидимая аутентификация не удалась", error);
+            }
+        };
+        init();
+    }, []);
+
+
     useSmoothScroll()
+
+
     return (<>
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>

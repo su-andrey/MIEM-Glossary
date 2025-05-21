@@ -1,20 +1,26 @@
 import axios from "axios";
 import BASE_URL from "../../baseURL";
 
-const requireUsers = async (id = "") => {
+
+const requireReaction = async (id) => {
     try{
-        const url = id === "" ? `${BASE_URL}/api/users` : `${BASE_URL}/users/${id}`;
+        if(!id){
+            throw new Error("Missing post id field");
+        }
         const token = localStorage.getItem("token")
         if (!token){
             throw new Error("Пользователь не аутентифицирован")
         }
+        const url = `${BASE_URL}/api/reactions/${id}`;
         const response = await axios.get(
             url,
-            {headers:{
-                Authorization: `Bearer ${token}`
-            }}
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
         );
-        console.log("Users received: ",response.data);
+        console.log("Reaction received: ",response.data);
         return response.data;
     } 
     catch(error){
@@ -23,4 +29,4 @@ const requireUsers = async (id = "") => {
     }
 };
 
-export default requireUsers;
+export default requireReaction;

@@ -1,13 +1,13 @@
 import axios from "axios";
 import BASE_URL from "../../baseURL";
 
-const createCategory = async (categoryName) => {
-    if(!categoryName){
-        throw new Error("Empty category name");
+const createReaction = async (post_id, reaction) => {
+    if(!post_id){
+        throw new Error("Empty post id field");
     }
     const data = 
     {
-        name : categoryName,
+        reaction,
     } 
     try{
         const token = localStorage.getItem("token")
@@ -15,7 +15,7 @@ const createCategory = async (categoryName) => {
             throw new Error("Пользователь не аутентифицирован")
         }
         const response = await axios.post(
-            `${BASE_URL}/api/categories`, 
+            `${BASE_URL}/api/reactions/${post_id}`, 
             data,
             {
                 headers:{
@@ -23,13 +23,13 @@ const createCategory = async (categoryName) => {
                 }
             }
         );
-        console.log("Category created:", response.data);
+        console.log("Reaction created:", response.data);
         return response.data;
     }
     catch(error) {
-        console.error("Error creating category:", error.response?.data?.error || error.message);
+        console.error("Error creating reaction:", error.response?.data?.error || error.message);
         throw error;
     }
 };
 
-export default createCategory;
+export default createReaction;

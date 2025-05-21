@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3000/api";
+import BASE_URL from "../../baseURL";
 
 const createComment = async (post_id, author_id, body) => {
     if(!post_id){
@@ -13,12 +12,24 @@ const createComment = async (post_id, author_id, body) => {
         throw new Error("Invalid body");
     }
     const data ={
-                    post_id : post_id,
-                    author_id : author_id,
-                    body : body,
+                    post_id,
+                    author_id,
+                    body,
                 } 
     try{
-        const response = await axios.post(`${BASE_URL}/comments`, data);
+        const token = localStorage.getItem("token")
+        if (!token){
+            throw new Error("Пользователь не аутентифицирован")
+        }
+        const response = await axios.post(
+            `${BASE_URL}/api/comments`, 
+            data,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("Comment added:", response.data);
         return response.data;
     }
