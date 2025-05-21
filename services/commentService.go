@@ -9,11 +9,11 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
-func GetComments(ctx context.Context, optCondition ...EqualCondition) ([]models.Comment, error) {
+func GetComments(ctx context.Context, optCondition ...Condition) ([]models.Comment, error) {
 	whereStatement := ""
 	args := []any{}
 	if len(optCondition) > 0 {
-		whereStatement = fmt.Sprintf(" WHERE %s = $1", optCondition[0].Name)
+		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
 		args = append(args, optCondition[0].Value)
 	}
 

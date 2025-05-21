@@ -38,6 +38,7 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	// Группировка постов
 	posts := api.Group("/posts")
 	posts.Get("/", handlers.GetPosts)                                                                                           // Получение всех постов
+	posts.Get("/search/:str", handlers.SearchPosts)                                                                             // Поиск постов по имени
 	posts.Get("/:id", handlers.GetPost)                                                                                         // Получение поста по ID
 	posts.Post("/", handlers.CreatePost, middleware.JWTMiddlewate())                                                            // Создание поста
 	posts.Put("/:id", handlers.UpdatePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(services.GetPostAuthorID))    // Обновление поста

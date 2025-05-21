@@ -185,6 +185,7 @@ npm install --legacy-peer-deps
         ```requests
         GET     /posts              получить все посты
         GET     /posts/{id}         получить пост по id
+        GET     /posts/search/{str} поиск постов по названию 
         POST    /posts              создать пост                    (*)
         PUT     /posts/{id}         обновить пост по id             (**)(***)
         DELETE  /posts/{id}         удалить пост по id              (**)(***)
