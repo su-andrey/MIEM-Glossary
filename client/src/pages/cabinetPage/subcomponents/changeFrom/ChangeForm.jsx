@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import EyeIcon from "../eyeIcon/EyeIcon.jsx";
 import { useState } from "react";
 import { resetState } from "../../../../store/mainSlice.js";
+import editMyData from "../../../../queries/USER/editMyData.js";
 
 const ChangeForm = () => {
     const dispatch = useDispatch();
@@ -39,8 +40,9 @@ const ChangeForm = () => {
     const onSubmit = async (data) => {
         try {
             console.log(data);
-            setOpen(false);
-        } catch(error) {
+            await editMyData(data.email, data.password)
+        } 
+        catch(error) {
             console.error(error);
         }
         reset();
@@ -113,7 +115,7 @@ const ChangeForm = () => {
                             message: "Слишком длинный пароль"
                         },
                         pattern: {
-                            value: /^[a-zA-Z0-9!@#$%\^\&*_=+-]{8,12}$/g,
+                            value: /^[a-zA-Z0-9!@#$%\^\&*_=+-]{8,40}$/g,
                             message: "Неверный формат пароля"
                         },
                     })}
@@ -139,7 +141,7 @@ const ChangeForm = () => {
                             message: "Слишком длинный пароль"
                         },
                         pattern: {
-                            value: /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g,
+                            value: /^[a-zA-Z0-9!@#$%\^\&*_=+-]{8,40}$/g,
                             message: "Неверный формат пароля"
                         },
                         validate: (value) =>

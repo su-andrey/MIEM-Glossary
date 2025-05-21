@@ -44,23 +44,18 @@ const App = () => {
     )
 
     useEffect(() => {
-        if (wasChanged) {
+        if(wasChanged) {
             const updateData = async () => {
                 try {
-                    const users = await requireUsers();
                     const posts = await requirePosts();
                     const comments = await requireComments();
-
-                    dispatch(setUsers({data: users}));
                     dispatch(setPosts({data: posts}));
                     dispatch(setComments({data:comments}));
-
                     console.log("Storage rebuilt");
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);
                 }
             };
-
             updateData();
             dispatch(setChanged(false));
         }

@@ -33,7 +33,7 @@ const RegisterForm = ({initialOpen = true}) => {
         }
         catch(error){
             console.log("Popalsa")
-            if (error.response?.status == 401) {
+            if (error.response?.status == 409) {
                 setRegError("Такой пользователь уже существует");
             } else {
                 setRegError("Ошибка регистрации. Попробуйте позже.");
