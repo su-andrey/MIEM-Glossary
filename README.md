@@ -169,7 +169,7 @@ npm install --legacy-peer-deps
 
 1. Суффиксы для получения нужных объектов:  
     1. Объекты `SUFFIX: /api`
-       
+
         🔹 Пользователи:
 
         ```requests
@@ -229,6 +229,7 @@ npm install --legacy-peer-deps
         ```requests
         POST    /find_teacher/     найти преподавателя по Фамилии Имени и Отчеству          
         ```
+
     1. Аутентификация `SUFFIX: /auth`
 
         ```structure
@@ -294,9 +295,9 @@ npm install --legacy-peer-deps
         "password": "password123"
     }
     ```
-    
+
     7️⃣ Поиск преподавателя
-    
+
     ```db
     {
         "target": "Surname Name Patronymic"
