@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"net/http"
 	"path"
 	"strings"
 
@@ -72,10 +73,29 @@ func UploadPostPhotos(ctx context.Context, cfg config.Config, postID string, fil
 	var urls []string
 
 	for _, fileHeader := range files {
+		if fileHeader.Size > int64(cfg.MaxImageWeight) {
+			return urls, errors.New("file size extends limits")
+		}
+
 		file, err := fileHeader.Open()
 		if err != nil {
 			return urls, errors.New("error opening fileheader")
 		}
+
+		buf := make([]byte, 512)
+		_, err = file.Read(buf)
+		if err != nil {
+			file.Close()
+			return urls, errors.New("error opening filereader")
+		}
+
+		fileType := http.DetectContentType(buf)
+		if !cfg.AllowedImagesTypes[fileType] {
+			file.Close()
+			return urls, errors.New("unsupported file type: " + fileType)
+		}
+		file.Seek(0, 0)
+
 		tx, err := database.DB.Begin(ctx)
 		if err != nil {
 			return urls, errors.New("error starting transaction")
