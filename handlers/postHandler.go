@@ -12,7 +12,7 @@ import (
 // Возвращаем полученный результат или сообщение об ошибки. Если результата не является объектом - выводим сообщение
 // GetPosts возвращает все посты
 func GetPosts(c fiber.Ctx) error {
-	posts, err := services.GetPosts(c.Context())
+	posts, err := services.GetPosts(c.Context(), &services.Options{})
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Ошибка запроса к БД")
 	}
