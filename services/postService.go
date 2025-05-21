@@ -11,12 +11,18 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
-func GetPosts(ctx context.Context, optCondition ...Condition) ([]models.Post, error) {
+func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 	whereStatement := ""
 	args := []any{}
-	if len(optCondition) > 0 {
-		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
-		args = append(args, optCondition[0].Value)
+	if opts != nil && opts.Condition != nil {
+		whereStatement = fmt.Sprintf(" WHERE p.%s %s $1", opts.Condition.Name, opts.Condition.Operator)
+		args = append(args, opts.Condition.Value)
+	}
+
+	orderStatement := ""
+	if opts != nil && opts.OrderByStrPos != nil {
+		orderStatement = fmt.Sprintf(" ORDER BY STRPOS(p.%s, $%d)", opts.OrderByStrPos.Name, len(args)+1)
+		args = append(args, opts.OrderByStrPos.Value)
 	}
 
 	var posts []models.Post
@@ -26,7 +32,7 @@ func GetPosts(ctx context.Context, optCondition ...Condition) ([]models.Post, er
 		        c.id, c.name, 
 		        p.author_id, p.is_moderated 
 		 FROM posts p
-		 JOIN categories c ON p.category_id = c.id`+whereStatement, args...)
+		 JOIN categories c ON p.category_id = c.id`+whereStatement+orderStatement, args...)
 	if err != nil {
 		return posts, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
