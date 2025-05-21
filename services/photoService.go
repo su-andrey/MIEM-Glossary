@@ -76,17 +76,27 @@ func UploadPostPhotos(ctx context.Context, cfg config.Config, postID string, fil
 		if err != nil {
 			return urls, errors.New("error opening fileheader")
 		}
-		defer file.Close()
+		tx, err := database.DB.Begin(ctx)
+		if err != nil {
+			return urls, errors.New("error starting transaction")
+		}
+		defer tx.Rollback(ctx)
 
 		url, err := UploadToCloudinary(file, fileHeader, cfg)
+		file.Close()
+
 		if err != nil {
 			return urls, errors.New("error uploading to cloud")
 		}
 		urls = append(urls, url)
 
-		_, err = database.DB.Exec(ctx, "INSERT INTO photos (post_id, url) VALUES ($1, $2)", postID, url)
+		_, err = tx.Exec(ctx, "INSERT INTO photos (post_id, url) VALUES ($1, $2)", postID, url)
 		if err != nil {
 			return urls, errors.New("error inserting url to DB")
+		}
+		err = tx.Commit(ctx)
+		if err != nil {
+			return urls, errors.New("error commiting changes")
 		}
 	}
 
@@ -102,16 +112,27 @@ func DeletePhoto(ctx context.Context, id string) error {
 		return errors.New("photo not found")
 	}
 
+	tx, err := database.DB.Begin(ctx)
+	if err != nil {
+		return errors.New("error starting transaction")
+	}
+	defer tx.Rollback(ctx)
+
 	cfg := config.LoadConfig()
 	err = DeletePhotoFromClodinary(cfg, url)
 	if err != nil {
 		return errors.New("error deleting photo from cloudinary")
 	}
 
-	_, err = database.DB.Exec(ctx, `
+	_, err = tx.Exec(ctx, `
 		DELETE FROM photos WHERE id = $1`, id)
 	if err != nil {
 		return errors.New("error deleting from DB")
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return errors.New("error commiting transaction")
 	}
 
 	return nil
