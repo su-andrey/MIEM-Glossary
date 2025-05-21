@@ -20,7 +20,17 @@ type Config struct {
 	CloudinaryCloudName string
 	CloudinaryAPIKey    string
 	CloudinaryAPISecret string
+	AllowedImagesTypes  map[string]bool
+	MaxImageWeight      int
 }
+
+var allowedImTypes = map[string]bool{
+	"image/jpeg": true,
+	"image/png":  true,
+	"image/webp": true,
+}
+
+var maxImWeight = 5 * 1024 * 1024
 
 func LoadConfig() Config {
 	if os.Getenv("ENV") != "production" {
@@ -50,5 +60,7 @@ func LoadConfig() Config {
 		CloudinaryAPIKey:    os.Getenv("CLOUDINARY_API_KEY"),
 		CloudinaryAPISecret: os.Getenv("CLOUDINARY_API_SECRET"),
 		ENV:                 os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
+		AllowedImagesTypes:  allowedImTypes,
+		MaxImageWeight:      maxImWeight,
 	}
 }
