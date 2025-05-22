@@ -2,16 +2,17 @@ package creators
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/su-andrey/kr_aip/config"
+	"go.uber.org/zap"
 )
 
 func CreateCommentsTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции:", err) // логируем критические ошибки
+		config.Logger.Fatal("Ошибка начала транзакции:", zap.Error(err)) // логируем критические ошибки
 	}
 	defer tx.Rollback(ctx)
 
@@ -20,7 +21,7 @@ func CreateCommentsTable(DB *pgxpool.Pool) {
 		"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'comments');").
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы comments:", err) // логируем критические ошибки
+		config.Logger.Fatal("Ошибка проверки таблицы comments:", zap.Error(err)) // логируем критические ошибки
 	}
 
 	if !tableExists { // Создаём таблицу, если её еще не было. Важны типы данных полей и первичные ключи
@@ -35,15 +36,15 @@ func CreateCommentsTable(DB *pgxpool.Pool) {
 			);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы comments:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка создания таблицы comments:", zap.Error(err)) // логируем критические ошибки
 		}
 
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка фиксации транзакции:", zap.Error(err)) // логируем критические ошибки
 		}
 
-		log.Println("✅ Таблица comments успешно создана!") // Пишем в лог об успехе
+		config.Logger.Info("✅ Таблица comments успешно создана!") // Пишем в лог об успехе
 	} else {
 		tx.Rollback(ctx)
 	}
