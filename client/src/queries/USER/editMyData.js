@@ -1,9 +1,7 @@
 
 import editUser from "../PUT/editUser";
 import { useSelector } from "react-redux";
-const editMyData = async (email, password) => {
-    let id =  useSelector(state => state.main.userID)
-    let is_admin = useSelector(state => state.main.isAdmin)
+const editMyData = async (email, password, id, is_admin) => {
     if (!email || !id || !password) {
         throw new Error("Missing required user fields");
     }

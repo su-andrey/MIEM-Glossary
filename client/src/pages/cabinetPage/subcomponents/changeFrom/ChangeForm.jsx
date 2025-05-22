@@ -7,16 +7,17 @@ import EyeIcon from "../eyeIcon/EyeIcon.jsx";
 import { useState } from "react";
 import { resetState } from "../../../../store/mainSlice.js";
 import editMyData from "../../../../queries/USER/editMyData.js";
+import getMe from "./../../../../queries/USER/getMe.js";
 
 const ChangeForm = () => {
     const dispatch = useDispatch();
-    let isAuth = useSelector(state => state.main.isAuthentificated);
-    let isAdmin = useSelector(state => state.main.isAdmin);
+
     const userEmail = useSelector(state => state.main.email) || localStorage.getItem("email");
     const userPassword = useSelector(state => state.main.password) || localStorage.getItem("password");
 
     const [input1Type, changeInput1Type] = useState(false);
     const [input2Type, changeInput2Type] = useState(false);
+
 
     const {
         register,
@@ -40,7 +41,9 @@ const ChangeForm = () => {
     const onSubmit = async (data) => {
         try {
             console.log(data);
-            await editMyData(data.email, data.password)
+            let me  = await getMe()
+            console.log(me)
+            await editMyData(data.email, data.password, me.id, me.is_admin)
         } 
         catch(error) {
             console.error(error);

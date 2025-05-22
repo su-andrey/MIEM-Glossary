@@ -15,8 +15,9 @@ const SingleQuestionPage = lazy(() => import('./pages/pageComponents/singleQuest
 const SingleFoodPage = lazy(() => import('./pages/pageComponents/singleFoodPage/SingleFoodPage.jsx'));
 const SinglePrepodPage = lazy(() => import('./pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx'));
 import Loader from './components/UI/loader/Loader.jsx';
+import Loader1 from './components/UI/loader1/Loader1.jsx';
 import { RouterProvider } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsers, setPosts, setComments } from './store/mainSlice.js';
 import requireComments from './queries/GET/requireComments.js';
@@ -36,12 +37,17 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-        useEffect(
-        ()=>{
-            setupDB()
-        },
-        []
-    )
+    /*
+    const hasRunRef = useRef(false);
+    let isLoggedIn = useSelector(state => state.main.isAuthentificated)
+    useEffect(() => {
+    if (!hasRunRef.current && isLoggedIn) {
+        setupDB()
+        hasRunRef.current = true;
+    }
+    }, [isLoggedIn]);
+    */
+
 
     useEffect(() => {
         if(wasChanged) {
@@ -88,7 +94,7 @@ const App = () => {
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/" element={<Layout></Layout>}>
-            <Route index element={<Suspense fallback={<Loader />}><HomePage></HomePage></Suspense>}></Route>
+            <Route index element={<Suspense fallback={<Loader1 />}><HomePage></HomePage></Suspense>}></Route>
 
             <Route path="/login" element={<LogInPage></LogInPage>}></Route>
             <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
