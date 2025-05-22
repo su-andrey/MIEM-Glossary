@@ -33,7 +33,7 @@ const FoodMainPage = () => {
             <div className={styles.container}>
                 {
                     data.map((category) => {
-                        if(category.name == "Кофе и еда" || category.name == "Фастфуд и шаурма" || category.name == "Копирки" || category.name == "Магазины"){
+                        if(category.name == "Кофе" || category.name == "Фастфуд и шаурма" || category.name == "Копирки" || category.name == "Магазины"){
                             return(
                             <Link key={uid()} to={`/food/${category.id}`}><CafeCard className={styles.containerItem}  data={category} ></CafeCard></Link>
                         )}

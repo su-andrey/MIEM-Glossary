@@ -94,7 +94,7 @@ const App = () => {
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/" element={<Layout></Layout>}>
-            <Route index element={<Suspense fallback={<Loader1 />}><HomePage></HomePage></Suspense>}></Route>
+            <Route index element={<Suspense fallback={<Loader />}><HomePage></HomePage></Suspense>}></Route>
 
             <Route path="/login" element={<LogInPage></LogInPage>}></Route>
             <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>

@@ -26,38 +26,6 @@ const CabinetPage = () => {
         name = name.slice(0, 13)
     }
 
-    const {
-        register,
-        formState: {
-            errors,
-            isSubmitting,
-        },
-        reset,
-        handleSubmit,
-        watch,
-    } = useForm({mode: "all",})
-
-    const onSubmit = async (data)=> {
-        try{
-            console.log(data)
-            editMyData(data.email, data.password)
-            setOpen(false);
-        }
-        catch(error){
-            console.error(error)
-        }
-        reset()
-    }
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    }
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
-    const handleConfirmChange = (e) => {
-        setConfirm(e.target.value);
-    }
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -65,16 +33,8 @@ const CabinetPage = () => {
     if(fromPage=="/login"){
         fromPage = "/"
     }
-    const handleClose = () => {
-        setOpen(false)
-        navigate(fromPage)
-    }
 
-    const handleRedirect = ()=>{
-        navigate("/login", { state: { from: location } });
-    }
 
-    const password = watch('password');
     const [ready, setReady] = useState(false);
     
     useEffect(() => {

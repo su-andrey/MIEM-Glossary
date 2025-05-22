@@ -8,6 +8,7 @@ import { useState } from "react";
 import { resetState } from "../../../../store/mainSlice.js";
 import editMyData from "../../../../queries/USER/editMyData.js";
 import getMe from "./../../../../queries/USER/getMe.js";
+import { resetEmail, resetPassword } from "../../../../store/mainSlice.js";
 
 const ChangeForm = () => {
     const dispatch = useDispatch();
@@ -44,11 +45,20 @@ const ChangeForm = () => {
             let me  = await getMe()
             console.log(me)
             await editMyData(data.email, data.password, me.id, me.is_admin)
+            localStorage.setItem("email", data.email)
+            localStorage.setItem("password", data.password)
+            console.log("DISPATCH DATA", data.email, data.password)
+            dispatch(resetEmail(data.email))
+            dispatch(resetPassword(data.password))
+            reset({
+                email: data.email,
+                password: data.password,
+                confirm: data.confirm,
+            });
         } 
         catch(error) {
             console.error(error);
         }
-        reset();
     }
 
     const location = useLocation();

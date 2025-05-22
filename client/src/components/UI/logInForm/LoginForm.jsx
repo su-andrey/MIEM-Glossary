@@ -32,6 +32,7 @@ const LoginForm = ({isOpen = true}) => {
             await logInUser(data.email, data.password)
             setLoginError("");
             let me = await getMe()
+            console.log("DISPATCH DATA", data.email, data.password)
             dispatch(handleLogIn({
                 email: data.email,
                 password: data.password,

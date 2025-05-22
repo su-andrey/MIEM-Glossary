@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react"
 import { MActionButton } from "../../components/UI/actionButton/ActionButton"
 import { motion, useScroll, useTransform, useSpring, transform } from "framer-motion"
 import { useNavigate, useLocation } from "react-router-dom";
+import Loader1 from "../../components/UI/loader1/Loader1"
 
 const HomePage = () => {
     const navigate = useNavigate();

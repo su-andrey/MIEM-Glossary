@@ -8,15 +8,17 @@ import { Navigation, Pagination, Autoplay, Parallax, FreeMode, Keyboard, Mousewh
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
+import waitForImagesToLoad from "./../../custom hooks/helpers/waitForImagesToLoad"
 import getPostsByCategoryID from "../../store/selectors/getPostsByCategoryID";
 import getCategories from "../../store/selectors/getCategories";
 import CafeListCard from "../../components/cafeListCard/CafeListCard";
 import SearchField from "../../components/UI/searchField/SearchField";
 import AnswerField from "../../components/UI/answerField/AnswerField";
 import Loader from "../../components/UI/loader/Loader";
+import Loader1 from "../../components/UI/loader1/Loader1";
 
 const FoodCataloguePage = () => {
+    const [isSliderReady, setSliderReady] = useState(false);
     const { category } = useParams();
     console.log(category)
     const posts = useSelector(state => getPostsByCategoryID(state, category));
@@ -24,6 +26,7 @@ const FoodCataloguePage = () => {
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.category_id == category)?.name || "Заведения";
     const [ready, setReady] = useState(false);
+
     useEffect(() => {
         const handleLoad = () => setReady(true);
     if (document.readyState === 'complete') {
@@ -34,6 +37,22 @@ const FoodCataloguePage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
+
+
+    useEffect(() => {
+        if (posts.length === 0) return <Loader1 />;
+
+        setSliderReady(false);
+        const timer = setTimeout(async () => {
+            await waitForImagesToLoad(`.${styles.sliderWrapper}`);
+            setSliderReady(true);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [posts]);
+
+
+
     if (!ready) return <Loader/>;
     return (
         <>
@@ -46,7 +65,7 @@ const FoodCataloguePage = () => {
                     <SearchField />
                 </div>
 
-                <div className={styles.sliderWrapper}>
+                {isSliderReady ? <div className={styles.sliderWrapper}>
                     <Swiper
                         className={styles.swiper}
                         modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel]}
@@ -101,6 +120,9 @@ const FoodCataloguePage = () => {
                     </div>
                     <div className={styles.swiperPagination}></div>
                 </div>
+                :
+                <Loader />
+                }
 
                 <AnswerField />
             </div>

@@ -14,7 +14,7 @@
   top: 30%;
   height: 20vh;
   aspect-ratio: 2;
-  border-bottom: 3px solid #0000;
+  border-bottom: 5px solid #0000;
   background: 
     linear-gradient(90deg,#524656 50%,#0000 0)
     -25% 100%/50% 3px repeat-x border-box;

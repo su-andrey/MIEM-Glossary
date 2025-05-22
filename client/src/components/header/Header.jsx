@@ -10,7 +10,7 @@ import Line from "./subcomponents/Line";
 import { useSelector } from "react-redux";
 const Header = () => {
     const [activeIndex, setActiveIndex] = useState(-1);
-    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Профиль"
+    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Вход"
     name = name.split('@')[0];
     if(name.length > 12){
         name = name.slice(0, 13)
