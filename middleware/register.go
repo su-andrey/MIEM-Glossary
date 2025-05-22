@@ -29,7 +29,7 @@ func Register(c fiber.Ctx) error {
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			_, err = services.CreateUser(c.Context(), input.Email, input.Password, false)
+			user, err = services.CreateUser(c.Context(), input.Email, input.Password, false)
 			if err != nil {
 				return errors.New("error creating new user")
 			}
