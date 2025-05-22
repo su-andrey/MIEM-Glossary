@@ -2,9 +2,23 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/models"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/services"
 )
+
+type postInput struct {
+	CategoryID int    `json:"category_id" validate:"required,gt=0"`
+	Name       string `json:"name" validate:"required,min=2,max=100"`
+	Body       string `json:"body" validate:"required,min=2,max=2000"`
+}
+
+type updatePostInput struct {
+	Name        string `json:"name" validate:"required,min=2,max=100"`
+	Body        string `json:"body" validate:"required,min=2,max=2000"`
+	Likes       int    `json:"likes"`
+	Dislikes    int    `json:"dislikes"`
+	IsModerated bool   `json:"is_moderated"`
+}
 
 // Общая структура всех функций в данном хэндлере (схожа с другими)
 // Выполняем подключение к БД, выполняем запрос. В случае ошибки сообщаем информативно
@@ -35,15 +49,15 @@ func GetPost(c fiber.Ctx) error {
 // Создать новый пост
 func CreatePost(c fiber.Ctx) error {
 	// Создаем временную структуру для парсинга входных данных
-	var input struct {
-		CategoryID int    `json:"category_id"`
-		Name       string `json:"name"`
-		Body       string `json:"body"`
-	}
+	var input postInput
 
 	// Парсим тело запроса
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	userIDRaw := c.Locals("userID")
@@ -63,13 +77,17 @@ func CreatePost(c fiber.Ctx) error {
 // UpdatePost обновляет существующий пост
 func UpdatePost(c fiber.Ctx) error {
 	id := c.Params("id")
-	post := new(models.Post)
+	var input updatePostInput
 
-	if err := c.Bind().Body(post); err != nil {
+	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	err := services.UpdatePost(c.Context(), id, post.Name, post.Body, post.Likes, post.Dislikes, post.IsModerated)
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
+	}
+
+	err := services.UpdatePost(c.Context(), id, input.Name, input.Body, input.Likes, input.Dislikes, input.IsModerated)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления поста")
 	}
