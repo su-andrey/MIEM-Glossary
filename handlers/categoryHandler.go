@@ -2,8 +2,13 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v3"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/services"
 )
+
+type categoryInput struct {
+	Name string `json:"name" validate:"required,min2,max50"`
+}
 
 // Общая структура всех функций в данном хэндлере
 // - Запрос к БД, обработка ошибки в случае её возникновения
@@ -33,12 +38,14 @@ func GetCategory(c fiber.Ctx) error {
 
 // CreateCategory создает новую категорию
 func CreateCategory(c fiber.Ctx) error {
-	var input struct {
-		Name string `json:"name"`
-	}
+	var input categoryInput
 
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
+	}
+
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	category, err := services.CreateCategory(c.Context(), input.Name)
@@ -52,12 +59,14 @@ func CreateCategory(c fiber.Ctx) error {
 // UpdateCategory обновляет категорию
 func UpdateCategory(c fiber.Ctx) error {
 	id := c.Params("id")
-	var input struct {
-		Name string `json:"name"`
-	}
+	var input categoryInput
 
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
+	}
+
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	err := services.UpdateCategory(c.Context(), id, input.Name)
