@@ -14,7 +14,7 @@ func JWTMiddlewate() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		auth := c.Get("Authorization")
 		if auth == "" || !strings.HasPrefix(auth, "Bearer ") {
-			return fiber.NewError(fiber.StatusUnauthorized, "error getting token")
+			return fiber.NewError(fiber.StatusUnauthorized, "ошибка получения токена")
 		}
 
 		tokenStr := strings.TrimPrefix(auth, "Bearer ")

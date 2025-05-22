@@ -2,9 +2,10 @@ package seeders
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/su-andrey/kr_aip/config"
+	"go.uber.org/zap"
 )
 
 func SeedCategoriesTable(db *pgxpool.Pool) {
@@ -31,7 +32,7 @@ func SeedCategoriesTable(db *pgxpool.Pool) {
 			category.Name).Scan(&categoryExists)
 
 		if err != nil {
-			log.Fatal(err, "Ошибка проверки существования категории")
+			config.Logger.Fatal("Ошибка проверки существования категории: ", zap.Error(err))
 		}
 
 		if !categoryExists {
@@ -42,13 +43,13 @@ func SeedCategoriesTable(db *pgxpool.Pool) {
 			)
 
 			if err != nil {
-				log.Printf("Error adding standart categories")
+				config.Logger.Fatal("Error adding standart categories: ", zap.Error(err))
 			}
 			categoryAdded = true
 		}
 	}
 
 	if categoryAdded {
-		log.Println("✅ Таблица categories успешно заполнена начальными данными")
+		config.Logger.Info("✅ Таблица categories успешно заполнена начальными данными")
 	}
 }

@@ -2,11 +2,11 @@ package seeders
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/models"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,13 +28,13 @@ func SeedUsersTable(db *pgxpool.Pool) {
 			user.Email).Scan(&userExists)
 
 		if err != nil {
-			log.Fatal("Ошибка проверки существования пользователя: ", err)
+			config.Logger.Fatal("Ошибка проверки существования пользователя: ", zap.Error(err))
 		}
 
 		if !userExists {
 			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 			if err != nil {
-				log.Fatal("Ошибка хэширования пароля:", err)
+				config.Logger.Fatal("Ошибка хэширования пароля:", zap.Error(err))
 			}
 
 			_, err = db.Exec(ctx,
@@ -43,13 +43,13 @@ func SeedUsersTable(db *pgxpool.Pool) {
 			)
 
 			if err != nil {
-				log.Fatal("Error adding standart users: ", err)
+				config.Logger.Fatal("Error adding standart users: ", zap.Error(err))
 			}
 			userAdded = true
 		}
 	}
 
 	if userAdded {
-		log.Println("✅ Таблица users успешно заполнена начальными данными")
+		config.Logger.Info("✅ Таблица users успешно заполнена начальными данными")
 	}
 }

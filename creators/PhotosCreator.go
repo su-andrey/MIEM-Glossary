@@ -2,16 +2,17 @@ package creators
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/su-andrey/kr_aip/config"
+	"go.uber.org/zap"
 )
 
 func CreatePhotosTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции: ", err)
+		config.Logger.Fatal("Ошибка начала транзакции: ", zap.Error(err))
 	}
 	defer tx.Rollback(ctx)
 
@@ -20,7 +21,7 @@ func CreatePhotosTable(DB *pgxpool.Pool) {
 		`SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'photos');`).
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы photos: ", err)
+		config.Logger.Fatal("Ошибка проверки таблицы photos: ", zap.Error(err))
 	}
 
 	if !tableExists {
@@ -32,15 +33,15 @@ func CreatePhotosTable(DB *pgxpool.Pool) {
 			);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы photos: ", err)
+			config.Logger.Fatal("Ошибка создания таблицы photos: ", zap.Error(err))
 		}
 
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции: ", err)
+			config.Logger.Fatal("Ошибка фиксации транзакции: ", zap.Error(err))
 		}
 
-		log.Println("✅ Таблица photos успешно создана!")
+		config.Logger.Info("✅ Таблица photos успешно создана!")
 	} else {
 		tx.Rollback(ctx)
 	}

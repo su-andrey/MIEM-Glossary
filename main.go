@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -10,9 +9,13 @@ import (
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/routes"
+	"go.uber.org/zap"
 )
 
 func main() {
+	config.InitLogger()
+	defer config.Logger.Sync()
+
 	app := fiber.New() // Создаем экземпляр приложения
 	cfg := config.LoadConfig()
 
@@ -46,6 +49,6 @@ func main() {
 	}
 
 	if err := app.Listen(":" + cfg.Port); err != nil { // Запускаем сервер на localhost:<PORT>
-		log.Fatal("Ошибка запуска сервера:", err) // логируем критические ошибки
+		config.Logger.Fatal("Ошибка запуска сервера: ", zap.Error(err)) // логируем критические ошибки
 	}
 }

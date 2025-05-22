@@ -2,16 +2,17 @@ package creators
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/su-andrey/kr_aip/config"
+	"go.uber.org/zap"
 )
 
 func CreateReactionsTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции:", err)
+		config.Logger.Fatal("Ошибка начала транзакции: ", zap.Error(err))
 	}
 	defer tx.Rollback(ctx)
 
@@ -21,7 +22,7 @@ func CreateReactionsTable(DB *pgxpool.Pool) {
 		"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'reactions');").
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы reactions:", err)
+		config.Logger.Fatal("Ошибка проверки таблицы reactions: ", zap.Error(err))
 	}
 
 	// Если таблицы нет — создаем, важно задание типа данных
@@ -36,7 +37,7 @@ func CreateReactionsTable(DB *pgxpool.Pool) {
 			); 
 		`) // Один пользователь - одна реакция на пост
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы reactions:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка создания таблицы reactions: ", zap.Error(err)) // логируем критические ошибки
 		}
 
 		// Создаем индекс для ускорения поиска реакций по постам
@@ -44,15 +45,15 @@ func CreateReactionsTable(DB *pgxpool.Pool) {
 			CREATE INDEX idx_reactions_post_id ON reactions(post_id);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания индекса для reactions:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка создания индекса для reactions: ", zap.Error(err)) // логируем критические ошибки
 		}
 
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка фиксации транзакции: ", zap.Error(err)) // логируем критические ошибки
 		}
 
-		log.Println("✅ Таблица reactions успешно создана!") // Пишем сообщение об успехе
+		config.Logger.Info("✅ Таблица reactions успешно создана!") // Пишем сообщение об успехе
 	} else { // Откатываем транзакцию, если таблица уже существует
 		tx.Rollback(ctx)
 	}

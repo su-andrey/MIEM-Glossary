@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -39,7 +38,7 @@ func LoadConfig() Config {
 		а через особый механизм передачи. Их все равно можно будет получить через os.Getenv,
 		но при этом сам файл .env загрузить не получится */
 		if err := godotenv.Load(".env"); err != nil { // Открываем .env и отлавливаем возможную ошибку
-			log.Fatal("Error loading environment variables:", err)
+			panic(err)
 		}
 	}
 

@@ -10,7 +10,7 @@ func IsAuthorOrAdmin(getAuthorID func(c fiber.Ctx) (int, error)) fiber.Handler {
 	return func(c fiber.Ctx) error {
 		userIDRaw := c.Locals("userID")
 		if userIDRaw == nil {
-			return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+			return fiber.NewError(fiber.StatusUnauthorized, "отсутствует userID")
 		}
 		userID := userIDRaw.(int)
 
@@ -22,7 +22,7 @@ func IsAuthorOrAdmin(getAuthorID func(c fiber.Ctx) (int, error)) fiber.Handler {
 
 		authorID, err := getAuthorID(c)
 		if err != nil {
-			return fiber.NewError(fiber.StatusForbidden, "can't get author id")
+			return fiber.NewError(fiber.StatusForbidden, "невозможно получить ID автора")
 		}
 		if userID == authorID || isAdmin {
 			return c.Next()
@@ -42,14 +42,14 @@ func IsSelfOrAdmin() fiber.Handler {
 
 		userIDRaw := c.Locals("userID")
 		if userIDRaw == nil {
-			return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+			return fiber.NewError(fiber.StatusUnauthorized, "отсутствует userID")
 		}
 		userID := userIDRaw.(int)
 
 		currentIDRaw := c.Params("id")
 		currentID, err := strconv.Atoi(currentIDRaw)
 		if err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "invalid user ID parameter")
+			return fiber.NewError(fiber.StatusBadRequest, "невалидный userID")
 		}
 
 		if currentID == userID || isAdmin {
@@ -80,14 +80,14 @@ func IsSelf() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		userIDRaw := c.Locals("userID")
 		if userIDRaw == nil {
-			return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+			return fiber.NewError(fiber.StatusUnauthorized, "отсутствует userID")
 		}
 		userID := userIDRaw.(int)
 
 		currentIDRaw := c.Params("id")
 		currentID, err := strconv.Atoi(currentIDRaw)
 		if err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "invalid user ID parameter")
+			return fiber.NewError(fiber.StatusBadRequest, "невалидный userID")
 		}
 
 		if userID == currentID {
@@ -102,13 +102,13 @@ func IsAuthor(getAuthorID func(c fiber.Ctx) (int, error)) fiber.Handler {
 	return func(c fiber.Ctx) error {
 		userIDRaw := c.Locals("userID")
 		if userIDRaw == nil {
-			return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+			return fiber.NewError(fiber.StatusUnauthorized, "отсутствует userID")
 		}
 		userID := userIDRaw.(int)
 
 		authorID, err := getAuthorID(c)
 		if err != nil {
-			return fiber.NewError(fiber.StatusForbidden, "can't get author id")
+			return fiber.NewError(fiber.StatusForbidden, "невозможно получить ID автора")
 		}
 		if userID == authorID {
 			return c.Next()
