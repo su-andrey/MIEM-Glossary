@@ -38,4 +38,6 @@ require (
 	github.com/cloudinary/cloudinary-go/v2 v2.10.0 // indirect
 	github.com/creasty/defaults v1.7.0 // indirect
 	github.com/gorilla/schema v1.4.1 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 )
