@@ -24,18 +24,20 @@ func main() {
 	database.ConnectDB()      // Подключаемся к БД + создаем таблицы, если те еще не существуют
 	defer database.DB.Close() // defer откладывает выполнение функции на момет исполнения всех других процессов в текущем окружении (в данном случае в функции main)
 
+	origins := []string{"http://localhost:3000", "http://127.0.0.1:3000"}
 	if cfg.ENV != "production" {
-		originURL := fmt.Sprintf("%s:%s", cfg.AppUrl, cfg.ReactPort)
-
-		app.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{originURL},
-			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
-			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
-			AllowCredentials: true,
-			ExposeHeaders:    []string{"Content-Length"},
-			MaxAge:           86400,
-		})) // Даем порту, на котором располагается реакт, возможность работать с API (для разработки, в проде порт будет единым)
+		reactDevURL := fmt.Sprintf("%s:%s", cfg.AppUrl, cfg.ReactPort)
+		origins = append(origins, reactDevURL)
 	}
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     origins,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
+		AllowCredentials: true,
+		ExposeHeaders:    []string{"Content-Length"},
+		MaxAge:           86400,
+	})) // Даем порту, на котором располагается реакт, возможность работать с API (для разработки, в проде порт будет единым)
 
 	routes.SetupRoutes(app) // Запускаем обработчики запросов (сама функция, вызывающая обработчики, находится в ./routes)
 
