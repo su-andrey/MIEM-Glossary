@@ -10,6 +10,8 @@ import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import Loader from "../../components/UI/loader/Loader.jsx";
 import ChangeForm from "./subcomponents/changeFrom/ChangeForm.jsx";
 import EyeIcon from "./subcomponents/eyeIcon/EyeIcon.jsx";
+import Loader1 from "../../components/UI/loader1/Loader1.jsx";
+import editMyData from "../../queries/USER/editMyData.js";
 const CabinetPage = () => {
     const dispatch = useDispatch;
     let isAuth = useSelector(state => state.main.isAuthentificated);
@@ -38,6 +40,7 @@ const CabinetPage = () => {
     const onSubmit = async (data)=> {
         try{
             console.log(data)
+            editMyData(data.email, data.password)
             setOpen(false);
         }
         catch(error){
