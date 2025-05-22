@@ -1,4 +1,4 @@
-import styles from "./SinglePrepodPage.module.css"
+import styles from "./singlePrepodPage.module.css"
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Question from "../../../components/question/Question";
