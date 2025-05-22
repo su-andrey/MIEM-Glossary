@@ -62,7 +62,7 @@ func UpdateUser(c fiber.Ctx) error {
 	id := c.Params("id")
 	var input models.User
 
-	if err := c.Bind().Body(input); err != nil {
+	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
