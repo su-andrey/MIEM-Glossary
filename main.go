@@ -16,6 +16,8 @@ func main() {
 	config.InitLogger()
 	defer config.Logger.Sync()
 
+	config.InitValidator()
+
 	app := fiber.New() // Создаем экземпляр приложения
 	cfg := config.LoadConfig()
 
