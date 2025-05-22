@@ -5,22 +5,24 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/services"
 )
 
-func Register(c fiber.Ctx) error {
-	type RegisterInput struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+type AuthInput struct {
+	Email    string `json:"email" validate:"required,email,max=100"`
+	Password string `json:"password" validate:"required,min=8,max=100"`
+}
 
-	var input RegisterInput
+func Register(c fiber.Ctx) error {
+	var input AuthInput
+
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.ErrBadRequest
 	}
 
-	if input.Email == "" || input.Password == "" {
-		return fiber.ErrBadRequest
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	user, err := services.GetUserByEmail(c.Context(), input.Email)

@@ -5,9 +5,15 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/models"
+	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/services"
 )
+
+type userInput struct {
+	Email    string `json:"email" validate:"required,email,max=100"`
+	Password string `json:"password" validate:"required,min=8,max=100"`
+	IsAdmin  bool   `json:"is_admin"`
+}
 
 // Общая структура всех функций в данном файле (схожа с другими хэндлерами)
 // Подключаемся к бд, выполняем запрос. В случае ошибки не продолжаем и не пытаемся снова, выводим сообщение
@@ -40,13 +46,14 @@ func GetUser(c fiber.Ctx) error {
 
 // CreateUser создает нового пользователя
 func CreateUser(c fiber.Ctx) error {
-	var input struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-		IsAdmin  bool   `json:"is_admin"`
-	}
+	var input userInput
+
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
+	}
+
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	user, err := services.CreateUser(c.Context(), input.Email, input.Password, input.IsAdmin)
@@ -60,10 +67,14 @@ func CreateUser(c fiber.Ctx) error {
 // UpdateUser обновляет данные пользователя
 func UpdateUser(c fiber.Ctx) error {
 	id := c.Params("id")
-	var input models.User
+	var input userInput
 
 	if err := c.Bind().Body(&input); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
 	}
 
 	err := services.UpdateUser(c.Context(), id, input.Email, input.Password, input.IsAdmin)
