@@ -58,7 +58,15 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
-		comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
+		commentsOpts := &Options{
+			Condition: &Condition{
+				Name:     "post_id",
+				Operator: OpEqual,
+				Value:    post.ID,
+			},
+		}
+
+		comments, err := GetComments(ctx, commentsOpts)
 		if err != nil {
 			return posts, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
@@ -94,7 +102,15 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
+	commentsOpts := &Options{
+		Condition: &Condition{
+			Name:     "post_id",
+			Operator: OpEqual,
+			Value:    post.ID,
+		},
+	}
+
+	comments, err := GetComments(ctx, commentsOpts)
 	if err != nil {
 		return post, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}

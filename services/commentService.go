@@ -9,18 +9,30 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
-func GetComments(ctx context.Context, optCondition ...Condition) ([]models.Comment, error) {
+func GetComments(ctx context.Context, opts *Options) ([]models.Comment, error) {
 	whereStatement := ""
 	args := []any{}
-	if len(optCondition) > 0 {
-		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
-		args = append(args, optCondition[0].Value)
+	if opts != nil && opts.Condition != nil {
+		whereStatement = fmt.Sprintf(" WHERE %s %s $1", opts.Condition.Name, opts.Condition.Operator)
+		args = append(args, opts.Condition.Value)
+	}
+
+	limitStatement := ""
+	if opts != nil && opts.Limit != nil {
+		limitStatement = fmt.Sprintf(" LIMIT $%d", len(args)+1)
+		args = append(args, opts.Limit)
+	}
+
+	offsetStatement := ""
+	if opts != nil && opts.Offset != nil {
+		offsetStatement = fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, opts.Offset)
 	}
 
 	var comments []models.Comment
 
 	rows, err := database.DB.Query(ctx,
-		`SELECT id, body, post_id, author_id FROM comments`+whereStatement, args...)
+		`SELECT id, body, post_id, author_id FROM comments`+whereStatement+limitStatement+offsetStatement, args...)
 	if err != nil {
 		return comments, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
