@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/limiter"
 	"github.com/gofiber/fiber/v3/middleware/static"
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
@@ -38,6 +39,18 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		MaxAge:           86400,
 	})) // Даем порту, на котором располагается реакт, возможность работать с API (для разработки, в проде порт будет единым)
+
+	if cfg.ENV == "production" {
+		app.Use(limiter.New(limiter.Config{
+			Max:        100,       // Максимум запросов в минуту
+			Expiration: 60 * 1000, // Время жизни в миллисекундах
+			LimitReached: func(c fiber.Ctx) error {
+				return c.Status(fiber.StatusTooManyRequests).JSON(fiber.Map{
+					"error": "cлишком много запросов, попробуйте позже",
+				})
+			},
+		}))
+	}
 
 	routes.SetupRoutes(app) // Запускаем обработчики запросов (сама функция, вызывающая обработчики, находится в ./routes)
 
