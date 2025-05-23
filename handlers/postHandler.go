@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/services"
@@ -26,7 +28,27 @@ type updatePostInput struct {
 // Возвращаем полученный результат или сообщение об ошибки. Если результата не является объектом - выводим сообщение
 // GetPosts возвращает все посты
 func GetPosts(c fiber.Ctx) error {
-	posts, err := services.GetPosts(c.Context(), &services.Options{})
+	cfg := config.LoadConfig()
+	var opts services.Options
+
+	limitStr := c.Query("limit")
+	offsetStr := c.Query("offset")
+
+	if cfg.ENV == "production" {
+		limitStr = c.Query("limit", "20")
+		offsetStr = c.Query("offset", "0")
+	}
+
+	limit, err1 := strconv.Atoi(limitStr)
+	offset, err2 := strconv.Atoi(offsetStr)
+	if err1 == nil && limit > 0 {
+		opts.Limit = &limit
+	}
+	if err2 == nil && offset >= 0 {
+		opts.Offset = &offset
+	}
+
+	posts, err := services.GetPosts(c.Context(), &opts)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Ошибка запроса к БД")
 	}

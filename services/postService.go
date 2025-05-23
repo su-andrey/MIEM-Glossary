@@ -25,6 +25,18 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 		args = append(args, opts.OrderByStrPos.Value)
 	}
 
+	limitStatement := ""
+	if opts != nil && opts.Limit != nil {
+		limitStatement = fmt.Sprintf(" LIMIT $%d", len(args)+1)
+		args = append(args, opts.Limit)
+	}
+
+	offsetStatement := ""
+	if opts != nil && opts.Offset != nil {
+		offsetStatement = fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, opts.Offset)
+	}
+
 	var posts []models.Post
 
 	rows, err := database.DB.Query(ctx,
@@ -32,7 +44,7 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 		        c.id, c.name, 
 		        p.author_id, p.is_moderated 
 		 FROM posts p
-		 JOIN categories c ON p.category_id = c.id`+whereStatement+orderStatement, args...)
+		 JOIN categories c ON p.category_id = c.id`+whereStatement+orderStatement+limitStatement+offsetStatement, args...)
 	if err != nil {
 		return posts, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
