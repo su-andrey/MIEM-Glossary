@@ -47,6 +47,10 @@ func main() {
 			MaxAge: 3600,
 		}))
 
+		app.Get("/vite.svg", func(c fiber.Ctx) error {
+			return c.SendFile("./client/dist/vite.svg")
+		})
+
 		app.Get("/*", func(c fiber.Ctx) error {
 			return c.SendFile("./client/dist/index.html")
 		})
