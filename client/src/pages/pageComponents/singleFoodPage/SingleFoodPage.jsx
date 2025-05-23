@@ -1,4 +1,4 @@
-import styles from "./SingleFoodPage.module.css"
+import styles from "./singleFoodPage.module.css"
 import { useSelector } from "react-redux";
 import { uid } from "uid";
 import AnswerField from "../../../components/UI/answerField/AnswerField";

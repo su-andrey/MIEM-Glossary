@@ -1,4 +1,4 @@
-import styles from "./PrepodCard.module.css"
+import styles from "./prepodCard.module.css"
 import getFiveScale from "../../custom hooks/useGetFiveScale";
 import StarsDumb from "../UI/starsDumb/StarsDumb";
 import soup from "./../../assets/jpg/cafe_categories/soup.jpg"

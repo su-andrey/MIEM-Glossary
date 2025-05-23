@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/config"
@@ -23,7 +24,27 @@ type updateCommentInput struct {
 // Если возвращать нечего (например удаление), выводим сообщение (удалённый объект не возвращаем за ненадобностью)
 // GetComments возвращает все комментарии
 func GetComments(c fiber.Ctx) error {
-	comments, err := services.GetComments(c.Context())
+	cfg := config.LoadConfig()
+	opts := &services.Options{}
+
+	limitStr := c.Query("limit")
+	offsetStr := c.Query("offset")
+
+	if cfg.ENV == "production" {
+		limitStr = c.Query("limit", "20")
+		offsetStr = c.Query("offset", "0")
+	}
+
+	limit, err1 := strconv.Atoi(limitStr)
+	offset, err2 := strconv.Atoi(offsetStr)
+	if err1 == nil && limit > 0 {
+		opts.Limit = &limit
+	}
+	if err2 == nil && offset >= 0 {
+		opts.Offset = &offset
+	}
+
+	comments, err := services.GetComments(c.Context(), opts)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения комментариев")
 	}

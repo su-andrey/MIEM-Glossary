@@ -25,6 +25,18 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 		args = append(args, opts.OrderByStrPos.Value)
 	}
 
+	limitStatement := ""
+	if opts != nil && opts.Limit != nil {
+		limitStatement = fmt.Sprintf(" LIMIT $%d", len(args)+1)
+		args = append(args, opts.Limit)
+	}
+
+	offsetStatement := ""
+	if opts != nil && opts.Offset != nil {
+		offsetStatement = fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, opts.Offset)
+	}
+
 	var posts []models.Post
 
 	rows, err := database.DB.Query(ctx,
@@ -32,7 +44,7 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 		        c.id, c.name, 
 		        p.author_id, p.is_moderated 
 		 FROM posts p
-		 JOIN categories c ON p.category_id = c.id`+whereStatement+orderStatement, args...)
+		 JOIN categories c ON p.category_id = c.id`+whereStatement+orderStatement+limitStatement+offsetStatement, args...)
 	if err != nil {
 		return posts, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
@@ -46,7 +58,15 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
-		comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
+		commentsOpts := &Options{
+			Condition: &Condition{
+				Name:     "post_id",
+				Operator: OpEqual,
+				Value:    post.ID,
+			},
+		}
+
+		comments, err := GetComments(ctx, commentsOpts)
 		if err != nil {
 			return posts, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
@@ -82,7 +102,15 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	comments, err := GetComments(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: post.ID})
+	commentsOpts := &Options{
+		Condition: &Condition{
+			Name:     "post_id",
+			Operator: OpEqual,
+			Value:    post.ID,
+		},
+	}
+
+	comments, err := GetComments(ctx, commentsOpts)
 	if err != nil {
 		return post, errors.New("ошибка получения комменатриев") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
