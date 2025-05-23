@@ -13,6 +13,8 @@ const (
 type Options struct {
 	Condition     *Condition
 	OrderByStrPos *OrderByStrPos
+	Limit         *int // пагинация: сколько записей вернуть
+	Offset        *int // пагинация: с какой записи начать
 }
 
 type Condition struct {
