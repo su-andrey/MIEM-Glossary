@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 const getPosts = state => state.main.posts;
 
 const getCategory = state =>
-    state.categories.find(category => category.name === "Отзывы");
+    state.main.categories.find(category => category.name === "Отзывы");
 
 const getPrepodID = (_, prepodID) => prepodID;
 

@@ -6,75 +6,38 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useLocation, useNavigate, Navigate, Link } from "react-router-dom";
 import Loader from "../../components/UI/loader/Loader.jsx";
 import ChangeForm from "./subcomponents/changeFrom/ChangeForm.jsx";
 import EyeIcon from "./subcomponents/eyeIcon/EyeIcon.jsx";
 import Loader1 from "../../components/UI/loader1/Loader1.jsx";
 import editMyData from "../../queries/USER/editMyData.js";
+import AdminPage from "../adminPage/AdminPage.jsx";
+import checkLogIn from "../../queries/USER/checkLogIn.js";
+import checkAdmin from "../../queries/USER/checkAdmin.js";
+import getMe from "../../queries/USER/getMe.js";
+
 const CabinetPage = () => {
-    const dispatch = useDispatch;
-    let isAuth = useSelector(state => state.main.isAuthentificated);
-    let isAdmin = useSelector(state => state.main.isAdmin);
-    const [email, setEmail] = useState(useSelector(state => state.main.email))
-    const [initialPassword, setPassword] = useState(useSelector(state => state.main.password))
-    const [initialConfirm, setConfirm] = useState(useSelector(state => state.main.password))
-
-    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Профиль"
-    name = name.split('@')[0];
-    if(name.length > 12){
-        name = name.slice(0, 13)
-    }
-
-    const {
-        register,
-        formState: {
-            errors,
-            isSubmitting,
-        },
-        reset,
-        handleSubmit,
-        watch,
-    } = useForm({mode: "all",})
-
-    const onSubmit = async (data)=> {
-        try{
-            console.log(data)
-            editMyData(data.email, data.password)
-            setOpen(false);
-        }
-        catch(error){
-            console.error(error)
-        }
-        reset()
-    }
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    }
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
-    const handleConfirmChange = (e) => {
-        setConfirm(e.target.value);
-    }
-
     const location = useLocation();
     const navigate = useNavigate();
     let fromPage = location.state?.from?.pathname || "/";
     if(fromPage=="/login"){
         fromPage = "/"
     }
-    const handleClose = () => {
-        setOpen(false)
-        navigate(fromPage)
-    }
 
-    const handleRedirect = ()=>{
-        navigate("/login", { state: { from: location } });
-    }
+    const [isAuth, setAuth] = useState(false);
+    const [isAdmin, setAdmin] = useState(false);
+    const [loading, setLoading] = useState(true)
+    useEffect(()=>{
+        const getInfo = async ()=>{
+            const result = await getMe();
+            setAuth(result.email);
+            setAdmin(result.is_admin);
+            setLoading(false)
+        }
+        getInfo();
+    }, [])
 
-    const password = watch('password');
     const [ready, setReady] = useState(false);
     
     useEffect(() => {
@@ -88,15 +51,9 @@ const CabinetPage = () => {
     }
     }, []);
 
-    useEffect(()=>{
-        if(!email || !initialPassword || !initialConfirm){
-            setEmail(localStorage.getItem("email"))
-            setPassword(localStorage.getItem("password"))
-            setConfirm(localStorage.getItem("confirm"))
-        }
-    }, [])
+
     
-    if (!ready) return <Loader/>;
+    if (!ready || loading) return <Loader1 />;
     
     return(
         <>
@@ -110,14 +67,12 @@ const CabinetPage = () => {
             }
             {isAuth && 
                 <>
-                    <div className={styles.subtitle} style={{marginTop:"calc(-1*var(--page-vertical-gap))"}}>Здравствуйте, {name} </div>
                     <ChangeForm />
                 </>
             }
             {
-                isAdmin && 
-                <>
-                </>
+                isAdmin && isAuth &&
+                <Link to="/admin"><ActionButton text="Админ"></ActionButton></Link>
             }
             <img src={button} alt="HSE button" className={styles.hsebutton}/>
         </div>

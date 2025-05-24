@@ -2,7 +2,7 @@ import styles from "./reply.module.css"
 import useNameGenerator from "../../custom hooks/useNameGenerator";
 import { useState, useEffect } from "react";
 
-const Reply = ({data}) => {
+const Reply = ({data, serv}) => {
     const [name, setName] = useState("");
     useEffect(()=>{setName(useNameGenerator())}, []);
 
@@ -10,7 +10,7 @@ const Reply = ({data}) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.name}>
-                {name}
+                {serv || name}
             </div>
             <div className={styles.body}>
                 {data.body}

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import image from "./../assets/jpg/cafe_categories/soup.jpg";
+import coffe from "./../assets/categories/coffe.jpg"
+import doner from "./../assets/categories/doner.jpg"
+import paper from "./../assets/categories/paper.jpg"
+import store from "./../assets/categories/store.jpg"
 
 const mainSlice = createSlice({
     name: 'main',
@@ -10,19 +14,23 @@ const mainSlice = createSlice({
         categories : [
                         {
                             "id": 1,
-                            "name": "Кофе"
+                            "name": "Кофе",
+                            "image": coffe,
                         },
                         {
                             "id": 2,
-                            "name": "Фастфуд и шаурма"
+                            "name": "Фастфуд и шаурма",
+                            "image": doner,
                         },
                         {
                             "id": 3,
-                            "name": "Копирки"
+                            "name": "Копирки",
+                            "image": paper,
                         },
                         {
                             "id": 4,
-                            "name": "Магазины"
+                            "name": "Магазины",
+                            "image": store,
                         },
                         {
                             "id": 5,
@@ -38,13 +46,13 @@ const mainSlice = createSlice({
                         }
                     ],
         wasChanged : true,
-        isAuthentificated : false,
         email : "",
-        password : "",
-        userID : undefined,
-        isAdmin : undefined,
     },
     reducers:{
+        setEmail(state, action){
+            state.email = action.payload
+        },
+
         setChanged(state, action){
             state.wasChanged = action.payload
         },
@@ -57,38 +65,22 @@ const mainSlice = createSlice({
             state.posts = action.payload.data
         },
 
-        setSelfUser(state, action){
-            state.isAuthentificated = true;
-            state.userName = action.payload.userName
-            state.userID = action.payload.authorID
-            state.isAdmin = action.payload.isAdmin
-        },
-
         setComments(state, action){
             state.comments = action.payload.data
         },
 
-        handleLogIn(state, action){
-            state.isAdmin = action.payload?.isAdmin
-            state.isAuthentificated = true
-            state.email = action.payload?.email
-            state.password = action.payload?.password
-            state.userID = action.payload?.userID
+        addComment(state, action){
+
         },
 
-        resetState(state){
-            state.isAuthentificated = false
-            state.email = ""
-            state.password = ""
-            state.userID = undefined
-            state.isAdmin = undefined
-            localStorage.removeItem("email")
-            localStorage.removeItem("password")
-            localStorage.removeItem("token")
-        }
+        addPost(state, action){
+
+        },
+
+
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, handleLogIn, resetState, setChanged} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

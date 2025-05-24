@@ -7,8 +7,12 @@ import { useState, useEffect, useRef } from "react"
 import { MActionButton } from "../../components/UI/actionButton/ActionButton"
 import { motion, useScroll, useTransform, useSpring, transform } from "framer-motion"
 import { useNavigate, useLocation } from "react-router-dom";
+import Loader1 from "../../components/UI/loader1/Loader1"
+import Loader2 from "../../components/UI/loader2/Loader2"
+import useScrollToTop from "../../custom hooks/useScrollToTop"
 
 const HomePage = () => {
+    useScrollToTop()
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -143,7 +147,7 @@ const HomePage = () => {
     }
         }, [ready]);
 
-    if (!ready) return <Loader />;
+    if (!ready) return <Loader2 />;
     return (
         <>
             <div

@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Routes } from 'react-router-dom'
+import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Suspense, lazy, use } from 'react';
 const Layout = lazy(() => import('./pages/layout/Layout.jsx'));
@@ -14,22 +14,20 @@ const NotFoundPage = lazy(() => import('./pages/notFoundPage/NotFoundPage.jsx'))
 const SingleQuestionPage = lazy(() => import('./pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx'));
 const SingleFoodPage = lazy(() => import('./pages/pageComponents/singleFoodPage/SingleFoodPage.jsx'));
 const SinglePrepodPage = lazy(() => import('./pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx'));
-import Loader from './components/UI/loader/Loader.jsx';
+import RequireAdmin from "./hoc/RequireAdmin.jsx"
+import Loader2 from './components/UI/loader2/Loader2.jsx';
 import Loader1 from './components/UI/loader1/Loader1.jsx';
-import { RouterProvider } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsers, setPosts, setComments } from './store/mainSlice.js';
 import requireComments from './queries/GET/requireComments.js';
 import requirePosts from './queries/GET/requirePosts.js';
-import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
 import getMe from './queries/USER/getMe.js';
 import useSmoothScroll from './custom hooks/useSmoothScroll.js';
-import invisibleLoginUser from './queries/USER/invisibleLoginUser.js';
-import { handleLogIn } from './store/mainSlice.js';
 import { setChanged } from './store/mainSlice.js';
 import setupDB from './store/fake/setupDB.js';
+import AdminPage from './pages/adminPage/AdminPage.jsx';
 
 
 
@@ -68,51 +66,34 @@ const App = () => {
     }, [wasChanged]);
 
 
-    useEffect(() => {
-        const init = async () => {
-            try {
-                const data = await invisibleLoginUser();
-                const me = await getMe();
-                dispatch(handleLogIn({
-                    email: data.email,
-                    password: data.password,
-                    isAdmin: me.is_admin,
-                    userID: me.id,
-                }));
-            } catch (error) {
-                console.error("Невидимая аутентификация не удалась", error);
-            }
-        };
-        init();
-    }, []);
-
-
     useSmoothScroll()
 
 
-    return (<>
+    return (
+    
     <Routes>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/" element={<Layout></Layout>}>
-            <Route index element={<Suspense fallback={<Loader1 />}><HomePage></HomePage></Suspense>}></Route>
+            <Route index element={<Suspense fallback={<Loader2 />}><HomePage></HomePage></Suspense>}></Route>
 
             <Route path="/login" element={<LogInPage></LogInPage>}></Route>
             <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
 
-            <Route path="prepods" element={<Suspense fallback={<Loader />}><PrepodPage /></Suspense>}></Route>
-            <Route path="prepods/:id" element={<Suspense fallback={<Loader />}><SinglePrepodPage/></Suspense>}></Route>
+            <Route path="prepods" element={<Suspense fallback={<Loader1 />}><PrepodPage /></Suspense>}></Route>
+            <Route path="prepods/:id" element={<Suspense fallback={<Loader1 />}><SinglePrepodPage/></Suspense>}></Route>
 
-            <Route path="food" element={<Suspense fallback={<Loader />}><FoodMainPage /></Suspense>}></Route>
-            <Route path="food/:category" element={<Suspense fallback={<Loader />}><FoodCataloguePage /></Suspense>}></Route>
-            <Route path="food/:category/:id" element={<Suspense fallback={<Loader />}><SingleFoodPage /></Suspense>}></Route>
+            <Route path="food" element={<Suspense fallback={<Loader1 />}><FoodMainPage /></Suspense>}></Route>
+            <Route path="food/:category" element={<Suspense fallback={<Loader1 />}><FoodCataloguePage /></Suspense>}></Route>
+            <Route path="food/:category/:id" element={<Suspense fallback={<Loader1 />}><SingleFoodPage /></Suspense>}></Route>
 
-            <Route path="questions" element={<Suspense fallback={<Loader />}><QuestionPage /></Suspense>}></Route>
-            <Route path="questions/:id" element={<Suspense fallback={<Loader />}><SingleQuestionPage /></Suspense>}></Route>
+            <Route path="questions" element={<Suspense fallback={<Loader1 />}><QuestionPage /></Suspense>}></Route>
+            <Route path="questions/:id" element={<Suspense fallback={<Loader1 />}><SingleQuestionPage /></Suspense>}></Route>
 
-            <Route path="cabinet" element={<Suspense fallback={<Loader />}><RequireAuth> <CabinetPage /> </RequireAuth></Suspense>}></Route>
+            <Route path="cabinet" element={<Suspense fallback={<Loader1 />}><RequireAuth> <CabinetPage /> </RequireAuth></Suspense>}></Route>
+            <Route path="admin" element={<Suspense fallback={<Loader1 />}><RequireAuth><RequireAdmin>   <AdminPage />   </RequireAdmin></RequireAuth></Suspense>}></Route>
         </Route>
     </Routes>
-    </>);
+    );
 }
 
 export default App;

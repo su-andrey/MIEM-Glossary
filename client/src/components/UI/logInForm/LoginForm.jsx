@@ -2,18 +2,20 @@ import style from "./loginForm.module.css"
 import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logInUser from "../../../queries/USER/logInUser";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
-import { handleLogIn } from "../../../store/mainSlice";
 import getMe from "../../../queries/USER/getMe";
+import { setEmail } from "../../../store/mainSlice";
 const LoginForm = ({isOpen = true}) => {
     const dispatch = useDispatch();
     const [input1Type, changeInput1Type] = useState(false);
     const [open, setOpen] = useState(isOpen);
     const [loginError, setLoginError] = useState("");
+    const location = useLocation();
+    const navigate = useNavigate();
     const {
         register,
         formState: {
@@ -28,18 +30,19 @@ const LoginForm = ({isOpen = true}) => {
     const onSubmit = async (data)=> {
         try{
             setLoginError("");
-            console.log(data)
             await logInUser(data.email, data.password)
             setLoginError("");
             let me = await getMe()
-            dispatch(handleLogIn({
-                email: data.email,
-                password: data.password,
-                isAdmin: me.is_admin,
-                userID: me.id,
-            }))
+            if(!me){
+            throw new Error("Ошибка получения данных пользователя после входа");
+            }
+            dispatch(setEmail(me.email))
+            let fromPage = location.state?.from?.pathname || "/";
+            if (fromPage === "/register" || fromPage === "/login") {
+                fromPage = "/cabinet";
+            }
+            navigate(fromPage);
             setOpen(false);
-            navigate("/")
         }
         catch (error) {
             if (error.response?.status === 401) {
@@ -52,8 +55,7 @@ const LoginForm = ({isOpen = true}) => {
         }
     }
 
-    const location = useLocation();
-    const navigate = useNavigate();
+    
     let fromPage = location.state?.from?.pathname || "/";
     if(fromPage=="/register"){
         fromPage = "/"

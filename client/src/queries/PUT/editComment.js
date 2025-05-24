@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const editComment = async (body, id, post_id, author_id) => {
     if(!id || !body || !post_id || !author_id){

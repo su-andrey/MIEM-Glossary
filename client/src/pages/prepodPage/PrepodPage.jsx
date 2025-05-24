@@ -15,23 +15,36 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import PrepodCard from "../../components/prepodCard/PrepodCard";
 import Loader from "../../components/UI/loader/Loader";
+import Loader1 from "../../components/UI/loader1/Loader1";
 const PrepodPage = () => {
+    const [isSliderReady, setSliderReady] = useState(false);
     const categories = useSelector(state => getCategories(state));
     const category = categories.find((category) => category.name === "Преподаватели");
     const posts = useSelector(state => getPostsByCategory(state, category?.id));
     console.log(posts)
     const [ready, setReady] = useState(false);
     useEffect(() => {
-        const handleLoad = () => setReady(true);
-    if (document.readyState === 'complete') {
-        handleLoad();
-    } 
-    else {
-        window.addEventListener('load', handleLoad);
-        return () => window.removeEventListener('load', handleLoad);
-    }
+        const MIN_LOAD_TIME = 0; 
+        const start = Date.now();
+
+        const handleLoad = () => {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);
+
+            setTimeout(() => {
+                setReady(true);
+            }, remaining);
+        };
+
+        if (document.readyState === 'complete') {
+            handleLoad();
+            setSliderReady(true)
+        } else {
+            window.addEventListener('load', handleLoad);
+            return () => window.removeEventListener('load', handleLoad);
+        }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1/>;
     return (
         <div className={styles.wrapper}>
             <div className={styles.topWrapper}>
@@ -42,7 +55,7 @@ const PrepodPage = () => {
                     </div>
                 </div>
             </div>
-            
+            {isSliderReady ? 
             <div className={styles.sliderWrapper}>
                     <Swiper
                         className={styles.swiper}
@@ -98,6 +111,9 @@ const PrepodPage = () => {
                     </div>
                     <div className={styles.swiperPagination}></div>
                 </div>
+                :
+                <Loader1 />
+            }
             
             <AnswerField 
                 placeholder="Предложить препода..."

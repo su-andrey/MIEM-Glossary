@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const createPost = async (name, author_id, body, category_id) => {
     if (!name || !author_id || !body || !category_id) {

@@ -5,15 +5,13 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import EyeIcon from "../eyeIcon/EyeIcon.jsx";
 import { useState } from "react";
-import { resetState } from "../../../../store/mainSlice.js";
+import { setEmail } from "../../../../store/mainSlice.js";
 import editMyData from "../../../../queries/USER/editMyData.js";
 import getMe from "./../../../../queries/USER/getMe.js";
+import logOutUser from "../../../../queries/USER/logOutUser.js";
 
 const ChangeForm = () => {
     const dispatch = useDispatch();
-
-    const userEmail = useSelector(state => state.main.email) || localStorage.getItem("email");
-    const userPassword = useSelector(state => state.main.password) || localStorage.getItem("password");
 
     const [input1Type, changeInput1Type] = useState(false);
     const [input2Type, changeInput2Type] = useState(false);
@@ -31,11 +29,6 @@ const ChangeForm = () => {
         control,
     } = useForm({
         mode: "all",
-        defaultValues: {
-            email: userEmail,
-            password: userPassword,
-            confirm: userPassword
-        }
     })
 
     const onSubmit = async (data) => {
@@ -44,11 +37,12 @@ const ChangeForm = () => {
             let me  = await getMe()
             console.log(me)
             await editMyData(data.email, data.password, me.id, me.is_admin)
+            dispatch(setEmail(me.email))
+            reset();
         } 
         catch(error) {
             console.error(error);
         }
-        reset();
     }
 
     const location = useLocation();
@@ -58,10 +52,6 @@ const ChangeForm = () => {
         fromPage = "/"
     }
     
-    const handleClose = () => {
-        setOpen(false);
-        navigate(fromPage);
-    }
 
     const handleRedirect = () => {
         navigate("/login", { state: { from: location } });
@@ -70,19 +60,20 @@ const ChangeForm = () => {
     const password = watch('password');
     
     const handleExit = ()=>{
-        navigate("/", { state: { from: "/" } });
-        dispatch(resetState())
+        logOutUser();
+        dispatch(setEmail(""))
+        navigate("/");
     }
 
     return ( 
         <form className={styles.changeForm} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.subtitle}>
-                Ваши данные:
+                Смена пароля:
             </div>
             <input 
                 className={errors.email ? styles.input_err : styles.input} 
                 type="email" 
-                placeholder="Ваша почта..."
+                placeholder="Введите вашу почту..."
                 {...register('email', {
                     required: "Поле обязательно к заполнению",
                     minLength: {

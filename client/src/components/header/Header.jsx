@@ -1,5 +1,5 @@
 import glass from "./../../assets/vectors/glass.svg"
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "./../../assets/vectors/logo/staticBook.svg"
 import styles from "./header.module.css"
@@ -8,13 +8,25 @@ import {motion, LayoutGroup, AnimatePresence} from 'framer-motion'
 import { useLocation } from "react-router-dom";
 import Line from "./subcomponents/Line";
 import { useSelector } from "react-redux";
+import checkLogIn from "../../queries/USER/checkLogIn";
+import getMe from "../../queries/USER/getMe";
 const Header = () => {
     const [activeIndex, setActiveIndex] = useState(-1);
-    let name = useSelector(store => store.main.email) || localStorage.getItem("email") || "Профиль"
-    name = name.split('@')[0];
-    if(name.length > 12){
-        name = name.slice(0, 13)
-    }
+    const [username, setUsername] = useState("");
+    let email = useSelector( state => state.main.email)
+    console.log("Our email", email)
+    useEffect(() => {
+        if (email) {
+            let name = email.split('@')[0] || "";
+            if (name.length > 12) {
+                name = name.slice(0, 12) + "...";
+            }
+            setUsername(name);
+        } else {
+            setUsername("");
+        }
+    }, [email]);
+
     const handleClick = (ind)=> {
         setActiveIndex(ind);
     }
@@ -69,7 +81,7 @@ const Header = () => {
                     <AnimatePresence >
                         {activeCurrentIndex == 3 && <Line />}
                     </AnimatePresence>
-                    <div onClick={()=>handleClick(3)} className={styles.navItem}>{name}</div>
+                    <div onClick={()=>handleClick(3)} className={styles.navItem}>{username || "Вход"}</div>
                 </NavLink>
                 <AnimatedSearchField></AnimatedSearchField>
             </div>

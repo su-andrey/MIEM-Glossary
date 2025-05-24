@@ -14,170 +14,16 @@ import getPostsByCategory from "../../../store/selectors/getPostsByCategoryID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
 import {motion} from "framer-motion"
+import Loader1 from "../../../components/UI/loader1/Loader1";
+import createComment from "../../../queries/POST/createComment";
 const SingleQuestionPage = () => {
-    const data2 = [{
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    },
-    {
-        "author_id": 1,
-        "post": 
-        {
-            "author_id": 1,
-            "body": "string",
-            "category": 
-                {
-                    "id": 2, 
-                    "name": "string"
-                },
-            "dislikes": 1,
-            "id": 1,
-            "likes": 3,
-            "name": "string",
-        },
-        "name": "Здесь имя",
-        "body": "Ребят, а чо делать, если сидишь на физике, сам русский, лектор русский, говорит на русском, а понимаю я на армянском. Это лечится?",
-        "likes": 3423,
-        "dislikes": 888,
-        "comments": 232,
-    }]
-
     let categories = useSelector(state => getCategories(state));
-    let category = categories.find((category) => category.name == "Вопрос");
+    let category = categories.find((category) => category.name == "Вопросы");
     let questions = useSelector(state => getPostsByCategory(state, category.id));
     const questionID = useParams().id;
     const question = useSelector(state => getPostsByID(state, questionID));
-    console.log(questionID)
-    console.log("Вопрос: ", question)
-
+    const author_id = useSelector(state => state.main.userID)
+    
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
@@ -193,10 +39,25 @@ const SingleQuestionPage = () => {
             }
         }),
     }
-    /*
+
     const comments = useSelector(state => getCommentsByQuestionID(state, questionID))
     console.log(comments)
-    */
+
+    const submitter = async (data)=>{
+        try{
+            const response = await createComment({
+                post_id: questionID,
+                author_id: author_id,
+                body: data.answer
+            })
+            
+
+        }
+        catch(error){
+
+        }
+    }
+
     const [ready, setReady] = useState(false);
     useEffect(() => {
         const handleLoad = () => setReady(true);
@@ -208,7 +69,7 @@ const SingleQuestionPage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1 />;
     return(
         <>
             <Scroll />
@@ -234,8 +95,8 @@ const SingleQuestionPage = () => {
                                 Ответы:
                             </div>
                             <div className={styles.sliderWrapper}>
-                                {
-                                    data2.map((comment)=>{
+                                {comments.size > 0 ?
+                                    comments.map((comment)=>{
                                         return(
                                             <motion.div
                                                 custom={1}
@@ -250,6 +111,18 @@ const SingleQuestionPage = () => {
                                             </motion.div>
                                         );
                                     })
+                                    :
+                                    <motion.div
+                                        custom={1}
+                                        variants={leftItemAnimation}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, amount: 0.5 }}
+                                        className={styles.metatitle}
+                                        key={uid()}
+                                    >
+                                        <Reply key={uid()} data={{body:"Пока нет ответов(", serv:"Одинокий бедолага"}}></Reply>
+                                    </motion.div>
                                 }
                             </div>
                         </div>
@@ -260,6 +133,7 @@ const SingleQuestionPage = () => {
                         height={"30vh"}
                         placeholder={"Поможете бедолаге?"}
                         caption={"Добавте ответ на вопрос"}
+                        submitter={()=>{submitter()}}
                     />
                 </div>
             </div>

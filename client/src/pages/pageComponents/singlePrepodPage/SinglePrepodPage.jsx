@@ -21,6 +21,7 @@ import getPrepodReviewsByID from "../../../store/selectors/forSinglePages/getPre
 import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
 import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
+import Loader1 from "../../../components/UI/loader1/Loader1";
 
 const SinglePrepodPage = () => {
     let categories = useSelector(state => getCategories(state));
@@ -39,16 +40,26 @@ const SinglePrepodPage = () => {
     console.log("Препод: ", prepod)
     const [ready, setReady] = useState(false);
     useEffect(() => {
-        const handleLoad = () => setReady(true);
-    if (document.readyState === 'complete') {
-        handleLoad();
-    } 
-    else {
-        window.addEventListener('load', handleLoad);
-        return () => window.removeEventListener('load', handleLoad);
-    }
+        const MIN_LOAD_TIME = 0; 
+        const start = Date.now();
+
+        const handleLoad = () => {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);
+
+            setTimeout(() => {
+                setReady(true);
+            }, remaining);
+        };
+
+        if (document.readyState === 'complete') {
+            handleLoad();
+        } else {
+            window.addEventListener('load', handleLoad);
+            return () => window.removeEventListener('load', handleLoad);
+        }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1/>;
     return(
         <>
             <Scroll />

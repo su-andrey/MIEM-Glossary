@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const getMe = async () => {
     let token = localStorage.getItem("token");
@@ -8,13 +8,12 @@ const getMe = async () => {
                                             {headers:{
                                                 Authorization: `Bearer ${token}`,
                                         }},);
-        console.log("Self information recieved:", response);
         return response.data;
 
     } 
     catch(error){
         console.error("Error getting info about myself:", error.response?.data?.error || error.message);
-        throw error;
+        return false;
     }
 };
 

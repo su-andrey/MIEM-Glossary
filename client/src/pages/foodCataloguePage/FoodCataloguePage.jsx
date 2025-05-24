@@ -8,15 +8,18 @@ import { Navigation, Pagination, Autoplay, Parallax, FreeMode, Keyboard, Mousewh
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
+import waitForImagesToLoad from "./../../custom hooks/helpers/waitForImagesToLoad"
 import getPostsByCategoryID from "../../store/selectors/getPostsByCategoryID";
 import getCategories from "../../store/selectors/getCategories";
 import CafeListCard from "../../components/cafeListCard/CafeListCard";
 import SearchField from "../../components/UI/searchField/SearchField";
 import AnswerField from "../../components/UI/answerField/AnswerField";
 import Loader from "../../components/UI/loader/Loader";
+import Loader1 from "../../components/UI/loader1/Loader1";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 
 const FoodCataloguePage = () => {
+    const [isSliderReady, setSliderReady] = useState(false);
     const { category } = useParams();
     console.log(category)
     const posts = useSelector(state => getPostsByCategoryID(state, category));
@@ -25,18 +28,29 @@ const FoodCataloguePage = () => {
     const currentCategory = categories.find(categoryEl => categoryEl.category_id == category)?.name || "Заведения";
     const [ready, setReady] = useState(false);
     useEffect(() => {
-        const handleLoad = () => setReady(true);
-    if (document.readyState === 'complete') {
-        handleLoad();
-    } 
-    else {
-        window.addEventListener('load', handleLoad);
-        return () => window.removeEventListener('load', handleLoad);
-    }
+        const MIN_LOAD_TIME = 0; 
+        const start = Date.now();
+
+        const handleLoad = () => {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);
+
+            setTimeout(() => {
+                setReady(true);
+            }, remaining);
+        };
+
+        if (document.readyState === 'complete') {
+            handleLoad();
+            setSliderReady(true)
+        } else {
+            window.addEventListener('load', handleLoad);
+            return () => window.removeEventListener('load', handleLoad);
+        }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1/>;
     return (
-        <>
+        <AppLoaderWrapper>
             <div className={styles.wrapper}>
                 <div className={styles.topWrapper}>
                     <div className={styles.textWrapper}>
@@ -46,7 +60,7 @@ const FoodCataloguePage = () => {
                     <SearchField />
                 </div>
 
-                <div className={styles.sliderWrapper}>
+                {isSliderReady ? <div className={styles.sliderWrapper}>
                     <Swiper
                         className={styles.swiper}
                         modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel]}
@@ -79,13 +93,17 @@ const FoodCataloguePage = () => {
                             enabled: true,
                         }}
                     >
-                        {posts.map((post) => (
-                            <SwiperSlide key={uid()}>
-                                <Link to={`/food/${category}/${post.id}`}>
-                                    <CafeListCard data={post} />
-                                </Link>
-                            </SwiperSlide>
-                        ))}
+                        {posts.length > 0 ? (
+                            posts.map((post) => (
+                                <SwiperSlide key={uid()}>
+                                    <Link to={`/food/${category}/${post.id}`}>
+                                        <CafeListCard data={post} />
+                                    </Link>
+                                </SwiperSlide>
+                            ))
+                        ) : (
+                            <Loader1 />
+                        )}
                     </Swiper>
 
                     <div className={styles.swiperButtonPrev}>
@@ -101,10 +119,13 @@ const FoodCataloguePage = () => {
                     </div>
                     <div className={styles.swiperPagination}></div>
                 </div>
+                :
+                <Loader1 />
+                }
 
                 <AnswerField />
             </div>
-        </>
+        </AppLoaderWrapper>
     );
 };
 

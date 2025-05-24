@@ -128,7 +128,6 @@
 
 
 .swiperPagination :global(.swiper-pagination-bullet) {
-    min-width: 1em;
     background-color: var(--primary-color);
     width: 0.7vw;
     height: 0.7vw;
