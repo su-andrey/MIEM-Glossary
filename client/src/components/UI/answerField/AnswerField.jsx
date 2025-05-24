@@ -10,7 +10,7 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter})
     };
     return (<>
     <div className={styles.wrapper} style={settings}>
-        <form className={styles.fieldForm} onSubmit={()=>handleSubmit()}>
+        <form className={styles.fieldForm} onSubmit={handleSubmit}>
             <div className={styles.caption}>{caption || "Добавьте собственное заведение или отзыв"}</div>
             <textarea  
                 placeholder={placeholder || "Добавить ответ..."}
@@ -20,6 +20,8 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter})
                     height: (height || "25vh"),
                     width: (width || "30vw"),
                 }}
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
             />
             <ActionButton text="Отправить" type="submit"></ActionButton>
         </form>

@@ -1,5 +1,5 @@
 import styles from "./questionPage.module.css"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import getCategories from "../../store/selectors/getCategories";
 import getPostsByCategory from "../../store/selectors/getPostsByCategoryID";
 import Question from "../../components/question/Question";
@@ -15,7 +15,10 @@ import Loader from "../../components/UI/loader/Loader";
 import { useState, useEffect } from "react";
 import {motion} from "framer-motion"
 import Loader1 from "../../components/UI/loader1/Loader1";
+import createPost from "../../queries/POST/createPost";
+import { addPost } from "../../store/mainSlice";
 const QuestionPage = () => {
+    const dispatch = useDispatch();
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
@@ -38,7 +41,25 @@ const QuestionPage = () => {
     console.log(category)
     let questions = useSelector(state => getPostsByCategory(state, category.id))
     console.log(questions)
+    let authorID = useSelector(state => state.main.userID)
     const [ready, setReady] = useState(false);
+
+    const submitter = async ({ answer, category_id, author_id }) => {
+        try {
+            const response = await createPost({
+            name: "question",
+            category_id: category_id,
+            author_id: author_id,
+            body: answer,
+            });
+            console.log("Ответ серва при создании коммента", response);
+            dispatch(addPost(response));
+        } 
+        catch (error) {
+            console.error("Ошибка добавления вопроса", error);
+        }
+    }
+
     useEffect(() => {
         const handleLoad = () => setReady(true);
     if (document.readyState === 'complete') {
@@ -88,6 +109,7 @@ const QuestionPage = () => {
                         height={"30vh"}
                         placeholder={"Спросите что-нибудь?"}
                         caption={"Создайте собственное обсуждение"}
+                        submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID })}
                     />
                 </div>
             </div>

@@ -6,7 +6,7 @@ const getCommentsByQuestionID = createSelector(
     [getComments, getQuestionID],
     (comments, questionID) => {
         if (!questionID) return [];
-        return comments.filter(comment => comment.post_id === questionID)
+        return comments.filter(comment => comment.post_id == questionID)
     }
 )
 

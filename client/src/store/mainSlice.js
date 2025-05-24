@@ -82,6 +82,8 @@ const mainSlice = createSlice({
             state.posts = [action.payload, ...state.posts]
         },
 
+        
+
 
     }
 }
