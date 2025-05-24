@@ -155,7 +155,16 @@ func CreatePost(ctx context.Context, categoryID int, name, body string, userID i
 }
 
 func UpdatePost(ctx context.Context, id, name, body string, likes, dislikes int, isModerated bool) error {
-	_, err := database.DB.Exec(ctx,
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM posts WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования поста")
+	}
+	if !exists {
+		return errors.New("пост не найден")
+	}
+
+	_, err = database.DB.Exec(ctx,
 		"UPDATE posts SET name = $1, body = $2, likes = $3, dislikes = $4, is_moderated = $5 WHERE id = $6",
 		name, body, likes, dislikes, isModerated, id)
 	if err != nil {
@@ -169,10 +178,10 @@ func DeletePost(ctx context.Context, id string) error {
 	var exists bool
 	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM posts WHERE id = $1)", id).Scan(&exists)
 	if err != nil {
-		return errors.New("ошибка проверки существования пользователя")
+		return errors.New("ошибка проверки существования поста")
 	}
 	if !exists {
-		return errors.New("пользователь не найден")
+		return errors.New("пост не найден")
 	}
 
 	photos, err := GetPhotos(ctx, Condition{Name: "post_id", Operator: OpEqual, Value: id})

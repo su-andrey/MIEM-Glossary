@@ -114,7 +114,12 @@ func UpdatePost(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления поста")
 	}
 
-	return c.JSON(fiber.Map{"message": "Пост обновлен"})
+	post, err := services.GetPostByID(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения поста после обновления")
+	}
+
+	return c.JSON(post)
 }
 
 // DeletePost удаляет пост
