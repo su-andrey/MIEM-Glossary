@@ -7,7 +7,7 @@ import (
 )
 
 type categoryInput struct {
-	Name string `json:"name" validate:"required,min=2,max=50"`
+	Name string `json:"name" validate:"required,min=1,max=50"`
 }
 
 // Общая структура всех функций в данном хэндлере

@@ -10,13 +10,13 @@ import (
 
 type postInput struct {
 	CategoryID int    `json:"category_id" validate:"required,gt=0"`
-	Name       string `json:"name" validate:"required,min=2,max=100"`
-	Body       string `json:"body" validate:"required,min=2,max=2000"`
+	Name       string `json:"name" validate:"required,min=1,max=100"`
+	Body       string `json:"body" validate:"required,min=1,max=2000"`
 }
 
 type updatePostInput struct {
-	Name        string `json:"name" validate:"required,min=2,max=100"`
-	Body        string `json:"body" validate:"required,min=2,max=2000"`
+	Name        string `json:"name" validate:"required,min=1,max=100"`
+	Body        string `json:"body" validate:"required,min=1,max=2000"`
 	Likes       int    `json:"likes"`
 	Dislikes    int    `json:"dislikes"`
 	IsModerated bool   `json:"is_moderated"`
