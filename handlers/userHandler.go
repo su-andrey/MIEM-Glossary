@@ -14,12 +14,6 @@ type userInput struct {
 	IsAdmin  bool   `json:"is_admin"`
 }
 
-type userOutput struct {
-	ID      int    `json:"id"`
-	Email   string `json:"email"`
-	IsAdmin bool   `json:"is_admin"`
-}
-
 // Общая структура всех функций в данном файле (схожа с другими хэндлерами)
 // Подключаемся к бд, выполняем запрос. В случае ошибки не продолжаем и не пытаемся снова, выводим сообщение
 // При успехе обрабатываем полученные данные, если результат объект - возвращаем его, иначе выводим сообщение. При удалении не возвращаем удаленный объект
@@ -88,13 +82,7 @@ func UpdateUser(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения обновленного пользователя")
 	}
 
-	userOutput := userOutput{
-		ID:      user.ID,
-		Email:   user.Email,
-		IsAdmin: user.IsAdmin,
-	}
-
-	return c.JSON(userOutput)
+	return c.JSON(user)
 }
 
 // DeleteUser удаляет пользователя
