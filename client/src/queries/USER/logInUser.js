@@ -17,10 +17,6 @@ const logInUser = async (email, password) => {
         }
         localStorage.removeItem("token");
         localStorage.setItem("token", token);
-        localStorage.removeItem("email")
-        localStorage.removeItem("password")
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
         return response.data;
     }
     catch (error) {

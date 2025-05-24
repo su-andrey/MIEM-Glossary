@@ -7,15 +7,13 @@ import logInUser from "../../../queries/USER/logInUser";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
-import { handleLogIn, resetState } from "../../../store/mainSlice";
 import getMe from "../../../queries/USER/getMe";
+import { setEmail } from "../../../store/mainSlice";
 const LoginForm = ({isOpen = true}) => {
     const dispatch = useDispatch();
     const [input1Type, changeInput1Type] = useState(false);
     const [open, setOpen] = useState(isOpen);
     const [loginError, setLoginError] = useState("");
-    const isAuthentificated = useSelector(state => state.main.isAuthentificated);
-    const isAdmin = useSelector(state => state.main.isAdmin);
     const location = useLocation();
     const navigate = useNavigate();
     const {
@@ -29,28 +27,21 @@ const LoginForm = ({isOpen = true}) => {
         watch,
     } = useForm({mode: "all",})
 
-    useEffect(() => {
-    if (isAuthentificated !== false && isAdmin !== null) {
-        navigate("/");
-    }
-    }, [isAuthentificated, isAdmin, navigate]);
-
     const onSubmit = async (data)=> {
         try{
             setLoginError("");
             await logInUser(data.email, data.password)
             setLoginError("");
             let me = await getMe()
-            if (!me) {
+            if(!me){
             throw new Error("Ошибка получения данных пользователя после входа");
             }
-
-            dispatch(handleLogIn({
-                email: data.email,
-                password: data.password,
-                isAdmin: me.is_admin,
-                userID: me.id,
-            }))
+            dispatch(setEmail(me.email))
+            let fromPage = location.state?.from?.pathname || "/";
+            if (fromPage === "/register" || fromPage === "/login") {
+                fromPage = "/cabinet";
+            }
+            navigate(fromPage);
             setOpen(false);
         }
         catch (error) {

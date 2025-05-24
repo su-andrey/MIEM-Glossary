@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Routes } from 'react-router-dom'
+import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Suspense, lazy, use } from 'react';
 const Layout = lazy(() => import('./pages/layout/Layout.jsx'));
@@ -17,18 +17,14 @@ const SinglePrepodPage = lazy(() => import('./pages/pageComponents/singlePrepodP
 import RequireAdmin from "./hoc/RequireAdmin.jsx"
 import Loader2 from './components/UI/loader2/Loader2.jsx';
 import Loader1 from './components/UI/loader1/Loader1.jsx';
-import AppLoaderWrapper from './pages/appLoaderWarapper/AppLoaderWrapper.jsx';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsers, setPosts, setComments } from './store/mainSlice.js';
 import requireComments from './queries/GET/requireComments.js';
 import requirePosts from './queries/GET/requirePosts.js';
-import requireUsers from './queries/GET/requireUsers.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
 import getMe from './queries/USER/getMe.js';
 import useSmoothScroll from './custom hooks/useSmoothScroll.js';
-import invisibleLoginUser from './queries/USER/invisibleLoginUser.js';
-import { handleLogIn } from './store/mainSlice.js';
 import { setChanged } from './store/mainSlice.js';
 import setupDB from './store/fake/setupDB.js';
 import AdminPage from './pages/adminPage/AdminPage.jsx';
@@ -68,29 +64,6 @@ const App = () => {
             dispatch(setChanged(false));
         }
     }, [wasChanged]);
-
-
-const isAuthentificated = useSelector(state => state.main.isAuthentificated);
-
-useEffect(() => {
-    const init = async () => {
-        try {
-            if (!isAuthentificated) {
-                const data = await invisibleLoginUser();
-                const me = await getMe();
-                dispatch(handleLogIn({
-                    email: data.email,
-                    password: data.password,
-                    isAdmin: me.is_admin,
-                    userID: me.id,
-                }));
-            }
-        } catch (error) {
-            console.error("Невидимая аутентификация не удалась", error);
-        }
-    };
-    init();
-}, [isAuthentificated]);
 
 
     useSmoothScroll()

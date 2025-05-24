@@ -8,13 +8,12 @@ const getMe = async () => {
                                             {headers:{
                                                 Authorization: `Bearer ${token}`,
                                         }},);
-        console.log("Self information recieved:", response);
         return response.data;
 
     } 
     catch(error){
         console.error("Error getting info about myself:", error.response?.data?.error || error.message);
-        throw error;
+        return false;
     }
 };
 

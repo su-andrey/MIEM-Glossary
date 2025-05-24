@@ -46,13 +46,13 @@ const mainSlice = createSlice({
                         }
                     ],
         wasChanged : true,
-        isAuthentificated : false,
         email : "",
-        password : "",
-        userID : null,
-        isAdmin : null,
     },
     reducers:{
+        setEmail(state, action){
+            state.email = action.payload
+        },
+
         setChanged(state, action){
             state.wasChanged = action.payload
         },
@@ -65,44 +65,8 @@ const mainSlice = createSlice({
             state.posts = action.payload.data
         },
 
-        setSelfUser(state, action){
-            state.isAuthentificated = true;
-            state.email = action.payload?.userName
-            state.password = action.payload?.password
-            state.isAdmin = action.payload?.isAdmin
-            state.userID = action.payload?.id
-        },
-
-        resetEmail(state, action){
-            state.email = action.payload
-        },
-
-        resetPassword(state, action){
-            state.password = action.payload
-        },
-
         setComments(state, action){
             state.comments = action.payload.data
-        },
-
-        handleLogIn(state, action){
-            state.isAdmin = action.payload?.isAdmin
-            state.isAuthentificated = true
-            state.email = action.payload?.email
-            state.password = action.payload?.password
-            state.userID = action.payload?.userID
-        },
-
-        resetState(state){
-            state.isAuthentificated = false
-            state.email = ""
-            state.password = ""
-            state.userID = undefined
-            state.isAdmin = undefined
-            localStorage.removeItem("email")
-            localStorage.removeItem("password")
-            localStorage.removeItem("token")
-            localStorage.removeItem("reduxState")
         },
 
         addComment(state, action){
@@ -118,5 +82,5 @@ const mainSlice = createSlice({
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, handleLogIn, resetState, setChanged, resetEmail, resetPassword} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;
