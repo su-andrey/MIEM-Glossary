@@ -37,7 +37,7 @@ func GetUsers(ctx context.Context, optCondition ...Condition) ([]models.User, er
 	return users, nil
 }
 
-func GetUserByID(ctx context.Context, id int) (models.User, error) {
+func GetUserByID(ctx context.Context, id string) (models.User, error) {
 	var user models.User
 	err := database.DB.QueryRow(context.Background(),
 		"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
@@ -90,10 +90,20 @@ func CreateUser(ctx context.Context, email, password string, isAdmin bool) (mode
 }
 
 func UpdateUser(ctx context.Context, id, email, password string, isAdmin bool) error {
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования пользователя")
+	}
+	if !exists {
+		return errors.New("пользователь не найден")
+	}
+
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return errors.New("ошибка кодирования пароля")
 	}
+
 	_, err = database.DB.Exec(ctx,
 		"UPDATE users SET email = $1, password = $2, is_admin = $3 WHERE id = $4",
 		email, passwordHash, isAdmin, id)

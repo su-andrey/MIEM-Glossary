@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/config"
@@ -30,11 +29,7 @@ func GetUsers(c fiber.Ctx) error {
 
 // GetUser возвращает одного пользователя по ID
 func GetUser(c fiber.Ctx) error {
-	idRaw := c.Params("id")
-	id, err := strconv.Atoi(idRaw)
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "некорректный формат id")
-	}
+	id := c.Params("id")
 
 	user, err := services.GetUserByID(c.Context(), id)
 	if err != nil {
@@ -82,7 +77,12 @@ func UpdateUser(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления пользователя")
 	}
 
-	return c.JSON(fiber.Map{"message": "Пользователь обновлен"})
+	user, err := services.GetUserByID(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения обновленного пользователя")
+	}
+
+	return c.JSON(user)
 }
 
 // DeleteUser удаляет пользователя
