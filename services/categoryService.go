@@ -65,7 +65,16 @@ func CreateCategory(ctx context.Context, name string) (models.Category, error) {
 }
 
 func UpdateCategory(ctx context.Context, id string, name string) error {
-	_, err := database.DB.Exec(ctx,
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM categories WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования категории")
+	}
+	if !exists {
+		return errors.New("категория не найдена")
+	}
+
+	_, err = database.DB.Exec(ctx,
 		"UPDATE categories SET name = $1 WHERE id = $2", name, id)
 	if err != nil {
 		return errors.New("ошибка обновления категории") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
@@ -78,10 +87,10 @@ func DeleteCategory(ctx context.Context, id string) error {
 	var exists bool
 	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM categories WHERE id = $1)", id).Scan(&exists)
 	if err != nil {
-		return errors.New("ошибка проверки существования пользователя")
+		return errors.New("ошибка проверки существования категории")
 	}
 	if !exists {
-		return errors.New("пользователь не найден")
+		return errors.New("категория не найдена")
 	}
 
 	_, err = database.DB.Exec(ctx, "DELETE FROM categories WHERE id = $1", id)
