@@ -330,14 +330,7 @@ npm install --legacy-peer-deps
 1️⃣ Пользователи (users)
 
 ```json
-// Ответ (GET /users, GET /users/{id}, POST /users)
-{
-  "id": 1,
-  "email": "string",
-  "password": "string",
-  "is_admin": true
-}
-// Ответ (PUT /users/{id})
+// Ответ (GET /users, GET /users/{id}, POST /users, PUT /users/{id})
 {
   "id": 1,
   "email": "string",
