@@ -85,7 +85,16 @@ func CreateComment(ctx context.Context, userID, postID int, body string) (models
 }
 
 func UpdateComment(ctx context.Context, id, body string) error {
-	_, err := database.DB.Exec(ctx,
+	var exists bool
+	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM comments WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		return errors.New("ошибка проверки существования комментария")
+	}
+	if !exists {
+		return errors.New("комментарий не найден")
+	}
+
+	_, err = database.DB.Exec(ctx,
 		"UPDATE comments SET body = $1 WHERE id = $2",
 		body, id)
 	if err != nil {
@@ -99,10 +108,10 @@ func DeleteComment(ctx context.Context, id string) error {
 	var exists bool
 	err := database.DB.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM comments WHERE id = $1)", id).Scan(&exists)
 	if err != nil {
-		return errors.New("ошибка проверки существования пользователя")
+		return errors.New("ошибка проверки существования комментария")
 	}
 	if !exists {
-		return errors.New("пользователь не найден")
+		return errors.New("комментарий не найден")
 	}
 
 	_, err = database.DB.Exec(context.Background(),

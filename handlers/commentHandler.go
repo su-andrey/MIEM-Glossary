@@ -110,7 +110,12 @@ func UpdateComment(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления комментария")
 	}
 
-	return c.JSON(fiber.Map{"message": "Комментарий обновлен"})
+	comment, err := services.GetCommentById(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения обновленного комментария")
+	}
+
+	return c.JSON(comment)
 }
 
 // DeleteComment удаляет комментарий

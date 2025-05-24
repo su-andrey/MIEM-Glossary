@@ -7,7 +7,7 @@ import (
 )
 
 type categoryInput struct {
-	Name string `json:"name" validate:"required,min2,max50"`
+	Name string `json:"name" validate:"required,min=2,max=50"`
 }
 
 // Общая структура всех функций в данном хэндлере
@@ -74,7 +74,12 @@ func UpdateCategory(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления категории")
 	}
 
-	return c.JSON(fiber.Map{"message": "Категория обновлена"})
+	category, err := services.GetCategoryByID(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения обновленной категории")
+	}
+
+	return c.JSON(category)
 }
 
 // DeleteCategory удаляет категорию
