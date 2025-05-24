@@ -330,7 +330,14 @@ npm install --legacy-peer-deps
 1️⃣ Пользователи (users)
 
 ```json
-// Ответ (GET /users, GET /users/{id})
+// Ответ (GET /users, GET /users/{id}, POST /users)
+{
+  "id": 1,
+  "email": "string",
+  "password": "string",
+  "is_admin": true
+}
+// Ответ (PUT /users/{id})
 {
   "id": 1,
   "email": "string",
@@ -341,7 +348,7 @@ npm install --legacy-peer-deps
 2️⃣ Категории (categories)
 
 ```json
-// Ответ (GET /categories, GET /categories/{id})
+// Ответ (GET /categories, GET /categories/{id}, POST /categories, PUT /categories/{id})
 {
   "id": 1,
   "name": "string"
@@ -351,7 +358,7 @@ npm install --legacy-peer-deps
 3️⃣ Посты (posts)
 
 ```json
-// Ответ (GET /posts, GET /posts/{id})
+// Ответ (GET /posts, GET /posts/{id}, POST /posts, PUT /posts/{id})
 {
   "id": 1,
   "isModerated": true,
@@ -385,7 +392,7 @@ npm install --legacy-peer-deps
 4️⃣ Комментарии (comments)
 
 ```json
-// Ответ (GET /comments, GET /comments/{id})
+// Ответ (GET /comments, GET /comments/{id}, POST /comments, PUT /comments/{id})
 {
   "id": 1,
   "post_id": 1,
