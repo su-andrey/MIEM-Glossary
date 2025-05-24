@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const editCategory = async (category_name, category_id) => {
     if (!category_name || !category_id ){

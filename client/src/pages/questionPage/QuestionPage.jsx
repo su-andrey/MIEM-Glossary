@@ -14,6 +14,7 @@ import Scroll from "../../components/UI/scrollButton/Scroll";
 import Loader from "../../components/UI/loader/Loader";
 import { useState, useEffect } from "react";
 import {motion} from "framer-motion"
+import Loader1 from "../../components/UI/loader1/Loader1";
 const QuestionPage = () => {
     const leftItemAnimation = {
         hidden: {
@@ -33,7 +34,7 @@ const QuestionPage = () => {
 
     let categories = useSelector(state => getCategories(state))
     console.log(categories)
-    let category = categories.find((category) => category.name == "Вопрос")
+    let category = categories.find((category) => category.name == "Вопросы")
     console.log(category)
     let questions = useSelector(state => getPostsByCategory(state, category.id))
     console.log(questions)
@@ -48,7 +49,7 @@ const QuestionPage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1/>;
     return(
         <>
             <Scroll />

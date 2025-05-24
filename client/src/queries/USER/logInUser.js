@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const logInUser = async (email, password) => {
     if (!email || !password) {

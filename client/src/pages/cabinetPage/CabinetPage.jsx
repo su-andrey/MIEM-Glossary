@@ -6,14 +6,15 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useLocation, useNavigate, Navigate, Link } from "react-router-dom";
 import Loader from "../../components/UI/loader/Loader.jsx";
 import ChangeForm from "./subcomponents/changeFrom/ChangeForm.jsx";
 import EyeIcon from "./subcomponents/eyeIcon/EyeIcon.jsx";
 import Loader1 from "../../components/UI/loader1/Loader1.jsx";
 import editMyData from "../../queries/USER/editMyData.js";
+import AdminPage from "../adminPage/AdminPage.jsx";
 const CabinetPage = () => {
-    const dispatch = useDispatch;
+    const dispatch = useDispatch();
     let isAuth = useSelector(state => state.main.isAuthentificated);
     let isAdmin = useSelector(state => state.main.isAdmin);
     const [email, setEmail] = useState(useSelector(state => state.main.email))
@@ -75,9 +76,8 @@ const CabinetPage = () => {
                 </>
             }
             {
-                isAdmin && 
-                <>
-                </>
+                isAdmin && isAuth &&
+                <Link to="/admin"><ActionButton text="Админ"></ActionButton></Link>
             }
             <img src={button} alt="HSE button" className={styles.hsebutton}/>
         </div>

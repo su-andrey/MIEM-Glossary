@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const getMe = async () => {
     let token = localStorage.getItem("token");

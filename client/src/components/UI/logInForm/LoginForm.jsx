@@ -2,18 +2,22 @@ import style from "./loginForm.module.css"
 import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logInUser from "../../../queries/USER/logInUser";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
-import { handleLogIn } from "../../../store/mainSlice";
+import { handleLogIn, resetState } from "../../../store/mainSlice";
 import getMe from "../../../queries/USER/getMe";
 const LoginForm = ({isOpen = true}) => {
     const dispatch = useDispatch();
     const [input1Type, changeInput1Type] = useState(false);
     const [open, setOpen] = useState(isOpen);
     const [loginError, setLoginError] = useState("");
+    const isAuthentificated = useSelector(state => state.main.isAuthentificated);
+    const isAdmin = useSelector(state => state.main.isAdmin);
+    const location = useLocation();
+    const navigate = useNavigate();
     const {
         register,
         formState: {
@@ -25,14 +29,22 @@ const LoginForm = ({isOpen = true}) => {
         watch,
     } = useForm({mode: "all",})
 
+    useEffect(() => {
+    if (isAuthentificated !== false && isAdmin !== null) {
+        navigate("/");
+    }
+    }, [isAuthentificated, isAdmin, navigate]);
+
     const onSubmit = async (data)=> {
         try{
             setLoginError("");
-            console.log(data)
             await logInUser(data.email, data.password)
             setLoginError("");
             let me = await getMe()
-            console.log("DISPATCH DATA", data.email, data.password)
+            if (!me) {
+            throw new Error("Ошибка получения данных пользователя после входа");
+            }
+
             dispatch(handleLogIn({
                 email: data.email,
                 password: data.password,
@@ -40,7 +52,6 @@ const LoginForm = ({isOpen = true}) => {
                 userID: me.id,
             }))
             setOpen(false);
-            navigate("/")
         }
         catch (error) {
             if (error.response?.status === 401) {
@@ -53,8 +64,7 @@ const LoginForm = ({isOpen = true}) => {
         }
     }
 
-    const location = useLocation();
-    const navigate = useNavigate();
+    
     let fromPage = location.state?.from?.pathname || "/";
     if(fromPage=="/register"){
         fromPage = "/"

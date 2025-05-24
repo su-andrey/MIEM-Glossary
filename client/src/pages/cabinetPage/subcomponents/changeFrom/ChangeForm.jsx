@@ -80,8 +80,8 @@ const ChangeForm = () => {
     const password = watch('password');
     
     const handleExit = ()=>{
-        navigate("/", { state: { from: "/" } });
         dispatch(resetState())
+        navigate("/", { state: { from: "/" } });
     }
 
     return ( 

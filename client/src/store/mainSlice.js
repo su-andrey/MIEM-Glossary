@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import image from "./../assets/jpg/cafe_categories/soup.jpg";
+import coffe from "./../assets/categories/coffe.jpg"
+import doner from "./../assets/categories/doner.jpg"
+import paper from "./../assets/categories/paper.jpg"
+import store from "./../assets/categories/store.jpg"
 
 const mainSlice = createSlice({
     name: 'main',
@@ -10,19 +14,23 @@ const mainSlice = createSlice({
         categories : [
                         {
                             "id": 1,
-                            "name": "Кофе"
+                            "name": "Кофе",
+                            "image": coffe,
                         },
                         {
                             "id": 2,
-                            "name": "Фастфуд и шаурма"
+                            "name": "Фастфуд и шаурма",
+                            "image": doner,
                         },
                         {
                             "id": 3,
-                            "name": "Копирки"
+                            "name": "Копирки",
+                            "image": paper,
                         },
                         {
                             "id": 4,
-                            "name": "Магазины"
+                            "name": "Магазины",
+                            "image": store,
                         },
                         {
                             "id": 5,
@@ -94,7 +102,18 @@ const mainSlice = createSlice({
             localStorage.removeItem("email")
             localStorage.removeItem("password")
             localStorage.removeItem("token")
-        }
+            localStorage.removeItem("reduxState")
+        },
+
+        addComment(state, action){
+
+        },
+
+        addPost(state, action){
+
+        },
+
+
     }
 }
 )

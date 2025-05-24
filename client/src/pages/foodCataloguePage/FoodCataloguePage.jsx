@@ -16,6 +16,7 @@ import SearchField from "../../components/UI/searchField/SearchField";
 import AnswerField from "../../components/UI/answerField/AnswerField";
 import Loader from "../../components/UI/loader/Loader";
 import Loader1 from "../../components/UI/loader1/Loader1";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 
 const FoodCataloguePage = () => {
     const [isSliderReady, setSliderReady] = useState(false);
@@ -26,36 +27,30 @@ const FoodCataloguePage = () => {
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.category_id == category)?.name || "Заведения";
     const [ready, setReady] = useState(false);
-
     useEffect(() => {
-        const handleLoad = () => setReady(true);
-    if (document.readyState === 'complete') {
-        handleLoad();
-    } 
-    else {
-        window.addEventListener('load', handleLoad);
-        return () => window.removeEventListener('load', handleLoad);
-    }
+        const MIN_LOAD_TIME = 0; 
+        const start = Date.now();
+
+        const handleLoad = () => {
+            const elapsed = Date.now() - start;
+            const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);
+
+            setTimeout(() => {
+                setReady(true);
+            }, remaining);
+        };
+
+        if (document.readyState === 'complete') {
+            handleLoad();
+            setSliderReady(true)
+        } else {
+            window.addEventListener('load', handleLoad);
+            return () => window.removeEventListener('load', handleLoad);
+        }
     }, []);
-
-
-    useEffect(() => {
-        if (posts.length === 0) return <Loader1 />;
-
-        setSliderReady(false);
-        const timer = setTimeout(async () => {
-            await waitForImagesToLoad(`.${styles.sliderWrapper}`);
-            setSliderReady(true);
-        }, 100);
-
-        return () => clearTimeout(timer);
-    }, [posts]);
-
-
-
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader1/>;
     return (
-        <>
+        <AppLoaderWrapper>
             <div className={styles.wrapper}>
                 <div className={styles.topWrapper}>
                     <div className={styles.textWrapper}>
@@ -98,13 +93,17 @@ const FoodCataloguePage = () => {
                             enabled: true,
                         }}
                     >
-                        {posts.map((post) => (
-                            <SwiperSlide key={uid()}>
-                                <Link to={`/food/${category}/${post.id}`}>
-                                    <CafeListCard data={post} />
-                                </Link>
-                            </SwiperSlide>
-                        ))}
+                        {posts.length > 0 ? (
+                            posts.map((post) => (
+                                <SwiperSlide key={uid()}>
+                                    <Link to={`/food/${category}/${post.id}`}>
+                                        <CafeListCard data={post} />
+                                    </Link>
+                                </SwiperSlide>
+                            ))
+                        ) : (
+                            <Loader1 />
+                        )}
                     </Swiper>
 
                     <div className={styles.swiperButtonPrev}>
@@ -121,12 +120,12 @@ const FoodCataloguePage = () => {
                     <div className={styles.swiperPagination}></div>
                 </div>
                 :
-                <Loader />
+                <Loader1 />
                 }
 
                 <AnswerField />
             </div>
-        </>
+        </AppLoaderWrapper>
     );
 };
 

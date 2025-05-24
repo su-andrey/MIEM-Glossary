@@ -1,7 +1,8 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const invisibleLoginUser = async () => {
+    
     let email = localStorage.getItem("email")
     let password = localStorage.getItem("password")
     if (!email || !password) {

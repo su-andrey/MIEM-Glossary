@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "../../baseURL";
+import { BASE_URL } from "../../config";
 
 const createComment = async (post_id, author_id, body) => {
     if(!post_id){
