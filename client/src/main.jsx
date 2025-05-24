@@ -16,7 +16,6 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['main'],
 }
 
 const persistedReducer = persistReducer(persistConfig, mainReducer)
@@ -26,8 +25,11 @@ const store = configureStore({
   reducer: {
     main : persistedReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-  devTools: true,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+    devTools: true,
 });
 
 const persistor = persistStore(store)

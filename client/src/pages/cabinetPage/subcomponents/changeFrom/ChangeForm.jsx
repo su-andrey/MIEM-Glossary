@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import EyeIcon from "../eyeIcon/EyeIcon.jsx";
 import { useState } from "react";
-import { setEmail } from "../../../../store/mainSlice.js";
+import { setEmail, setUserID } from "../../../../store/mainSlice.js";
 import editMyData from "../../../../queries/USER/editMyData.js";
 import getMe from "./../../../../queries/USER/getMe.js";
 import logOutUser from "../../../../queries/USER/logOutUser.js";
@@ -62,6 +62,7 @@ const ChangeForm = () => {
     const handleExit = ()=>{
         logOutUser();
         dispatch(setEmail(""))
+        dispatch(setUserID(null))
         navigate("/");
     }
 

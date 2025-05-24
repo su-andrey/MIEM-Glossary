@@ -1,5 +1,5 @@
 import styles from "./singleQuestionPage.module.css"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Question from "../../../components/question/Question";
 import { Link } from "react-router-dom";
@@ -16,13 +16,15 @@ import Loader from "../../../components/UI/loader/Loader";
 import {motion} from "framer-motion"
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import createComment from "../../../queries/POST/createComment";
+import { addComment } from "../../../store/mainSlice";
 const SingleQuestionPage = () => {
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Вопросы");
     let questions = useSelector(state => getPostsByCategory(state, category.id));
     const questionID = useParams().id;
+    const authorID = useSelector(state => state.main.userID)
     const question = useSelector(state => getPostsByID(state, questionID));
-    const author_id = useSelector(state => state.main.userID)
+    const dispatch = useDispatch()
     
     const leftItemAnimation = {
         hidden: {
@@ -43,18 +45,18 @@ const SingleQuestionPage = () => {
     const comments = useSelector(state => getCommentsByQuestionID(state, questionID))
     console.log(comments)
 
-    const submitter = async (data)=>{
+    const submitter = async (answer, post_id, author_id)=>{
         try{
             const response = await createComment({
-                post_id: questionID,
+                post_id: post_id,
                 author_id: author_id,
-                body: data.answer
+                body: answer,
             })
-            
-
+            console.log("Ответ серва при создании коммента", response)
+            dispatch(addComment(response))
         }
         catch(error){
-
+            console.error("Ошибка добавления комментария", error)
         }
     }
 
@@ -133,7 +135,7 @@ const SingleQuestionPage = () => {
                         height={"30vh"}
                         placeholder={"Поможете бедолаге?"}
                         caption={"Добавте ответ на вопрос"}
-                        submitter={()=>{submitter()}}
+                        submitter={(answer) => submitter({ answer, post_id: questionID })}
                     />
                 </div>
             </div>

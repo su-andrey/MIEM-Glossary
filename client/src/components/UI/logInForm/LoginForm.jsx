@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import EyeIcon from "../../../pages/cabinetPage/subcomponents/eyeIcon/EyeIcon";
 import getMe from "../../../queries/USER/getMe";
-import { setEmail } from "../../../store/mainSlice";
+import { setEmail, setUserID } from "../../../store/mainSlice";
 const LoginForm = ({isOpen = true}) => {
     const dispatch = useDispatch();
     const [input1Type, changeInput1Type] = useState(false);
@@ -37,6 +37,7 @@ const LoginForm = ({isOpen = true}) => {
             throw new Error("Ошибка получения данных пользователя после входа");
             }
             dispatch(setEmail(me.email))
+            dispatch(setUserID(me.id))
             let fromPage = location.state?.from?.pathname || "/";
             if (fromPage === "/register" || fromPage === "/login") {
                 fromPage = "/cabinet";

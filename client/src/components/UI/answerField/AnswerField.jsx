@@ -1,9 +1,16 @@
 import ActionButton from "../actionButton/ActionButton";
 import styles from "./answerField.module.css"
+import { useState } from "react";
 const AnswerField = ({height, width, placeholder, caption, settings, submitter}) => {
+    const [answer, setAnswer] = useState("");
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        submitter(answer); 
+        setAnswer(""); 
+    };
     return (<>
     <div className={styles.wrapper} style={settings}>
-        <form className={styles.fieldForm} onSubmit={submitter()}>
+        <form className={styles.fieldForm} onSubmit={()=>handleSubmit()}>
             <div className={styles.caption}>{caption || "Добавьте собственное заведение или отзыв"}</div>
             <textarea  
                 placeholder={placeholder || "Добавить ответ..."}
@@ -14,7 +21,7 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter})
                     width: (width || "30vw"),
                 }}
             />
-            <ActionButton text="Отправить"></ActionButton>
+            <ActionButton text="Отправить" type="submit"></ActionButton>
         </form>
         
     </div>
