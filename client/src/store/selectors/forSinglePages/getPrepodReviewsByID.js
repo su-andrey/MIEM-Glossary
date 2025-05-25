@@ -13,9 +13,9 @@ const getPrepodReviewsByID = createSelector(
         if (!category) return [];
         return posts.filter(
             post =>
-            post.category?.id === category.id &&
-            post.category?.name === "Отзывы" &&
-            post.name === prepodID
+            post.category?.id == category.id &&
+            post.category?.name == "Отзывы" &&
+            post.name == prepodID
         );
     }
 );

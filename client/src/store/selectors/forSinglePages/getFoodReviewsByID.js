@@ -9,7 +9,7 @@ const getFoodReviewsByID = createSelector(
     [getPosts, getPostID, getCategory],
     (posts, postID, reviewCategory)=>{
         console.log(reviewCategory)
-        return posts.filter(post => (post.category?.id == reviewCategory.id && post.category?.name == "Отзывы" && post.id == postID))
+        return posts.filter(post => (post.category?.id == reviewCategory.id && post.category?.name == "Отзывы" && post.name == postID))
     }
 );
 

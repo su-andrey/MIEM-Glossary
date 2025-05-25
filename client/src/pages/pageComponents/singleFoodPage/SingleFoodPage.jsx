@@ -22,10 +22,13 @@ import { useDispatch } from "react-redux";
 import { addPost } from "../../../store/mainSlice";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
-    let postID = useParams().id;
+    let postID = (useParams().id);
     let authorID = useSelector(state => state.main.userID)
     const food = useSelector(state => getPostsByID(state, postID))
     const reviews = useSelector(state => getFoodReviewsByID(state, postID)) 
+    let categories = useSelector(state => state.main.categories)
+    let reviewCategory = categories.find((category) => category.name == "Отзывы");
+    console.log("Полученные отзывы", reviews)
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
 
@@ -177,7 +180,7 @@ const SingleFoodPage = () => {
                         height={"30vh"}
                         placeholder={"Поделитесь мнением?"}
                         caption={"Добавте отзыв о преподе"}
-                        submitter={(answer) => submitter({answer, category_id: categoryID, author_id: authorID, post_id: "post_id"  })}
+                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
                     />
                 </div>
             </div>

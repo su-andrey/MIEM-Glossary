@@ -29,16 +29,16 @@ const SinglePrepodPage = () => {
     const dispatch = useDispatch();
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Преподаватели");
+    let reviewCategory = categories.find((category) => category.name == "Отзывы");
     let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
-    const post_id = useParams().id;
-
+    const post_id = (useParams().id);
     const prepod = useSelector(state => getPrepodByID(state, post_id));
-    console.log(prepod)
     if (!prepod) {
         return <Loader />;
     }
-    const reviews = useSelector(state => getPrepodReviewsByID(state, prepod.id))
+    const reviews = useSelector(state => getPrepodReviewsByID(state, post_id))
+    console.log("Полученные отзывы", reviews)
     console.log(post_id)
     console.log("Препод: ", prepod)
     const [ready, setReady] = useState(false);
@@ -203,7 +203,7 @@ const SinglePrepodPage = () => {
                         height={"30vh"}
                         placeholder={"Поделитесь мнением?"}
                         caption={"Добавте отзыв о преподе"}
-                        submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID, post_id: "post_id"  })}
+                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: post_id  })}
                     />
             </div>
         </>

@@ -3,7 +3,7 @@ import { BASE_URL } from "../../config";
 
 const requirePosts = async (id = "") => {
     try{
-        const url = !id  ? `${BASE_URL}/api/posts` : `${BASE_URL}/posts/${id}`;
+        const url = !id  ? `${BASE_URL}/api/posts` : `${BASE_URL}/api/posts/${id}`;
         const response = await axios.get(
             url
         );

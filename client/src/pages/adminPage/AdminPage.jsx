@@ -1,10 +1,10 @@
 import styles from "./adminPage.module.css"
 import Loader1 from "../../components/UI/loader1/Loader1";
+import PostCreateField from "../../components/UI/postCreateField/PostCreateField";
 const AdminPage = () => {
     return ( 
-    <Loader1>
-
-    </Loader1>);
+    <PostCreateField />
+    );
 }
 
 export default AdminPage;

@@ -1,0 +1,108 @@
+.field{
+    position: relative;
+    z-index: 1;
+    width:30vw;
+    background-color: #e7e7e7;
+    padding: calc(1*var(--index));
+    border-radius: calc(0.9*var(--index));
+    padding-inline: calc(1.2*var(--index));
+    padding-top: calc(1*var(--index));
+    transition: all 0.3s ease-out;
+    resize: none;   
+    border: none;  
+    outline: none;  
+    font-size:var(--caption-font);
+    height: 25vh;
+}
+
+.caption{
+    color: var(--light-grey);
+    font-size: var(--caption-font);
+}
+
+.fieldForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    row-gap: 2vh;
+}
+
+.glass{
+    position: relative;
+    top:1.2vh;
+    left:-19.25vw;
+    z-index: 3;
+    transition: all 0.3s ease-out;
+}
+
+
+.wrapper{
+    position: relative;
+    z-index: 1;
+}
+
+
+.wrapper:focus-within .field{
+    box-shadow: 0px 15px 20px -12px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-out;
+}
+
+
+.fileInput{
+    display: none;
+    visibility: hidden;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    line-height: 0;
+}
+
+.leaveField{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:30vw;
+    min-height: 30vh;
+    border: 1px solid var(#e7e7e7);
+    background-color: #e7e7e7;
+    border-radius: calc(0.9*var(--index));
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+    padding: calc(1*var(--index));
+    padding-inline: calc(1.2*var(--index));
+    padding-top: calc(1*var(--index));
+}
+
+.dragField{
+    padding: calc(1*var(--index));
+    padding-inline: calc(1.2*var(--index));
+    padding-top: calc(1*var(--index));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:30vw;
+    min-height: 10vh;
+    border: 1px solid var(--dark-grey);
+    border-radius: calc(0.9*var(--index));
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+}
+
+.dragField:hover{
+    transition: all 0.3s ease-out;
+    min-height: 30vh;
+    border: none;
+    background-color: #e7e7e7;
+}
+
+.leave{
+    text-align: center;
+}
+
+
+.drag{
+    text-align: center;
+}
