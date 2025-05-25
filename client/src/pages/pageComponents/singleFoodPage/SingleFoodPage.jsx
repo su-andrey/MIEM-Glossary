@@ -17,12 +17,40 @@ import getPostsByID from "../../../store/selectors/getPostByID";
 import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
 import { useState, useEffect } from "react";
+import createPost from "../../../queries/POST/createPost";
+import { useDispatch } from "react-redux";
+import { addPost } from "../../../store/mainSlice";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = useParams().id;
+    let authorID = useSelector(state => state.main.userID)
     const food = useSelector(state => getPostsByID(state, postID))
     const reviews = useSelector(state => getFoodReviewsByID(state, postID)) 
     const [ready, setReady] = useState(false);
+    const dispatch = useDispatch();
+
+    const submitter = async ({ answer, category_id, author_id, post_id }) => {
+        try {
+            console.log({
+                name: post_id,
+                category_id: Number(category_id),
+                author_id: author_id,
+                body: answer,
+            })
+            const response = await createPost({
+            name: post_id,
+            category_id: Number(category_id),
+            author_id: Number(author_id),
+            body: answer,
+            });
+            console.log("Ответ серва при создании отзыва", response);
+            dispatch(addPost(response));
+        } 
+        catch (error) {
+            console.error("Ошибка добавления вопроса", error);
+        }
+    }
+
     useEffect(() => {
         const handleLoad = () => setReady(true);
     if (document.readyState === 'complete') {
@@ -131,12 +159,14 @@ const SingleFoodPage = () => {
                                 Отзывы:
                             </div>
                             <div className={styles.sliderWrapper}>
-                                {
+                                {reviews.length > 0 ?
                                     reviews.map((review)=>{
                                         return(
                                             <Review key={uid()} data={review}></Review>
                                         );
                                     })
+                                    :
+                                    <Review key={uid()} data={{body:"Пока нет отзывов"}}></Review>
                                 }
                             </div>
                         </div>
@@ -147,6 +177,7 @@ const SingleFoodPage = () => {
                         height={"30vh"}
                         placeholder={"Поделитесь мнением?"}
                         caption={"Добавте отзыв о преподе"}
+                        submitter={(answer) => submitter({answer, category_id: categoryID, author_id: authorID, post_id: "post_id"  })}
                     />
                 </div>
             </div>

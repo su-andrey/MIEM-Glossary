@@ -1,6 +1,7 @@
 import styles from "./singlePrepodPage.module.css"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import createPost from "../../../queries/POST/createPost";
 import Question from "../../../components/question/Question";
 import { Link } from "react-router-dom";
 import { uid } from "uid";
@@ -22,11 +23,13 @@ import image from "./../../../assets/jpg/cafe_categories/soup.jpg"
 import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
 import Loader1 from "../../../components/UI/loader1/Loader1";
+import { addPost } from "../../../store/mainSlice";
 
 const SinglePrepodPage = () => {
+    const dispatch = useDispatch();
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Преподаватели");
-    console.warn(category)
+    let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = useParams().id;
 
@@ -59,6 +62,31 @@ const SinglePrepodPage = () => {
             return () => window.removeEventListener('load', handleLoad);
         }
     }, []);
+
+
+    const submitter = async ({ answer, category_id, author_id, post_id }) => {
+        try {
+            console.log({
+                name: post_id,
+                category_id: category_id,
+                author_id: author_id,
+                body: answer,
+            })
+            const response = await createPost({
+            name: post_id,
+            category_id: category_id,
+            author_id: author_id,
+            body: answer,
+            });
+            console.log("Ответ серва при создании отзыва", response);
+            dispatch(addPost(response));
+        } 
+        catch (error) {
+            console.error("Ошибка добавления вопроса", error);
+        }
+    }
+
+
     if (!ready) return <Loader1/>;
     return(
         <>
@@ -157,12 +185,14 @@ const SinglePrepodPage = () => {
                                 Отзывы:
                             </div>
                             <div className={styles.sliderWrapper}>
-                                {
+                                {reviews.length > 0 ?
                                     reviews.map((review)=>{
                                         return(
                                             <Review key={uid()} data={review}></Review>
                                         );
                                     })
+                                    :
+                                    <Review key={uid()} data={{body:"Пока нет отзывов"}}></Review>
                                 }
                             </div>
                         </div>
@@ -173,6 +203,7 @@ const SinglePrepodPage = () => {
                         height={"30vh"}
                         placeholder={"Поделитесь мнением?"}
                         caption={"Добавте отзыв о преподе"}
+                        submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID, post_id: "post_id"  })}
                     />
             </div>
         </>
