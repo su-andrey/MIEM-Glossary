@@ -21,6 +21,7 @@ import createPost from "../../queries/POST/createPost";
 import createPhotos from "../../queries/POST/createPhotos";
 import { addPost } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
+import ActionButton from "../../components/UI/actionButton/ActionButton";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
@@ -35,9 +36,7 @@ const PrepodPage = () => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id})
             const response = await createPost({name, body: answer, author_id, category_id})
-            console.log(response)
             const photots_answer = await createPhotos({photos, id: response.id})
-            console.log(photos.answer)
             const final_post = await requirePosts(response.id)
             console.log(final_post)
             dispatch(addPost(final_post))
@@ -112,13 +111,17 @@ const PrepodPage = () => {
                             enabled: true,
                         }}
                     >
-                        {posts.map((post) => (
+                        {posts && posts.length > 0 ?
+                        (posts?.map((post) => (
                             <SwiperSlide key={uid()}>
                                 <Link to={`/prepods/${post.id}`}>
                                     <PrepodCard data={post} />
                                 </Link>
                             </SwiperSlide>
-                        ))}
+                        )))
+                        :
+                        <PrepodCard data={{name:"Пока тут никого"}} />
+                        }
                     </Swiper>
 
                     <div className={styles.swiperButtonPrev}>
@@ -137,12 +140,21 @@ const PrepodPage = () => {
                 :
                 <Loader1 />
             }
+            {author_id &&
+                <FileDragField 
+                    placeholder="Предложить препода..."
+                    caption="Забыли кого-то? Напомните нам"
+                    sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
+                />
+            }
+            {!author_id &&
+                <>
+                    <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                    <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                </>
+                
+            }
             
-            <FileDragField 
-                placeholder="Предложить препода..."
-                caption="Забыли кого-то? Напомните нам"
-                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
-            />
         </div>
     );
 }

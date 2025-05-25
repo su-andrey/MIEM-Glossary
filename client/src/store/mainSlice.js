@@ -75,11 +75,21 @@ const mainSlice = createSlice({
         },
 
         addComment(state, action){
-            state.comments = [action.payload, ...state.comments]
+            if(state.comments && state.comments.length>0){
+                state.comments = [action.payload, ...state.comments]
+            }
+            else{
+                state.comments = [action.payload]
+            }
         },
 
         addPost(state, action){
-            state.posts = [action.payload, ...state.posts]
+            if(state.posts && state.posts.length>0){
+                state.posts = [action.payload, ...state.posts]
+            }
+            else{
+                state.posts = [action.payload]
+            }
         },
 
         

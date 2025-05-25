@@ -127,18 +127,19 @@ const SingleFoodPage = () => {
                                     }}
 
                                 >
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
+                                {food?.photos && food?.photos.length > 0 ?
+                                        (food.photos.map((photo)=>{
+                                            return(
+                                                <SwiperSlide key={uid()}>
+                                                    <img src={photo.url} className={styles.image}></img>
+                                                </SwiperSlide>
+                                            )
+                                        }))
+                                        :
+                                        <SwiperSlide>
+                                            <img src={getRandomImagePath()} className={styles.image}></img>
+                                        </SwiperSlide>
+                                    }
                                 </Swiper>
                                 <div className={styles.swiperButtonPrev}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
@@ -169,19 +170,28 @@ const SingleFoodPage = () => {
                                         );
                                     })
                                     :
-                                    <Review key={uid()} data={{body:"Пока нет отзывов"}}></Review>
+                                    <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
                                 }
                             </div>
                         </div>
                     </div>
-                    <AnswerField
-                        settings={{marginTop:'1vh'}}
-                        width={"40vw"} 
-                        height={"30vh"}
-                        placeholder={"Поделитесь мнением?"}
-                        caption={"Добавте отзыв о преподе"}
-                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
-                    />
+                    
+                    {authorID &&
+                        <AnswerField
+                            settings={{marginTop:'1vh'}}
+                            width={"40vw"} 
+                            height={"30vh"}
+                            placeholder={"Поделитесь мнением?"}
+                            caption={"Добавте отзыв о преподе"}
+                            submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
+                        />
+                    }
+                    {!authorID && 
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                        </div>
+                    }
                 </div>
             </div>
         </>

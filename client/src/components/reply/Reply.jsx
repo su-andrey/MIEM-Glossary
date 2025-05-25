@@ -10,7 +10,7 @@ const Reply = ({data, serv}) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.name}>
-                {serv || name}
+                {data.nothing || name}
             </div>
             <div className={styles.body}>
                 {data.body}

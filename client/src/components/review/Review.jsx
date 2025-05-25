@@ -9,7 +9,7 @@ const Review = ({data}) => {
     return(
     <div className={styles.wrapper}>
         <div className={styles.name}>
-            {name}
+            {data?.nothing || name}
         </div>
         <div className={styles.body}>
             {data.body}

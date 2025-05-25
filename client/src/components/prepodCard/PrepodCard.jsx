@@ -1,14 +1,21 @@
 import styles from "./prepodCard.module.css"
 import getFiveScale from "../../custom hooks/useGetFiveScale";
 import StarsDumb from "../UI/starsDumb/StarsDumb";
-import soup from "./../../assets/jpg/cafe_categories/soup.jpg"
+import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
 const PrepodCard = ({data}) => {
+    console.log(data)
+    const getPhoto = () => {
+            if (Array.isArray(data?.photos) && data.photos.length > 0) {
+                return data.photos[0].url;
+            }
+            return getRandomImagePath();
+        };
     return (
         <div className={styles.wrapper}>
-            <img src={data.image || soup} alt="cafe image" className={styles.image} />
+            <img src={getPhoto() || getRandomImagePath()} alt="cafe image" className={styles.image} />
             <div className={styles.lower}>
                 <div className={styles.title}>
-                    {data.name || "ошибка загрузки"}
+                    {data.name || "ХЗ как его зовут"}
                 </div>
                 <div className={styles.gradeBlock}>
                     <div className={styles.grade}>
