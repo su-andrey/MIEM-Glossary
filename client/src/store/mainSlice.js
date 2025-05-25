@@ -47,10 +47,15 @@ const mainSlice = createSlice({
                     ],
         wasChanged : true,
         email : "",
+        userID : null,
     },
     reducers:{
         setEmail(state, action){
             state.email = action.payload
+        },
+
+        setUserID(state, action){
+            state.userID = action.payload
         },
 
         setChanged(state, action){
@@ -70,17 +75,19 @@ const mainSlice = createSlice({
         },
 
         addComment(state, action){
-
+            state.comments = [action.payload, ...state.comments]
         },
 
         addPost(state, action){
-
+            state.posts = [action.payload, ...state.posts]
         },
+
+        
 
 
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

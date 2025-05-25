@@ -9,7 +9,7 @@ import like_filled from "./assets/like/like_filled.svg"
 import dislike from "./assets/dislike/dislike.svg"
 
 const Question = ({data}) => {
-    console.log("Comment data : ", data)
+    console.log(data)
     const [name, setName] = useState("");
     useEffect(()=>{setName(useNameGenerator())}, []);
     const [liked, setLiked] = useState(false);

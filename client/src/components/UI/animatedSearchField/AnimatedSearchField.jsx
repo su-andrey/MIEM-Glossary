@@ -4,9 +4,9 @@ import { useEffect } from "react";
 const AnimatedSearchField = () => {
     
     return(
-        <div class="search-bar">
-            <input type="search" class="search-input" placeholder="Search here..." tabindex="0" />
-            <button class="search-submit" tabindex="0">
+        <div className="search-bar">
+            <input type="search" className="search-input" placeholder="Search here..." tabIndex={0} />
+            <button className="search-submit" tabIndex={0}>
                 <img src={glass} alt="glass" className="searchIcon"/>
             </button>
         </div>

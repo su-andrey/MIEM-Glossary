@@ -1,3 +1,5 @@
-export default function logOutUser() {
+
+
+export default function logOutUser(){
     localStorage.removeItem("token")
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../../config";
 
-const createComment = async (post_id, author_id, body) => {
+const createComment = async ({post_id, author_id, body}) => {
     if(!post_id){
         throw new Error("Invalid post id");
     }
@@ -12,9 +12,9 @@ const createComment = async (post_id, author_id, body) => {
         throw new Error("Invalid body");
     }
     const data ={
-                    post_id,
-                    author_id,
-                    body,
+                    post_id: Number(post_id),
+                    author_id: Number(author_id),
+                    body: String(body)
                 } 
     try{
         const token = localStorage.getItem("token")
