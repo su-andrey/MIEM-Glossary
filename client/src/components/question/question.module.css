@@ -22,6 +22,7 @@
     display: flex;
     flex-direction: column;
     gap: 1vh;
+    max-width: 100%;
 }
 
 .title{
@@ -34,7 +35,8 @@
 .body{
     color: var(--dark-grey);
     font-size: var(--caption-font);
-
+    max-width: 100%;
+    word-break: break-all;
 }
 
 .commentBlock{

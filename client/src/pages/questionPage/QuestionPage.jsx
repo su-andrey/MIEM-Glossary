@@ -17,6 +17,7 @@ import {motion} from "framer-motion"
 import Loader1 from "../../components/UI/loader1/Loader1";
 import createPost from "../../queries/POST/createPost";
 import { addPost } from "../../store/mainSlice";
+import ActionButton from "../../components/UI/actionButton/ActionButton";
 const QuestionPage = () => {
     const dispatch = useDispatch();
     const leftItemAnimation = {
@@ -87,30 +88,43 @@ const QuestionPage = () => {
                 </div>
                 <div className={styles.wholeWrapper}>
                     <div className={styles.sliderWrapper}>
-                            {questions.map((post) => (
-                                <motion.div
-                                    custom={1}
-                                    variants={leftItemAnimation}
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    viewport={{ once: true, amount: 0.5 }}
-                                    className={styles.metatitle}
-                                    key={uid()}
-                                >
-                                    <Link to={`/questions/${post.id}`} >
-                                        <Question data={post} />
-                                    </Link>
-                                </motion.div>
-                            ))}
+                            {questions && questions.length > 0 ?
+                                (questions.map((post) => (
+                                    <motion.div
+                                        custom={1}
+                                        variants={leftItemAnimation}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, amount: 0.5 }}
+                                        className={styles.metatitle}
+                                        key={uid()}
+                                    >
+                                        <Link to={`/questions/${post.id}`} >
+                                            <Question data={post} />
+                                        </Link>
+                                    </motion.div>
+                                )))
+                                :
+                                <Question data={{nothing: "Пока нет вопросов"}} />
+                            }
                     </div>
-                    <AnswerField 
+                    {authorID &&
+                        <AnswerField 
                         settings={{marginTop:'-5vh'}}
                         width={"40vw"} 
                         height={"30vh"}
                         placeholder={"Спросите что-нибудь?"}
                         caption={"Создайте собственное обсуждение"}
                         submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID })}
-                    />
+                        />
+                    }
+                    {!authorID && 
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         </>

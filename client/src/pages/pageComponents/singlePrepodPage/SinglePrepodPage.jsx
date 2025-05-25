@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import createPost from "../../../queries/POST/createPost";
 import Question from "../../../components/question/Question";
+import ActionButton from "../../../components/UI/actionButton/ActionButton";
 import { Link } from "react-router-dom";
 import { uid } from "uid";
 import AnswerField from "../../../components/UI/answerField/AnswerField";
@@ -24,23 +25,21 @@ import Scroll from "../../../components/UI/scrollButton/Scroll";
 import Loader from "../../../components/UI/loader/Loader";
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import { addPost } from "../../../store/mainSlice";
+import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Преподаватели");
+    let reviewCategory = categories.find((category) => category.name == "Отзывы");
     let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
-    const post_id = useParams().id;
-
+    const post_id = (useParams().id);
     const prepod = useSelector(state => getPrepodByID(state, post_id));
-    console.log(prepod)
     if (!prepod) {
         return <Loader />;
     }
-    const reviews = useSelector(state => getPrepodReviewsByID(state, prepod.id))
-    console.log(post_id)
-    console.log("Препод: ", prepod)
+    const reviews = useSelector(state => getPrepodReviewsByID(state, post_id))
     const [ready, setReady] = useState(false);
     useEffect(() => {
         const MIN_LOAD_TIME = 0; 
@@ -148,20 +147,20 @@ const SinglePrepodPage = () => {
                                         modifier: 1,
                                         slideShadows: false,
                                     }}
-
                                 >
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <img src={image} className={styles.image}></img>
-                                    </SwiperSlide>
+                                    {prepod?.photos && prepod?.photos.length > 0 ?
+                                        (prepod.photos.map((photo)=>{
+                                            return(
+                                                <SwiperSlide key={uid()}>
+                                                    <img src={photo.url} className={styles.image}></img>
+                                                </SwiperSlide>
+                                            )
+                                        }))
+                                        :
+                                        <SwiperSlide>
+                                            <img src={getRandomImagePath()} className={styles.image}></img>
+                                        </SwiperSlide>
+                                    }
                                 </Swiper>
                                 <div className={styles.swiperButtonPrev}>
                                     <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
@@ -197,14 +196,23 @@ const SinglePrepodPage = () => {
                             </div>
                         </div>
                     </div>
-                    <AnswerField
+                    {authorID && 
+                        <AnswerField
                         settings={{marginTop:'1vh'}}
                         width={"40vw"} 
                         height={"30vh"}
                         placeholder={"Поделитесь мнением?"}
                         caption={"Добавте отзыв о преподе"}
-                        submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID, post_id: "post_id"  })}
-                    />
+                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: post_id  })}
+                        />
+                    }
+                    {!authorID && 
+                        <>
+                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                        </>
+                    }
+                    
             </div>
         </>
 );}

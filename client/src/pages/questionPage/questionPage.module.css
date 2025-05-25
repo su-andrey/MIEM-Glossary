@@ -15,7 +15,11 @@
     justify-content: space-between;
 }
 
-
+.subcont{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
 
 .title{
     font-size: var(--title-font);

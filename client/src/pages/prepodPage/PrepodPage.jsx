@@ -1,6 +1,6 @@
 import styles from "./prepodPage.module.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uid } from "uid";
 import { useState, useEffect } from "react";
 
@@ -16,13 +16,35 @@ import 'swiper/css/pagination';
 import PrepodCard from "../../components/prepodCard/PrepodCard";
 import Loader from "../../components/UI/loader/Loader";
 import Loader1 from "../../components/UI/loader1/Loader1";
+import FileDragField from "../../components/UI/postCreateField/fileDragField/FileDragField";
+import createPost from "../../queries/POST/createPost";
+import createPhotos from "../../queries/POST/createPhotos";
+import { addPost } from "../../store/mainSlice";
+import requirePosts from "../../queries/GET/requirePosts";
+import ActionButton from "../../components/UI/actionButton/ActionButton";
 const PrepodPage = () => {
+    const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
     const categories = useSelector(state => getCategories(state));
-    const category = categories.find((category) => category.name === "Преподаватели");
+    const category = categories.find((category) => category.name == "Преподаватели");
     const posts = useSelector(state => getPostsByCategory(state, category?.id));
+    const author_id = useSelector(state => state.main.userID)
     console.log(posts)
     const [ready, setReady] = useState(false);
+
+    const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
+        try{
+            console.log("sending this to the server:", {name, body: answer, author_id, category_id})
+            const response = await createPost({name, body: answer, author_id, category_id})
+            const photots_answer = await createPhotos({photos, id: response.id})
+            const final_post = await requirePosts(response.id)
+            console.log(final_post)
+            dispatch(addPost(final_post))
+        }
+        catch(error){
+            console.error(error)
+        }
+    }
     useEffect(() => {
         const MIN_LOAD_TIME = 0; 
         const start = Date.now();
@@ -89,13 +111,17 @@ const PrepodPage = () => {
                             enabled: true,
                         }}
                     >
-                        {posts.map((post) => (
+                        {posts && posts.length > 0 ?
+                        (posts?.map((post) => (
                             <SwiperSlide key={uid()}>
                                 <Link to={`/prepods/${post.id}`}>
                                     <PrepodCard data={post} />
                                 </Link>
                             </SwiperSlide>
-                        ))}
+                        )))
+                        :
+                        <PrepodCard data={{name:"Пока тут никого"}} />
+                        }
                     </Swiper>
 
                     <div className={styles.swiperButtonPrev}>
@@ -114,11 +140,21 @@ const PrepodPage = () => {
                 :
                 <Loader1 />
             }
+            {author_id &&
+                <FileDragField 
+                    placeholder="Предложить препода..."
+                    caption="Забыли кого-то? Напомните нам"
+                    sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
+                />
+            }
+            {!author_id &&
+                <>
+                    <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                    <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                </>
+                
+            }
             
-            <AnswerField 
-                placeholder="Предложить препода..."
-                caption="Забыли кого-то? Напомните нам"
-            />
         </div>
     );
 }

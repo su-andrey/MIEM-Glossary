@@ -129,7 +129,7 @@ const SingleQuestionPage = () => {
                                         className={styles.metatitle}
                                         key={uid()}
                                     >
-                                        <Reply key={uid()} data={{body:"Пока нет ответов(", serv:"Одинокий бедолага"}}></Reply>
+                                        <Reply key={uid()} data={{nothing: "Пока нет ответов"}}></Reply>
                                     </motion.div>
                                 }
                             </div>

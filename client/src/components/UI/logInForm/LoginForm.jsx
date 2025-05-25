@@ -64,7 +64,7 @@ const LoginForm = ({isOpen = true}) => {
 
     const handleClose = () => {
         setOpen(false)
-        navigate(fromPage)
+        navigate("/")
     }
 
 

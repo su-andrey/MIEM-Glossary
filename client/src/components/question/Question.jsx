@@ -29,7 +29,7 @@ const Question = ({data}) => {
         <div className={styles.wrapper}>
                 <div className={styles.textWrapper}>
                     <div className={styles.title}>
-                        {name}
+                        {data.nothing || name}
                     </div>
                     <div className={styles.body}>
                         {data.body}
