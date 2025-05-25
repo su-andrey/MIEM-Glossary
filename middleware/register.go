@@ -41,7 +41,7 @@ func Register(c fiber.Ctx) error {
 
 			return c.JSON(fiber.Map{"token": token})
 		}
-		return errors.New("error checking")
+		return errors.New("error checking user existence")
 	}
 
 	return fiber.NewError(fiber.StatusConflict, "пользователь с данным email уже создан")

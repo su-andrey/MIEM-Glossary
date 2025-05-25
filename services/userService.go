@@ -10,25 +10,31 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GetUsers(ctx context.Context, optCondition ...Condition) ([]models.User, error) {
+type userOutput struct {
+	ID      int    `json:"id"`
+	Email   string `json:"email"`
+	IsAdmin bool   `json:"is_admin"`
+}
+
+func GetUsers(ctx context.Context, optCondition ...Condition) ([]userOutput, error) {
 	whereStatement := ""
 	args := []any{}
 	if len(optCondition) > 0 {
 		whereStatement = fmt.Sprintf(" WHERE %s %s $1", optCondition[0].Name, optCondition[0].Operator)
 		args = append(args, optCondition[0].Value)
 	}
-	var users []models.User
+	var users []userOutput
 
 	rows, err := database.DB.Query(ctx,
-		"SELECT id, email, password, is_admin FROM users"+whereStatement, args...)
+		"SELECT id, email, is_admin FROM users"+whereStatement, args...)
 	if err != nil {
 		return users, errors.New("ошибка запроса к базе данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var user models.User
-		if err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin); err != nil {
+		var user userOutput
+		if err := rows.Scan(&user.ID, &user.Email, &user.IsAdmin); err != nil {
 			return users, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 		users = append(users, user)
@@ -37,11 +43,11 @@ func GetUsers(ctx context.Context, optCondition ...Condition) ([]models.User, er
 	return users, nil
 }
 
-func GetUserByID(ctx context.Context, id string) (models.User, error) {
-	var user models.User
-	err := database.DB.QueryRow(context.Background(),
-		"SELECT id, email, password, is_admin FROM users WHERE id = $1", id).
-		Scan(&user.ID, &user.Email, &user.Password, &user.IsAdmin)
+func GetUserByID(ctx context.Context, id string) (userOutput, error) {
+	var user userOutput
+	err := database.DB.QueryRow(ctx,
+		"SELECT id, email, is_admin FROM users WHERE id = $1", id).
+		Scan(&user.ID, &user.Email, &user.IsAdmin)
 
 	if err != nil {
 		return user, errors.New("пользователь не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
