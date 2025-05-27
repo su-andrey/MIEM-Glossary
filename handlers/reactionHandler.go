@@ -41,7 +41,10 @@ func SetReaction(c fiber.Ctx) error {
 	if userIDRaw == nil {
 		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
 	}
-	userID := userIDRaw.(int)
+	userID, ok := userIDRaw.(int)
+	if !ok {
+		return fiber.NewError(fiber.StatusUnauthorized, "Некорректный userID")
+	}
 
 	//Получаем ID поста из параметров URL
 	postIDRaw := c.Params("id")
