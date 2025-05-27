@@ -53,8 +53,9 @@
 
 .sliderWrapper{
     display: flex;
-    flex-direction: column;
-    gap: 4vh;
+    flex-direction: row;
+    flex-wrap: wrap;
+
 }
 
 .topContainer{
@@ -145,4 +146,32 @@
 .swiperPagination {
     margin-top: 1vh;
     text-align: center;
+}
+
+
+
+.gridWrapper{
+    user-select: none;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: left;
+    row-gap: 6vh;
+    column-gap: 6vw;
+    width: 100%;
+}
+
+
+.subwrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    gap: 2vh;
+}
+
+
+.logicalBlock{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
 }

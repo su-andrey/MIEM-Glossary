@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../../config";
 
-const createReaction = async (post_id, reaction) => {
+const createReaction = async ({post_id, reaction}) => {
     if(!post_id){
         throw new Error("Empty post id field");
     }

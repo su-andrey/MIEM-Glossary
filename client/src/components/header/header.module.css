@@ -7,9 +7,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-inline: 3vw;
+    padding-inline: var(--page-main-padding);
     padding-block: 3vh;
-    padding-right: 4vw;
 }
 
 

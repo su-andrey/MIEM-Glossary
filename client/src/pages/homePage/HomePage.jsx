@@ -10,12 +10,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Loader1 from "../../components/UI/loader1/Loader1"
 import Loader2 from "../../components/UI/loader2/Loader2"
 import useScrollToTop from "../../custom hooks/useScrollToTop"
+import { useSelector } from "react-redux"
 
 const HomePage = () => {
     useScrollToTop()
     const navigate = useNavigate();
     const location = useLocation();
-
+    const userID = useSelector(state => state.main.userID)
     const [ready, setReady] = useState(false);
     useEffect(() => {
         const handleLoad = () => setReady(true);
@@ -238,7 +239,7 @@ const HomePage = () => {
                     />
                 </div>
 
-                <div className={styles.container}>
+                {!userID && <div className={styles.container}>
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -253,7 +254,23 @@ const HomePage = () => {
                         <motion.div custom={2} variants={middleTextAnimation} className={styles.paragraf}>Авторизуйтесь, чтобы добавлять и редактировать отзывы, <br />а также оставлять реакции и писать комментарии</motion.div>
                         <MActionButton custom={3} variants={middleTextAnimation} text="Войти" onClick={()=>navigate("/login", { state: { from: location.pathname } })}/>
                     </motion.div>
-                </div>
+                </div>}
+                {userID && <div className={styles.container}>
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.7 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        custom={1}
+                        variants={middleTextAnimation}
+                        className={styles.bottomContainer}
+                        style={{ textAlign: "center" }}
+                    >
+                        <motion.div custom={1} variants={middleTextAnimation} className={styles.title} style={{ marginBottom: "-2.5vh" }}>Вы уже авторизованы</motion.div>
+                        <motion.div custom={2} variants={middleTextAnimation} className={styles.paragraf}>Сейчас вы можете создавать посты и темы,<br/> оставлять реакции и участвовать в обсуждениях</motion.div>
+                        <MActionButton custom={3} variants={middleTextAnimation} text="Профиль" onClick={()=>navigate("/cabinet", { state: { from: location.pathname } })}/>
+                    </motion.div>
+                </div>}
             </div>
         </>
     )

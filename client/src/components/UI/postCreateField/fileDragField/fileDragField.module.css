@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: start;
+    align-items: center;
     row-gap: 2vh;
 }
 
@@ -64,8 +64,8 @@
     align-items: center;
     justify-content: center;
     width:30vw;
-    min-height: 30vh;
-    border: 1px solid var(#e7e7e7);
+    min-height: 20vh;
+    border: 1px dotted var(#e7e7e7);
     background-color: #e7e7e7;
     border-radius: calc(0.9*var(--index));
     transition: all 0.3s ease-out;
@@ -85,7 +85,7 @@
     justify-content: center;
     width:30vw;
     min-height: 10vh;
-    border: 1px solid var(--dark-grey);
+    border: 1px dashed var(--light-grey);
     border-radius: calc(0.9*var(--index));
     transition: all 0.3s ease-out;
     cursor: pointer;
@@ -93,7 +93,7 @@
 
 .dragField:hover{
     transition: all 0.3s ease-out;
-    min-height: 30vh;
+    min-height: 20vh;
     border: none;
     background-color: #e7e7e7;
 }

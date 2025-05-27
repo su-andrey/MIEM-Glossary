@@ -20,9 +20,6 @@ const CafeListCard = ({data}) => {
                     {data.name || data.body || "ошибка загрузки"}
                 </div>
                 <div className={styles.gradeBlock}>
-                    <div className={styles.grade}>
-                        {getFiveScale(data, 1) || 0} 
-                    </div>
                     <StarsDumb defaultRating={getFiveScale(data)} iconSize="1.7vw"></StarsDumb>
                 </div>
             </div>  

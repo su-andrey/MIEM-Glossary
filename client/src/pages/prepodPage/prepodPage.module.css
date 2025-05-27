@@ -1,17 +1,50 @@
 .wrapper{
-    padding-block: var(--page-vertical-offset);
+    padding-block: calc(var(--page-vertical-offset));
     display: flex;
     flex-direction: column;
     align-items: left;
     justify-content: start;
     padding-inline: var(--page-main-padding);
-    gap: var(--page-vertical-gap);
+    gap: calc(1*var(--page-vertical-gap));
+}
+
+
+.buttonWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: start;
+    gap: 1vh;
+}
+
+
+.textWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.subcont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.5vh;
+}
+
+.subwrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 2vh;
 }
 
 .topWrapper {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 
 .title {
@@ -26,63 +59,13 @@
 }
 
 .sliderWrapper {
-    position: relative;
     user-select: none;
-    padding-inline: calc(1.5 * var(--page-main-padding));
-    padding-right: calc(-0.2 * var(--page-main-padding));
-}
-
-.swiperButtonNext,
-.swiperButtonPrev {
-    min-width: 1em;
-    position: absolute;
-    top: 40%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    user-select: none;
-}
-
-.swiperButtonNext svg,
-.swiperButtonPrev svg{
-    min-width: 2em;
-}
-
-.swiperButtonPrev {
-    min-width: 1em;
-    left: -0.4vw;
-}
-
-.swiperButtonNext {
-    min-width: 1em;
-    right: -0.4vw;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
+    row-gap: 12vh;
+    width: 100%;
 }
 
 
 
-.swiperPagination :global(.swiper-pagination-bullet) {
-    background-color: var(--primary-color);
-    margin-inline: 0.3vw;
-    opacity: 0.3;
-}
-
-
-.swiperPagination :global(.swiper-pagination-bullet-active) {
-    background-color:  var(--primary-color);
-    margin-inline: 0.3vw;
-    opacity: 1;
-}
-
-.swiperPagination {
-    margin-top: 2vh;
-    text-align: center;
-}

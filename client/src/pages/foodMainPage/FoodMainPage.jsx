@@ -35,11 +35,13 @@ const FoodMainPage = () => {
     return (
     <>
         <div className={styles.wrapper}>
-            <div className={styles.title}>
-                Куда сходить?
-            </div>
-            <div className={styles.caption}>
-                Выберите интересующую услугу или заведение
+            <div className={styles.textContainer}>
+                <div className={styles.title}>
+                    Куда сходить?
+                </div>
+                <div className={styles.caption}>
+                    Выберите интересующую услугу или заведение
+                </div>
             </div>
             <div className={styles.container}>
                 {data.length > 0 ?

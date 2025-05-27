@@ -5,7 +5,7 @@ import { uid } from "uid";
 import { useRef } from "react";
 import { IoMdPhotos } from "react-icons/io";
 import { MdCloudUpload } from "react-icons/md";
-const FileDragField = ({height, width, placeholder, caption, settings, sender}) => {
+const FileDragField = ({height, width, placeholder, caption, settings, sender, opener}) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploaded, setUploaded] = useState();
     const [answer, setAnswer] = useState("");
@@ -27,6 +27,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender}) 
         setAnswer(""); 
         setName("");
         setSelectedFiles([]);
+        opener(false);
     };
 
     const handleFileChange = (e) => {

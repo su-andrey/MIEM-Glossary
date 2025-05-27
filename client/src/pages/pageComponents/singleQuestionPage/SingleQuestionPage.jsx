@@ -17,6 +17,7 @@ import {motion} from "framer-motion"
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import createComment from "../../../queries/POST/createComment";
 import { addComment } from "../../../store/mainSlice";
+import ActionButton from "../../../components/UI/actionButton/ActionButton";
 const SingleQuestionPage = () => {
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Вопросы");
@@ -135,7 +136,8 @@ const SingleQuestionPage = () => {
                             </div>
                         </div>
                     </div>
-                    <AnswerField 
+                    {authorID && 
+                        <AnswerField 
                         settings={{marginTop:'16vh'}}
                         width={"40vw"} 
                         height={"30vh"}
@@ -143,6 +145,13 @@ const SingleQuestionPage = () => {
                         caption={"Добавте ответ на вопрос"}
                         submitter={(answer) => submitter({answer, post_id: questionID, author_id: authorID })}
                     />
+                    }
+                    {!authorID && 
+                        <>
+                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                        </>
+                    }
                 </div>
             </div>
         </>

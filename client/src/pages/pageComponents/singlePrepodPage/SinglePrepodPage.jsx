@@ -26,6 +26,7 @@ import Loader from "../../../components/UI/loader/Loader";
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import { addPost } from "../../../store/mainSlice";
 import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
+import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -93,17 +94,31 @@ const SinglePrepodPage = () => {
             <div className={styles.wrapper}>
                         <div className={styles.topContainer}>
                             <div className={styles.topWrapper}>
-                                <div className={styles.title}>
-                                    {prepod.name}
+                                <div className={styles.logicalBlock}>
+                                    <div className={styles.title}>
+                                        {prepod.name}
+                                    </div>
+                                    <div className={styles.gradeBlock}>
+                                        <div className={styles.grade}>
+                                            {useGetFiveScale(prepod, 1)}
+                                        </div>
+                                        <Stars defaultRating={useGetFiveScale(prepod)}/>
+                                    </div>
                                 </div>
                                 <div className={styles.caption}>
                                     {prepod.body}
                                 </div>
-                                <div className={styles.gradeBlock}>
-                                    <div className={styles.grade}>
-                                        {useGetFiveScale(prepod, 1)}
+                                
+                                <div className={styles.logicalBlock}>
+                                    <div className={styles.caption} style={{color:"var(--light-grey)"}}>
+                                        Выскажите свое мнение о преподе
                                     </div>
-                                    <Stars defaultRating={useGetFiveScale(prepod)}/>
+                                    <CreateCommentModal
+                                        settings={{marginTop:'1vh'}}
+                                        placeholder={"Поделитесь мнением?"}
+                                        caption={"Добавте отзыв о преподе"}
+                                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: post_id  })}
+                                    />
                                 </div>
                             </div>
                             <div className={styles.imageContainer}>
@@ -167,7 +182,6 @@ const SinglePrepodPage = () => {
                                         <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                                     </svg>
                                 </div>
-
                                 <div className={styles.swiperButtonNext}>
                                     <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
                                         <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
@@ -176,44 +190,23 @@ const SinglePrepodPage = () => {
                                 <div className={styles.swiperPagination}></div>                                
                             </div>
                         </div>
-                </div>
-                <div className={styles.wholeWrapper}>
-                    <div className={styles.topWrapper}>
-                        <div className={styles.textWrapper}>
-                            <div className={styles.subtitle}>
-                                Отзывы:
-                            </div>
-                            <div className={styles.sliderWrapper}>
-                                {reviews.length > 0 ?
-                                    reviews.map((review)=>{
-                                        return(
-                                            <Review key={uid()} data={review}></Review>
-                                        );
-                                    })
-                                    :
-                                    <Review key={uid()} data={{body:"Пока нет отзывов"}}></Review>
-                                }
-                            </div>
-                        </div>
+                    <div className={styles.subwrapper}>
+                                <div className={styles.subtitle}>
+                                    Отзывы:
+                                </div>
+                                <div className={styles.gridWrapper}>
+                                    {reviews.length > 0 ?
+                                        reviews.map((review)=>{
+                                            return(
+                                                <Review key={uid()} data={review}></Review>
+                                            );
+                                        })
+                                        :
+                                        <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
+                                    }
+                                </div>
                     </div>
-                    {authorID && 
-                        <AnswerField
-                        settings={{marginTop:'1vh'}}
-                        width={"40vw"} 
-                        height={"30vh"}
-                        placeholder={"Поделитесь мнением?"}
-                        caption={"Добавте отзыв о преподе"}
-                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: post_id  })}
-                        />
-                    }
-                    {!authorID && 
-                        <>
-                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
-                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
-                        </>
-                    }
-                    
-            </div>
+                </div>
         </>
 );}
 

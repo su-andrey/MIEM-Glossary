@@ -25,8 +25,16 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: start;
-    row-gap: 2vh;
+    align-items: center;
+    row-gap: 5vh;
+}
+
+.subContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 1vh;
 }
 
 .glass{

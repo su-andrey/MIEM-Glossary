@@ -35,17 +35,6 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-    /*
-    const hasRunRef = useRef(false);
-    let isLoggedIn = useSelector(state => state.main.isAuthentificated)
-    useEffect(() => {
-    if (!hasRunRef.current && isLoggedIn) {
-        setupDB()
-        hasRunRef.current = true;
-    }
-    }, [isLoggedIn]);
-    */
-
 
     useEffect(() => {
         if(wasChanged) {
@@ -61,7 +50,7 @@ const App = () => {
                 }
             };
             updateData();
-            dispatch(setChanged(false));
+            dispatch(setChanged());
         }
     }, [wasChanged]);
 
