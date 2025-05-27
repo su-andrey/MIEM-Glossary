@@ -23,6 +23,7 @@ import { addPost } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
@@ -69,6 +70,7 @@ const PrepodPage = () => {
     }, []);
     if (!ready) return <Loader1/>;
     return (
+        <AppLoaderWrapper >
         <div className={styles.wrapper}>
             <div className={styles.topWrapper}>
                 <div className={styles.textWrapper}>
@@ -128,6 +130,7 @@ const PrepodPage = () => {
                         </div>
             }
         </div>
+        </AppLoaderWrapper>
     );
 }
 

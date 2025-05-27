@@ -18,6 +18,8 @@ import Loader1 from "../../components/UI/loader1/Loader1";
 import createPost from "../../queries/POST/createPost";
 import { addPost } from "../../store/mainSlice";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
+import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 const QuestionPage = () => {
     const dispatch = useDispatch();
     const leftItemAnimation = {
@@ -44,6 +46,22 @@ const QuestionPage = () => {
     console.log(questions)
     let authorID = useSelector(state => state.main.userID)
     const [ready, setReady] = useState(false);
+
+        const centerItemAnimation = {
+        hidden: {
+            opacity: 0,
+            y: 100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
 
     const submitter = async ({ answer, category_id, author_id }) => {
         try {
@@ -74,6 +92,7 @@ const QuestionPage = () => {
     if (!ready) return <Loader1/>;
     return(
         <>
+        <AppLoaderWrapper >
             <Scroll />
             <div className={styles.wrapper}>
                 <div className={styles.topWrapper}>
@@ -85,14 +104,24 @@ const QuestionPage = () => {
                             Выберите интересующую тему
                         </div>
                     </div>
+                    <div className={styles.rightWrapper}>
+                        <div className={styles.caption}>
+                            Задайте собственный вопрос
+                        </div>
+                        <CreateCommentModal 
+                            placeholder={"Спросите что-нибудь?"}
+                            caption={"Создайте собственное обсуждение"}
+                            submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID })}
+                        />
+                    </div>
                 </div>
                 <div className={styles.wholeWrapper}>
-                    <div className={styles.sliderWrapper}>
+                    <div className={styles.gridWrapper}>
                             {questions && questions.length > 0 ?
-                                (questions.map((post) => (
+                                (questions.map((post, index) => (
                                     <motion.div
-                                        custom={1}
-                                        variants={leftItemAnimation}
+                                        custom={index%3}
+                                        variants={centerItemAnimation}
                                         initial="hidden"
                                         whileInView="visible"
                                         viewport={{ once: true, amount: 0.5 }}
@@ -108,25 +137,25 @@ const QuestionPage = () => {
                                 <Question data={{nothing: "Пока нет вопросов"}} />
                             }
                     </div>
-                    {authorID &&
-                        <AnswerField 
-                        settings={{marginTop:'-5vh'}}
-                        width={"40vw"} 
-                        height={"30vh"}
-                        placeholder={"Спросите что-нибудь?"}
-                        caption={"Создайте собственное обсуждение"}
-                        submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID })}
-                        />
-                    }
-                    {!authorID && 
+                </div>
+            {authorID &&
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Добавте свое заведение</div>
+                                <CreateCommentModal 
+                                    placeholder={"Спросите что-нибудь?"}
+                                    caption={"Создайте собственное обсуждение"}
+                                    submitter={(answer) => submitter({answer, category_id: category.id, author_id: authorID })}
+                                />
+                        </div>
+            }
+            {!authorID && 
                         <div className={styles.subcont}>
                             <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
                             <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
                         </div>
-                    }
-                    
-                </div>
+            }
             </div>
+        </AppLoaderWrapper>
         </>
 );}
 
