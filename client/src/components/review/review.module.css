@@ -5,11 +5,13 @@
     align-items: start;
     border: 1px var(--light-grey) solid;
     border-radius: calc(1.2*var(--index));
-    width: calc(20*var(--index));
+    width: calc(17*var(--index));
     padding: 3.5vh;
     padding-block: 4vh;
     gap: 2vh;
     transition: all 0.3s ease-out;
+    background-color: white;
+    height: 100%;
 }
 
 

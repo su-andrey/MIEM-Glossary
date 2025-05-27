@@ -2,8 +2,8 @@
     display: block;
     width:4.5%;
     position:fixed;
-    right:5vw;
-    bottom:5vw;
+    right:0.7vw;
+    bottom:0.7vw;
     cursor: pointer;
     color: var(--light-grey);
 }

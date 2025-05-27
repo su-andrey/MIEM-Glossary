@@ -1,15 +1,16 @@
 .wrapper{
     display: flex;
     flex-direction: column;
-    justify-content: start;
     align-items: start;
     border: 1px var(--light-grey) solid;
     border-radius: calc(1.2*var(--index));
-    width: calc(25*var(--index));
+    width: calc(17*var(--index));
     padding: 3.5vh;
     gap: 2vh;
     transition: all 0.3s ease-out;
     background-color: white;
+    padding-block: 4vh;
+    height: 100%;
 }
 
 .wrapper:hover{
@@ -20,10 +21,12 @@
 .name{
     font-weight: 450;
     font-size: var(--subprimary-font);
+    word-break: break-word;
 }
 
 
 .body{
     color: var(--light-grey);
     font-size: calc(0.8*var(--index));
+    word-break: break-word;
 }

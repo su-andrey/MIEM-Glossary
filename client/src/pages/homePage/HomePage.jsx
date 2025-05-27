@@ -11,6 +11,7 @@ import Loader1 from "../../components/UI/loader1/Loader1"
 import Loader2 from "../../components/UI/loader2/Loader2"
 import useScrollToTop from "../../custom hooks/useScrollToTop"
 import { useSelector } from "react-redux"
+import Scroll from "../../components/UI/scrollButton/Scroll"
 
 const HomePage = () => {
     useScrollToTop()

@@ -35,7 +35,7 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-
+/*
     useEffect(() => {
         if(wasChanged) {
             const updateData = async () => {
@@ -53,7 +53,7 @@ const App = () => {
             dispatch(setChanged());
         }
     }, [wasChanged]);
-
+*/
 
     useSmoothScroll()
 

@@ -158,11 +158,11 @@
 .gridWrapper{
     user-select: none;
     display: grid;
-    grid-template-columns: repeat(2, max-content);
-    justify-content: left;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
     row-gap: 6vh;
-    column-gap: 6vw;
     width: 100%;
+    height: auto; 
 }
 
 

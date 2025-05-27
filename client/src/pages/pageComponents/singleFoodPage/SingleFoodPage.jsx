@@ -2,6 +2,7 @@ import styles from "./singleFoodPage.module.css"
 import { useSelector } from "react-redux";
 import { uid } from "uid";
 import AnswerField from "../../../components/UI/answerField/AnswerField";
+import {motion} from "framer-motion"
 import { useParams } from "react-router-dom";
 import Review from "../../../components/review/Review";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -35,6 +36,22 @@ const SingleFoodPage = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
 
+        const centerItemAnimation = {
+        hidden: {
+            opacity: 0,
+            y: 100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
+    
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
             console.log({
@@ -96,7 +113,7 @@ const SingleFoodPage = () => {
                                     <CreateCommentModal
                                         settings={{marginTop:'1vh'}}
                                         placeholder={"Поделитесь мнением?"}
-                                        caption={"Добавте отзыв о преподе"}
+                                        caption={"Добавте отзыв о заведении"}
                                         submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
                                     />
                                 </div>
@@ -178,9 +195,24 @@ const SingleFoodPage = () => {
                                 </div>
                                 <div className={styles.gridWrapper}>
                                     {reviews.length > 0 ?
-                                        reviews.map((review)=>{
+                                        reviews.map((review, index)=>{
                                             return(
-                                                <Review key={uid()} data={review}></Review>
+                                                <motion.div
+                                                    custom={index%3}
+                                                    variants={centerItemAnimation}
+                                                    initial="hidden"
+                                                    whileInView="visible"
+                                                    viewport={{ once: true, amount: 0.5 }}
+                                                    className={styles.element}
+                                                    key={uid()}
+                                                    style={{
+                                                        width:"max-content",
+                                                        height: "stretch"
+                                                    }}
+                                                >
+                                                    <Review data={review}></Review>
+                                                </motion.div>
+                                                
                                             );
                                         })
                                         :
