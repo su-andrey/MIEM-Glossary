@@ -39,6 +39,8 @@ func GetPosts(c fiber.Ctx) error {
 		offsetStr = c.Query("offset", "0")
 	}
 
+	//
+
 	limit, err1 := strconv.Atoi(limitStr)
 	offset, err2 := strconv.Atoi(offsetStr)
 	if err1 == nil && limit > 0 {
