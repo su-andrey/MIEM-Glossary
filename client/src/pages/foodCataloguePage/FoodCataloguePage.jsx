@@ -16,7 +16,6 @@ import getCategories from "../../store/selectors/getCategories";
 import CafeListCard from "../../components/cafeListCard/CafeListCard";
 import SearchField from "../../components/UI/searchField/SearchField";
 import AnswerField from "../../components/UI/answerField/AnswerField";
-import Loader from "../../components/UI/loader/Loader";
 import Loader1 from "../../components/UI/loader1/Loader1";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 import FileDragField from "../../components/UI/postCreateField/fileDragField/FileDragField";
@@ -25,6 +24,7 @@ import createPhotos from "../../queries/POST/createPhotos";
 import requirePosts from "../../queries/GET/requirePosts";
 import { addPost } from "../../store/mainSlice";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
+import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
 
 const FoodCataloguePage = () => {
     const dispatch = useDispatch();
@@ -80,88 +80,61 @@ const FoodCataloguePage = () => {
                 <div className={styles.topWrapper}>
                     <div className={styles.textWrapper}>
                         <div className={styles.title}>{currentCategory.name}</div>
-                        <div className={styles.caption}>Выберите интересующее заведение</div>
+                        <div className={styles.caption}>
+                            Выберите интересующее заведение
+                        </div>
                     </div>
-                    <SearchField />
+                    <div className={styles.buttonWrapper}>
+                            <div className={styles.caption}>
+                                Предложите что-то еще
+                            </div>
+                            {author_id &&
+                                <CreatePostModal 
+                                    placeholder="Предложить заведение..."
+                                    caption="Забыли что-то? Напомните нам"
+                                    sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
+                                />
+                            }
+                            {!author_id &&
+                                <div className={styles.subcont}>
+                                    <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                                    <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                                </div>
+                            }
+                    </div>
                 </div>
 
                 {isSliderReady ? <div className={styles.sliderWrapper}>
-                    <Swiper
-                        className={styles.swiper}
-                        modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel]}
-                        spaceBetween={40}
-                        slidesPerView={3}
-                        loop={true}
-                        navigation={{
-                            nextEl: `.${styles.swiperButtonNext}`,
-                            prevEl: `.${styles.swiperButtonPrev}`
-                        }}
-                        pagination={{
-                            el: `.${styles.swiperPagination}`,
-                            clickable: true
-                        }}
-                        autoplay={{
-                            delay: 5000,
-                            disableOnInteraction: false,
-                            pauseOnMouseEnter: true,
-                        }}
-                        freeMode={{
-                            enabled: true,
-                            momentumBounceRatio: 1.5,
-                            momentumRatio: 3,
-                            momentumVelocityRatio: 1,
-                        }}
-                        keyboard={{
-                            enabled: true,
-                        }}
-                        parallax={{
-                            enabled: true,
-                        }}
-                    >
                         {posts?.length > 0 ? (
                             posts.map((post) => (
-                                <SwiperSlide key={uid()}>
-                                    <Link to={`/food/${category}/${post.id}`}>
+                                    <Link key={uid()} to={`/food/${category}/${post.id}`}>
                                         <CafeListCard data={post} />
                                     </Link>
-                                </SwiperSlide>
                             ))
                         ) : (
                             <CafeListCard data={{name:"Пока тут пусто"}} />
                         )}
-                    </Swiper>
-
-                    <div className={styles.swiperButtonPrev}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                            <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                        </svg>
-                    </div>
-
-                    <div className={styles.swiperButtonNext}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                            <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-                        </svg>
-                    </div>
-                    <div className={styles.swiperPagination}></div>
                 </div>
                 :
                 <Loader1 />
                 }
-
-                
                 {author_id &&
-                        <FileDragField 
-                            placeholder="Предложить заведение..."
-                            caption="Забыли что-то? Напомните нам"
-                            sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
-                        />
-                    }
-                    {!author_id && 
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <CreatePostModal 
+                                placeholder="Предложить заведение..."
+                                caption="Забыли что-то? Напомните нам"
+                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
+                            />
+                        </div>
+
+                }
+                {!author_id && 
                         <div className={styles.subcont}>
                             <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
                             <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
                         </div>
-                    }
+                }
             </div>
         </AppLoaderWrapper>
     );

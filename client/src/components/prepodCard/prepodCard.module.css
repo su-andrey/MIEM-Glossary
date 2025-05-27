@@ -5,7 +5,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    gap: 0.5vh;
+    gap: 1vh;
 }
 
 
@@ -27,7 +27,7 @@
 
 .title{
     font-size: var(--caption-font);
-    font-weight: 450;
+    font-weight: 500;
     color: black;
 }
 

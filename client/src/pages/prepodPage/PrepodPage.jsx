@@ -22,6 +22,8 @@ import createPhotos from "../../queries/POST/createPhotos";
 import { addPost } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
+import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
@@ -68,6 +70,7 @@ const PrepodPage = () => {
     }, []);
     if (!ready) return <Loader1/>;
     return (
+        <AppLoaderWrapper >
         <div className={styles.wrapper}>
             <div className={styles.topWrapper}>
                 <div className={styles.textWrapper}>
@@ -76,86 +79,58 @@ const PrepodPage = () => {
                         Выберите интересующего преподавателя
                     </div>
                 </div>
+                <div className={styles.buttonWrapper}>
+                        <div className={styles.caption}>
+                            Предложите кого-то еще
+                        </div>
+                        {author_id &&
+                            <CreatePostModal 
+                                placeholder="Предложить препода..."
+                                caption="Забыли кого-то? Напомните нам"
+                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
+                            />
+                        }
+                        {!author_id &&
+                            <>
+                                <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                                <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                            </>
+                        }
+                </div>
             </div>
             {isSliderReady ? 
             <div className={styles.sliderWrapper}>
-                    <Swiper
-                        className={styles.swiper}
-                        modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel]}
-                        spaceBetween={40}
-                        slidesPerView={3}
-                        loop={true}
-                        navigation={{
-                            nextEl: `.${styles.swiperButtonNext}`,
-                            prevEl: `.${styles.swiperButtonPrev}`
-                        }}
-                        pagination={{
-                            el: `.${styles.swiperPagination}`,
-                            clickable: true
-                        }}
-                        autoplay={{
-                            delay: 5000,
-                            disableOnInteraction: false,
-                            pauseOnMouseEnter: true,
-                        }}
-                        freeMode={{
-                            enabled: true,
-                            momentumBounceRatio: 1.5,
-                            momentumRatio: 4,
-                            momentumVelocityRatio: 1,
-                        }}
-                        keyboard={{
-                            enabled: true,
-                        }}
-                        parallax={{
-                            enabled: true,
-                        }}
-                    >
                         {posts && posts.length > 0 ?
                         (posts?.map((post) => (
-                            <SwiperSlide key={uid()}>
-                                <Link to={`/prepods/${post.id}`}>
+                                <Link to={`/prepods/${post.id}`} key={uid()}>
                                     <PrepodCard data={post} />
                                 </Link>
-                            </SwiperSlide>
                         )))
                         :
                         <PrepodCard data={{name:"Пока тут никого"}} />
                         }
-                    </Swiper>
-
-                    <div className={styles.swiperButtonPrev}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                            <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                        </svg>
-                    </div>
-
-                    <div className={styles.swiperButtonNext}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                            <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-                        </svg>
-                    </div>
-                    <div className={styles.swiperPagination}></div>
                 </div>
                 :
                 <Loader1 />
             }
             {author_id &&
-                <FileDragField 
-                    placeholder="Предложить препода..."
-                    caption="Забыли кого-то? Напомните нам"
-                    sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
-                />
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <CreatePostModal 
+                                placeholder="Предложить заведение..."
+                                caption="Забыли что-то? Напомните нам"
+                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
+                            />
+                        </div>
             }
-            {!author_id &&
-                <>
-                    <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
-                    <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
-                </>
-                
+            {!author_id && 
+                        <div className={styles.subcont}>
+                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
+                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
+                        </div>
             }
-            
         </div>
+        </AppLoaderWrapper>
     );
 }
 

@@ -18,6 +18,7 @@
 }
 
 .textWrapper{
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.5vh;
@@ -54,8 +55,10 @@
 
 .sliderWrapper{
     display: flex;
-    flex-direction: column;
-    gap: 4vh;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+
 }
 
 .topContainer{
@@ -149,4 +152,31 @@
 
 .swiperSVG{
     min-width: 1em;
+}
+
+
+.gridWrapper{
+    user-select: none;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
+    row-gap: 6vh;
+    width: 100%;
+    height: auto; 
+}
+
+
+.subwrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    gap: 2vh;
+}
+
+
+.logicalBlock{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
 }

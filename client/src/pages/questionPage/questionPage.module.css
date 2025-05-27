@@ -11,7 +11,7 @@
 .topWrapper{
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
 }
 
@@ -49,3 +49,30 @@
     gap: 4vh;
 }
 
+.rightWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: start;
+    gap: 1vh;
+}
+
+
+.gridWrapper{
+    user-select: none;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
+    row-gap: 6vh;
+    width: 100%;
+    height: auto; 
+}
+
+.subcont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.5vh;
+}

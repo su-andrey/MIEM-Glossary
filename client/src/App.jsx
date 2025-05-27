@@ -35,17 +35,6 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-    /*
-    const hasRunRef = useRef(false);
-    let isLoggedIn = useSelector(state => state.main.isAuthentificated)
-    useEffect(() => {
-    if (!hasRunRef.current && isLoggedIn) {
-        setupDB()
-        hasRunRef.current = true;
-    }
-    }, [isLoggedIn]);
-    */
-
 
     useEffect(() => {
         if(wasChanged) {
@@ -53,6 +42,7 @@ const App = () => {
                 try {
                     const posts = await requirePosts();
                     const comments = await requireComments();
+                    localStorage.removeItem('persist:root')
                     dispatch(setPosts({data: posts}));
                     dispatch(setComments({data:comments}));
                     console.log("Storage rebuilt");
@@ -61,7 +51,7 @@ const App = () => {
                 }
             };
             updateData();
-            dispatch(setChanged(false));
+            dispatch(setChanged());
         }
     }, [wasChanged]);
 

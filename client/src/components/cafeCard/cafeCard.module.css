@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    gap: 0.5vh;
+    gap: 1vh;
     transition: all 0.3s ease-out;
     
 }
@@ -32,8 +32,8 @@
 
 .title{
     margin-top: 0.5vh;
-    font-size: calc(1*var(--index));
-    font-weight: 450;
+    font-size: calc(1*var(--subprimary-font));
+    font-weight: 600;
     transition: all 0.3s ease-out;
-    color: var(--dark-grey)
+    color: black;
 }

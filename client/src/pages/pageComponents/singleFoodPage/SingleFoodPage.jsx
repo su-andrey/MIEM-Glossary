@@ -2,6 +2,7 @@ import styles from "./singleFoodPage.module.css"
 import { useSelector } from "react-redux";
 import { uid } from "uid";
 import AnswerField from "../../../components/UI/answerField/AnswerField";
+import {motion} from "framer-motion"
 import { useParams } from "react-router-dom";
 import Review from "../../../components/review/Review";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,6 +21,8 @@ import { useState, useEffect } from "react";
 import createPost from "../../../queries/POST/createPost";
 import { useDispatch } from "react-redux";
 import { addPost } from "../../../store/mainSlice";
+import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
+import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = (useParams().id);
@@ -31,7 +34,24 @@ const SingleFoodPage = () => {
     console.log("Полученные отзывы", reviews)
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
+    const [open, setOpen] = useState(false);
 
+        const centerItemAnimation = {
+        hidden: {
+            opacity: 0,
+            y: 100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
+    
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
             console.log({
@@ -71,17 +91,31 @@ const SingleFoodPage = () => {
             <div className={styles.wrapper}>
                         <div className={styles.topContainer}>
                             <div className={styles.topWrapper}>
-                                <div className={styles.title}>
-                                    {food.name}
+                                <div className={styles.logicalBlock}>
+                                    <div className={styles.title}>
+                                        {food.name}
+                                    </div>
+                                    <div className={styles.gradeBlock}>
+                                        <div className={styles.grade}>
+                                            {useGetFiveScale(food, 1)}
+                                        </div>
+                                        <Stars defaultRating={useGetFiveScale(food)}/>
+                                    </div>
                                 </div>
                                 <div className={styles.caption}>
                                     {food.body}
                                 </div>
-                                <div className={styles.gradeBlock}>
-                                    <div className={styles.grade}>
-                                        {useGetFiveScale(food, 1)}
+                                
+                                <div className={styles.logicalBlock}>
+                                    <div className={styles.caption} style={{color:"var(--light-grey)"}}>
+                                        Выскажите свое мнение о заведении
                                     </div>
-                                    <Stars defaultRating={useGetFiveScale(food)}/>
+                                    <CreateCommentModal
+                                        settings={{marginTop:'1vh'}}
+                                        placeholder={"Поделитесь мнением?"}
+                                        caption={"Добавте отзыв о заведении"}
+                                        submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
+                                    />
                                 </div>
                             </div>
                             <div className={styles.imageContainer}>
@@ -155,44 +189,37 @@ const SingleFoodPage = () => {
                                 <div className={styles.swiperPagination}></div>                                
                             </div>
                         </div>
-                        
-                <div className={styles.wholeWrapper}>
-                    <div className={styles.topWrapper}>
-                        <div className={styles.textWrapper}>
-                            <div className={styles.subtitle}>
-                                Отзывы:
-                            </div>
-                            <div className={styles.sliderWrapper}>
-                                {reviews.length > 0 ?
-                                    reviews.map((review)=>{
-                                        return(
-                                            <Review key={uid()} data={review}></Review>
-                                        );
-                                    })
-                                    :
-                                    <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
-                                }
-                            </div>
-                        </div>
+                        <div className={styles.subwrapper}>
+                                <div className={styles.subtitle}>
+                                    Отзывы:
+                                </div>
+                                <div className={styles.gridWrapper}>
+                                    {reviews.length > 0 ?
+                                        reviews.map((review, index)=>{
+                                            return(
+                                                <motion.div
+                                                    custom={index%3}
+                                                    variants={centerItemAnimation}
+                                                    initial="hidden"
+                                                    whileInView="visible"
+                                                    viewport={{ once: true, amount: 0.5 }}
+                                                    className={styles.element}
+                                                    key={uid()}
+                                                    style={{
+                                                        width:"max-content",
+                                                        height: "stretch"
+                                                    }}
+                                                >
+                                                    <Review data={review}></Review>
+                                                </motion.div>
+                                                
+                                            );
+                                        })
+                                        :
+                                        <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
+                                    }
+                                </div>
                     </div>
-                    
-                    {authorID &&
-                        <AnswerField
-                            settings={{marginTop:'1vh'}}
-                            width={"40vw"} 
-                            height={"30vh"}
-                            placeholder={"Поделитесь мнением?"}
-                            caption={"Добавте отзыв о преподе"}
-                            submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
-                        />
-                    }
-                    {!authorID && 
-                        <div className={styles.subcont}>
-                            <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
-                            <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
-                        </div>
-                    }
-                </div>
             </div>
         </>
 );}

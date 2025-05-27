@@ -17,6 +17,8 @@ import {motion} from "framer-motion"
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import createComment from "../../../queries/POST/createComment";
 import { addComment } from "../../../store/mainSlice";
+import ActionButton from "../../../components/UI/actionButton/ActionButton";
+import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 const SingleQuestionPage = () => {
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Вопросы");
@@ -35,6 +37,22 @@ const SingleQuestionPage = () => {
         visible: custom => ({
             opacity: 1,
             x: 0,
+            transition: {
+                delay: custom * 0.3,
+                duration: 0.4, 
+                ease: "easeOut",
+            }
+        }),
+    }
+
+    const centerItemAnimation = {
+        hidden: {
+            opacity: 0,
+            y: 100,
+        },
+        visible: custom => ({
+            opacity: 1,
+            y: 0,
             transition: {
                 delay: custom * 0.3,
                 duration: 0.4, 
@@ -92,6 +110,16 @@ const SingleQuestionPage = () => {
                                 Нужно помочь бедолаге!
                             </div>
                         </div>
+                        <div className={styles.logicalBlock}>
+                                    <div className={styles.caption} style={{color:"var(--light-grey)"}}>
+                                        Оставте свой ответ на вопрос
+                                    </div>
+                                    <CreateCommentModal
+                                        placeholder={"Поможете бедолаге?"}
+                                        caption={"Добавте ответ на вопрос"}
+                                        submitter={(answer) => submitter({answer, post_id: questionID, author_id: authorID })}
+                                    />
+                        </div>
                         <div className={styles.textWrapper}>
                             <div className={styles.subtitle}>
                                 Вопрос:
@@ -102,18 +130,22 @@ const SingleQuestionPage = () => {
                             <div className={styles.subtitle}>
                                 Ответы:
                             </div>
-                            <div className={styles.sliderWrapper}>
+                            <div className={styles.gridWrapper}>
                                 {comments.length > 0 ?
-                                    comments.map((comment)=>{
+                                    comments.map((comment, index)=>{
                                         return(
                                             <motion.div
-                                                custom={1}
-                                                variants={leftItemAnimation}
+                                                custom={index%3}
+                                                variants={centerItemAnimation}
                                                 initial="hidden"
                                                 whileInView="visible"
                                                 viewport={{ once: true, amount: 0.5 }}
-                                                className={styles.metatitle}
+                                                className={styles.element}
                                                 key={uid()}
+                                                style={{
+                                                    width:"max-content",
+                                                    height: "stretch"
+                                                }}
                                             >
                                                 <Reply key={uid()} data={comment}></Reply>
                                             </motion.div>
@@ -122,7 +154,7 @@ const SingleQuestionPage = () => {
                                     :
                                     <motion.div
                                         custom={1}
-                                        variants={leftItemAnimation}
+                                        variants={centerItemAnimation}
                                         initial="hidden"
                                         whileInView="visible"
                                         viewport={{ once: true, amount: 0.5 }}
@@ -135,18 +167,9 @@ const SingleQuestionPage = () => {
                             </div>
                         </div>
                     </div>
-                    <AnswerField 
-                        settings={{marginTop:'16vh'}}
-                        width={"40vw"} 
-                        height={"30vh"}
-                        placeholder={"Поможете бедолаге?"}
-                        caption={"Добавте ответ на вопрос"}
-                        submitter={(answer) => submitter({answer, post_id: questionID, author_id: authorID })}
-                    />
                 </div>
             </div>
         </>
 );}
-
 
 export default SingleQuestionPage;

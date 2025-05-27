@@ -14,12 +14,6 @@ const Review = ({data}) => {
         <div className={styles.body}>
             {data.body}
         </div>
-        <div className={styles.gradeBlock}>
-            <div className={styles.grade}>
-                {getFiveScale(data, 1)}
-            </div>
-            <StarsDumb defaultRating={getFiveScale(data)} iconSize="1.7vw"></StarsDumb>
-        </div>  
     </div>
 );}
 

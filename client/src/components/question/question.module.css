@@ -6,7 +6,7 @@
     padding: var(--left-padding);
     border: 1px solid var(--light-grey);
     border-radius: var(--border-radius);
-    width: 35vw;
+    width: 28vw;
     row-gap: 3vh;
     transition: all 0.3s ease-out;
     background-color: white;

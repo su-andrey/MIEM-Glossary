@@ -8,6 +8,7 @@ import getCategories from "../../store/selectors/getCategories.js";
 import Loader from "../../components/UI/loader/Loader.jsx";
 import { useState, useEffect } from "react";
 import Loader1 from "../../components/UI/loader1/Loader1.jsx";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper.jsx";
 const FoodMainPage = () => {
     const data = useSelector(state => getCategories(state));
     const [ready, setReady] = useState(false);
@@ -33,13 +34,16 @@ const FoodMainPage = () => {
     }, []);
     if (!ready) return <Loader1/>;
     return (
+    <AppLoaderWrapper >
     <>
         <div className={styles.wrapper}>
-            <div className={styles.title}>
-                Куда сходить?
-            </div>
-            <div className={styles.caption}>
-                Выберите интересующую услугу или заведение
+            <div className={styles.textContainer}>
+                <div className={styles.title}>
+                    Куда сходить?
+                </div>
+                <div className={styles.caption}>
+                    Выберите интересующую услугу или заведение
+                </div>
             </div>
             <div className={styles.container}>
                 {data.length > 0 ?
@@ -54,7 +58,8 @@ const FoodMainPage = () => {
                 }
             </div>
         </div>
-    </>);
+    </>
+    </AppLoaderWrapper>);
 }
 
 export default FoodMainPage;
