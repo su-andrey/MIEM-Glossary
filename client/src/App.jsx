@@ -35,13 +35,14 @@ const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
 
-/*
+
     useEffect(() => {
         if(wasChanged) {
             const updateData = async () => {
                 try {
                     const posts = await requirePosts();
                     const comments = await requireComments();
+                    localStorage.removeItem('persist:root')
                     dispatch(setPosts({data: posts}));
                     dispatch(setComments({data:comments}));
                     console.log("Storage rebuilt");
@@ -53,7 +54,7 @@ const App = () => {
             dispatch(setChanged());
         }
     }, [wasChanged]);
-*/
+
 
     useSmoothScroll()
 
