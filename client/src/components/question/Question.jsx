@@ -12,19 +12,15 @@ import requireReaction from "../../queries/GET/requireReaction";
 import createReaction from "../../queries/POST/createReaction";
 import refreshPosts from "../../store/refreshers/refreshPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { updateReaction } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
 import { addLikes, addDislikes } from "../../store/mainSlice";
 
 const Question = ({data}) => {
     const postID = data.id;
     const [name, setName] = useState("");
-    const likes = useSelector(state => state.main.posts.find(
-        (post)=> post.id == postID
-    ).likes)
-    const dislikes = useSelector(state => state.main.posts.find(
-        (post)=> post.id == postID
-    ).dislikes)
+    const post = useSelector(state => state.main.posts.find(post => post.id == postID));
+    const likes = post?.likes ?? 0;
+    const dislikes = post?.dislikes ?? 0;
     const [reaction, setReaction] = useState(null);
     const dispatch = useDispatch();
     let init;

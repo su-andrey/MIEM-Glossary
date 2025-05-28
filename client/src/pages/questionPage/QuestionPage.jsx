@@ -126,7 +126,7 @@ const QuestionPage = () => {
                                         whileInView="visible"
                                         viewport={{ once: true, amount: 0.5 }}
                                         className={styles.metatitle}
-                                        key={uid()}
+                                        key={post?.id || uid()}
                                     >
                                         <Link to={`/questions/${post.id}`} >
                                             <Question data={post} />
