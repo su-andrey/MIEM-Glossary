@@ -11,13 +11,20 @@ import dislike_filled from "./assets/dislike/dislike_filled.svg"
 import requireReaction from "../../queries/GET/requireReaction";
 import createReaction from "../../queries/POST/createReaction";
 import refreshPosts from "../../store/refreshers/refreshPosts";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateReaction } from "../../store/mainSlice";
+import requirePosts from "../../queries/GET/requirePosts";
+import { addLikes, addDislikes } from "../../store/mainSlice";
 
 const Question = ({data}) => {
+    const postID = data.id;
     const [name, setName] = useState("");
-    const [likes, setLikes] = useState(data.likes);
-    const [dislikes, setDislikes] = useState(data.dislikes);
+    const likes = useSelector(state => state.main.posts.find(
+        (post)=> post.id == postID
+    ).likes)
+    const dislikes = useSelector(state => state.main.posts.find(
+        (post)=> post.id == postID
+    ).dislikes)
     const [reaction, setReaction] = useState(null);
     const dispatch = useDispatch();
     let init;
@@ -25,8 +32,9 @@ const Question = ({data}) => {
     useEffect(()=>{
         const requireLike = async ()=> {
             init = await requireReaction(data?.id)
-            console.log("Получили реакцию с серва:", init)
-            setReaction(init)
+            console.log("Получили изначальную реакцию с серва:", init.reaction)
+            const post = await requirePosts(data.id)
+            setReaction(init.reaction)
         }
         requireLike();
     }, [])
@@ -36,12 +44,24 @@ const Question = ({data}) => {
         e.preventDefault();
         e.stopPropagation();
         try {
-            await createReaction({ post_id: data.id, reaction: true });
-            dispatch(updateReaction({ postId: data?.id, reaction: true }));
-            if (reaction !== true) {
-                setLikes(prev => prev + 1);
-                if (reaction === false) setDislikes(prev => prev - 1);
-                setReaction(true);
+            const initial = reaction
+            if(initial === null){
+                await createReaction({ post_id: data.id, reaction: true });
+                dispatch(addLikes({ postID , reaction: 1}));
+                dispatch(addDislikes({ postID , reaction: 0}));
+                setReaction(true)
+            }
+            else if(initial === true){
+                await createReaction({ post_id: data.id, reaction: null });
+                dispatch(addLikes({ postID , reaction: -1}));
+                dispatch(addDislikes({ postID , reaction: 0}));
+                setReaction(null)
+            }
+            else if(initial === false){
+                await createReaction({ post_id: data.id, reaction: true });
+                dispatch(addLikes({ postID , reaction: 1}));
+                dispatch(addDislikes({ postID , reaction: -1}));
+                setReaction(true)
             }
         } catch (error) {
             console.error(error);
@@ -52,12 +72,24 @@ const Question = ({data}) => {
         e.preventDefault();
         e.stopPropagation();
         try {
-            await createReaction({ post_id: data.id, reaction: false });
-            dispatch(updateReaction({ postId: data?.id, reaction: false }));
-            if (reaction !== false) {
-                setDislikes(prev => prev + 1);
-                if (reaction === true) setLikes(prev => prev - 1);
-                setReaction(false);
+            const initial = reaction
+            if(initial === null){
+                await createReaction({ post_id: data.id, reaction: false });
+                dispatch(addLikes({ postID , reaction: 0}));
+                dispatch(addDislikes({ postID , reaction: 1}));
+                setReaction(false)
+            }
+            else if(initial === true){
+                await createReaction({ post_id: data.id, reaction: false });
+                dispatch(addLikes({ postID , reaction: -1}));
+                dispatch(addDislikes({ postID , reaction: 1}));
+                setReaction(false)
+            }
+            else if(initial === false){
+                await createReaction({ post_id: data.id, reaction: null });
+                dispatch(addLikes({ postID , reaction: 0}));
+                dispatch(addDislikes({ postID , reaction: -1}));
+                setReaction(null)
             }
         } catch (error) {
             console.error(error);

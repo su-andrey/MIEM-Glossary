@@ -108,11 +108,25 @@ const mainSlice = createSlice({
                 post.userReaction = reaction;
             },
 
+        addLikes: (state, action) => {
+                const { postID, reaction } = action.payload;
+                const post = state?.posts.find(post => post.id == postID);
+                if (!post) return;
+                post.likes += reaction
+            },
+
+        addDislikes: (state, action) => {
+                const { postID, reaction } = action.payload;
+                const post = state?.posts.find(post => post.id == postID);
+                if (!post) return;
+                post.dislikes += reaction
+            },
+
 
 
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, updateReaction} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, updateReaction, addLikes, addDislikes} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;
