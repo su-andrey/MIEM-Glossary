@@ -39,8 +39,6 @@ func GetPosts(c fiber.Ctx) error {
 		offsetStr = c.Query("offset", "0")
 	}
 
-	//
-
 	limit, err1 := strconv.Atoi(limitStr)
 	offset, err2 := strconv.Atoi(offsetStr)
 	if err1 == nil && limit > 0 {
@@ -89,6 +87,21 @@ func CreatePost(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
 	}
 	userID := userIDRaw.(int)
+
+	category, err := services.GetCategoryByID(c.Context(), strconv.Itoa(input.CategoryID))
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "категория не найдена")
+	}
+	if category.Name == "Отзывы" {
+		postID, err := strconv.Atoi(input.Name)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "неверный формат ID поста")
+		}
+		post, err := services.GetPostByID(c.Context(), strconv.Itoa(postID))
+		if err != nil || post.Category.Name == "Отзывы" || post.Category.Name == "Вопросы" {
+			return fiber.NewError(fiber.StatusBadRequest, "пост не найден или не является постом, на который можно оставить отзыв")
+		}
+	}
 
 	post, err := services.CreatePost(c.Context(), input.CategoryID, input.Name, input.Body, userID)
 	if err != nil {
