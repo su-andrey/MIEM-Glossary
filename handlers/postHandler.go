@@ -88,6 +88,21 @@ func CreatePost(c fiber.Ctx) error {
 	}
 	userID := userIDRaw.(int)
 
+	category, err := services.GetCategoryByID(c.Context(), strconv.Itoa(input.CategoryID))
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "категория не найдена")
+	}
+	if category.Name == "Отзывы" {
+		postID, err := strconv.Atoi(input.Name)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "неверный формат ID поста")
+		}
+		post, err := services.GetPostByID(c.Context(), strconv.Itoa(postID))
+		if err != nil || post.Category.Name == "Отзывы" || post.Category.Name == "Вопросы" {
+			return fiber.NewError(fiber.StatusBadRequest, "пост не найден или не является постом, на который можно оставить отзыв")
+		}
+	}
+
 	post, err := services.CreatePost(c.Context(), input.CategoryID, input.Name, input.Body, userID)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "error creating post")
