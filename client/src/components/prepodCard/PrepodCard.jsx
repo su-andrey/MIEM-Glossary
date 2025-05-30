@@ -2,7 +2,6 @@ import styles from "./prepodCard.module.css"
 import getFiveScale from "../../custom hooks/useGetFiveScale";
 import StarsDumb from "../UI/starsDumb/StarsDumb";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
-import ReactionBlock from "../reactionBlock/ReacrionBlock";
 const PrepodCard = ({data}) => {
     console.log(data)
     const getPhoto = () => {
@@ -19,7 +18,7 @@ const PrepodCard = ({data}) => {
                     {data.name || "ХЗ как его зовут"}
                 </div>
                 <div className={styles.gradeBlock}>
-                    <ReactionBlock data={data} />
+                    <StarsDumb defaultRating={getFiveScale(data)} iconSize="1.7vw"></StarsDumb>
                 </div>
             </div>  
         </div>

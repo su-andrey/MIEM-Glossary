@@ -23,6 +23,8 @@ import { useDispatch } from "react-redux";
 import { addPost } from "../../../store/mainSlice";
 import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
+import updatePost from "../../../store/refreshers/updatePost";
+import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = (useParams().id);
@@ -35,6 +37,10 @@ const SingleFoodPage = () => {
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
+
+    useEffect(()=>{
+        updatePost({dispatch, postID})
+    }, [])
 
         const centerItemAnimation = {
         hidden: {
@@ -96,10 +102,7 @@ const SingleFoodPage = () => {
                                         {food.name}
                                     </div>
                                     <div className={styles.gradeBlock}>
-                                        <div className={styles.grade}>
-                                            {useGetFiveScale(food, 1)}
-                                        </div>
-                                        <Stars defaultRating={useGetFiveScale(food)}/>
+                                        <ReactionBlock data={food} />
                                     </div>
                                 </div>
                                 <div className={styles.caption}>
@@ -204,7 +207,7 @@ const SingleFoodPage = () => {
                                                     whileInView="visible"
                                                     viewport={{ once: true, amount: 0.5 }}
                                                     className={styles.element}
-                                                    key={uid()}
+                                                    key={review.id}
                                                     style={{
                                                         width:"max-content",
                                                         height: "stretch"

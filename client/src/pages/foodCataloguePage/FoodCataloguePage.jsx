@@ -38,10 +38,6 @@ const FoodCataloguePage = () => {
     const [ready, setReady] = useState(false);
     const author_id = useSelector(state => state.main.userID)
 
-    useEffect(()=>{
-        dispatch(setChanged(true))
-    }, [])
-
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id})

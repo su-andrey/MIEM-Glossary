@@ -19,6 +19,8 @@ import createComment from "../../../queries/POST/createComment";
 import { addComment } from "../../../store/mainSlice";
 import ActionButton from "../../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
+import updatePost from "../../../store/refreshers/updatePost";
+
 const SingleQuestionPage = () => {
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Вопросы");
@@ -29,11 +31,9 @@ const SingleQuestionPage = () => {
     const question = useSelector(state => getPostsByID(state, questionID));
     const dispatch = useDispatch()
     
-    useEffect(
-        ()=>{
-            
-        }, []
-    )
+    useEffect(()=>{
+        updatePost({dispatch, postID: questionID})
+    }, [])
 
     const leftItemAnimation = {
         hidden: {

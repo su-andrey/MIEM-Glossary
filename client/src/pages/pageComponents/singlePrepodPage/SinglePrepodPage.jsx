@@ -32,6 +32,7 @@ import StarsDumb from "../../../components/UI/starsDumb/StarsDumb";
 import GradeModal from "../../../components/UI/gradeModal/GradeModal";
 import requirePosts from "../../../queries/GET/requirePosts";
 import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
+import updatePost from "../../../store/refreshers/updatePost";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -42,6 +43,10 @@ const SinglePrepodPage = () => {
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = (useParams().id);
     const [prepod, setPrepod] = useState(null)
+
+    useEffect(()=>{
+        updatePost({dispatch, postID: post_id})
+    }, [])
 
     useEffect(()=>{
         const getPost = async ()=>{

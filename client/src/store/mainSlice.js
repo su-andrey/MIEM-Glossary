@@ -109,7 +109,12 @@ const mainSlice = createSlice({
                 post.dislikes += reaction
             },
 
-        
+        refreshStoragePost: (state, action) => {
+                const { postID, new_post } = action.payload;
+                const postIndex = state.posts.findIndex(post => post.id == postID);
+                if (postIndex === -1) return;
+                state.posts[postIndex] = new_post;
+        }
 
 
 
@@ -117,5 +122,5 @@ const mainSlice = createSlice({
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, addLikes, addDislikes, refreshPost} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, addLikes, addDislikes, refreshStoragePost} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;
