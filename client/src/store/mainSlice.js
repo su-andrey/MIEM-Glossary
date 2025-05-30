@@ -109,11 +109,13 @@ const mainSlice = createSlice({
                 post.dislikes += reaction
             },
 
+        
+
 
 
     }
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, addLikes, addDislikes} = mainSlice.actions;
+export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, addLikes, addDislikes, refreshPost} = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

@@ -16,12 +16,16 @@ import { useState, useEffect } from "react";
 import {motion} from "framer-motion"
 import Loader1 from "../../components/UI/loader1/Loader1";
 import createPost from "../../queries/POST/createPost";
-import { addPost } from "../../store/mainSlice";
+import { addPost, setChanged } from "../../store/mainSlice";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 const QuestionPage = () => {
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(setChanged(true))
+    }, [])
     const leftItemAnimation = {
         hidden: {
             opacity: 0,

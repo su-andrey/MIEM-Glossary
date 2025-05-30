@@ -29,6 +29,12 @@ const SingleQuestionPage = () => {
     const question = useSelector(state => getPostsByID(state, questionID));
     const dispatch = useDispatch()
     
+    useEffect(
+        ()=>{
+            
+        }, []
+    )
+
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
