@@ -37,43 +37,46 @@ const App = () => {
     let userID = useSelector(state => state.main.userID)
 
     useEffect(() => {
-        if(wasChanged || !userID){
+        if (wasChanged) {
             const updateData = async () => {
-                if(wasChanged){
-                    try {
-                        const posts = await requirePosts();
-                        const comments = await requireComments();
-                        localStorage.removeItem('persist:root')
-                        dispatch(setPosts({data: posts}));
-                        dispatch(setComments({data:comments}));
-                        console.log("Storage rebuilt");
-                    } catch (error) {
-                        console.error("Ошибка при обновлении данных:", error);
-                    }
+                try {
+                    const posts = await requirePosts();
+                    const comments = await requireComments();
+                    localStorage.removeItem('persist:root')
+                    dispatch(setPosts({ data: posts }));
+                    dispatch(setComments({ data: comments }));
+                    console.log("Storage rebuilt");
+                } catch (error) {
+                    console.error("Ошибка при обновлении данных:", error);
                 }
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    console.warn("Нет токена — пользователь не авторизован");
-                    return;
-                }
-                if(!userID){
-                    try{
-                        const me = await getMe()
-                        dispatch(setEmail(me.email))
-                        dispatch(setUserID(me.id))
-                    }
-                    catch(error){
-                        console.error("Ошибка при обновлении данных пользователя:", error);
-                        dispatch(setEmail(""))
-                        dispatch(setUserID(null))
-                        localStorage.removeItem("token")
-                    }
-                }
+                dispatch(setChanged());
             };
             updateData();
-            dispatch(setChanged());
         }
-    }, [wasChanged, userID]);
+    }, [wasChanged]);
+
+    useEffect(() => {
+        if (!userID) {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.warn("Нет токена — пользователь не авторизован");
+                return;
+            }
+            const fetchUser = async () => {
+                try {
+                    const me = await getMe();
+                    dispatch(setEmail(me.email));
+                    dispatch(setUserID(me.id));
+                } catch (error) {
+                    console.error("Ошибка при обновлении данных пользователя:", error);
+                    dispatch(setEmail(""));
+                    dispatch(setUserID(null));
+                    localStorage.removeItem("token");
+                }
+            };
+            fetchUser();
+        }
+    }, [userID]);
 
 
     useSmoothScroll()

@@ -31,6 +31,7 @@ import CreateCommentModal from "../../../components/UI/createCommentModal/Create
 import StarsDumb from "../../../components/UI/starsDumb/StarsDumb";
 import GradeModal from "../../../components/UI/gradeModal/GradeModal";
 import requirePosts from "../../../queries/GET/requirePosts";
+import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -122,7 +123,6 @@ const SinglePrepodPage = () => {
     return(
         <>
             <Scroll />
-            <GradeModal opened={gradeModalOpened} setOpened={setModalOpened} postID={post_id}/>
             <div className={styles.wrapper}>
                         <div className={styles.topContainer}>
                             <div className={styles.topWrapper}>
@@ -132,9 +132,9 @@ const SinglePrepodPage = () => {
                                     </div>
                                     <div  onClick={()=>{setModalOpened(true)}} className={styles.gradeBlock}>
                                         <div className={styles.grade}>
-                                            {useGetFiveScale(prepod, 1)}
+                                            <ReactionBlock data={prepod}/>
                                         </div>
-                                        <StarsDumb defaultRating={useGetFiveScale(prepod, 1)}/>
+                                        
                                     </div>
                                 </div>
                                 <div className={styles.caption}>
@@ -237,13 +237,13 @@ const SinglePrepodPage = () => {
                                                     whileInView="visible"
                                                     viewport={{ once: true, amount: 0.5 }}
                                                     className={styles.element}
-                                                    key={uid()}
+                                                    key={review.id}
                                                     style={{
                                                         width:"max-content",
                                                         height: "stretch"
                                                     }}
                                                 >
-                                                    <Review key={uid()} data={review}></Review>
+                                                    <Review data={review}></Review>
                                                 </motion.div>
                                             );
                                         })

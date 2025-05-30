@@ -141,7 +141,7 @@ const SingleQuestionPage = () => {
                                                 whileInView="visible"
                                                 viewport={{ once: true, amount: 0.5 }}
                                                 className={styles.element}
-                                                key={uid()}
+                                                key={comment.id}
                                                 style={{
                                                     width:"max-content",
                                                     height: "stretch"

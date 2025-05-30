@@ -19,7 +19,7 @@ import Loader1 from "../../components/UI/loader1/Loader1";
 import FileDragField from "../../components/UI/postCreateField/fileDragField/FileDragField";
 import createPost from "../../queries/POST/createPost";
 import createPhotos from "../../queries/POST/createPhotos";
-import { addPost } from "../../store/mainSlice";
+import { addPost, setChanged } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
@@ -33,6 +33,10 @@ const PrepodPage = () => {
     const author_id = useSelector(state => state.main.userID)
     console.log(posts)
     const [ready, setReady] = useState(false);
+
+    useEffect(()=>{
+        dispatch(setChanged(true))
+    }, [])
 
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
@@ -102,7 +106,7 @@ const PrepodPage = () => {
             <div className={styles.sliderWrapper}>
                         {posts && posts.length > 0 ?
                         (posts?.map((post) => (
-                                <Link to={`/prepods/${post.id}`} key={uid()}>
+                                <Link to={`/prepods/${post.id}`} key={post.id}>
                                     <PrepodCard data={post} />
                                 </Link>
                         )))
