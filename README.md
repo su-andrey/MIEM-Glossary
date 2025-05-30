@@ -278,7 +278,7 @@ npm install --legacy-peer-deps
   "author_id": 1,
   "name": "string",
   "body": "string",
-  "im_moderated": true
+  "is_moderated": true
 }
 ```
 
