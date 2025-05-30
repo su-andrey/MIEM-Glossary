@@ -28,6 +28,8 @@ import useSmoothScroll from './custom hooks/useSmoothScroll.js';
 import { setChanged } from './store/mainSlice.js';
 import setupDB from './store/fake/setupDB.js';
 import AdminPage from './pages/adminPage/AdminPage.jsx';
+import AdminPosts from './pages/adminPages/AdminPosts.jsx';
+import AdminComments from './pages/adminPages/AdminComments.jsx';
 
 
 
@@ -89,8 +91,8 @@ const App = () => {
         <Route path="/" element={<Layout></Layout>}>
             <Route index element={<Suspense fallback={<Loader2 />}><HomePage></HomePage></Suspense>}></Route>
 
-            <Route path="/login" element={<LogInPage></LogInPage>}></Route>
-            <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
+            <Route path="login" element={<LogInPage></LogInPage>}></Route>
+            <Route path="register" element={<RegisterPage></RegisterPage>}></Route>
 
             <Route path="prepods" element={<Suspense fallback={<Loader1 />}><PrepodPage /></Suspense>}></Route>
             <Route path="prepods/:id" element={<Suspense fallback={<Loader1 />}><SinglePrepodPage/></Suspense>}></Route>
@@ -103,7 +105,11 @@ const App = () => {
             <Route path="questions/:id" element={<Suspense fallback={<Loader1 />}><SingleQuestionPage /></Suspense>}></Route>
 
             <Route path="cabinet" element={<Suspense fallback={<Loader1 />}><RequireAuth> <CabinetPage /> </RequireAuth></Suspense>}></Route>
-            <Route path="admin" element={<Suspense fallback={<Loader1 />}><RequireAuth><RequireAdmin>   <AdminPage />   </RequireAdmin></RequireAuth></Suspense>}></Route>
+            <Route path="admin" element={<Suspense fallback={<Loader1 />}><RequireAuth><RequireAdmin>   <AdminPage />   </RequireAdmin></RequireAuth></Suspense>}>
+                <Route path="posts" element={<Suspense fallback={<Loader1 />}> <AdminPosts/> </Suspense>}></Route>
+                <Route path="comments" element={<Suspense fallback={<Loader1 />}> <AdminComments /> </Suspense>}></Route>
+            </Route>
+            
         </Route>
     </Routes>
     );

@@ -14,7 +14,6 @@ const Header = () => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [username, setUsername] = useState("");
     let email = useSelector(state => state.main.email)
-    console.log("Our email", email)
     useEffect(() => {
         if (email) {
             let name = email.split('@')[0] || "";
