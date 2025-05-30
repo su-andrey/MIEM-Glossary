@@ -28,6 +28,9 @@ import Loader1 from "../../../components/UI/loader1/Loader1";
 import { addPost } from "../../../store/mainSlice";
 import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
+import StarsDumb from "../../../components/UI/starsDumb/StarsDumb";
+import GradeModal from "../../../components/UI/gradeModal/GradeModal";
+import requirePosts from "../../../queries/GET/requirePosts";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -37,12 +40,25 @@ const SinglePrepodPage = () => {
     let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = (useParams().id);
-    const prepod = useSelector(state => getPrepodByID(state, post_id));
-    if (!prepod) {
-        return <Loader />;
-    }
+    const [prepod, setPrepod] = useState(null)
+
+    useEffect(()=>{
+        const getPost = async ()=>{
+            try{
+                let prepodus = await requirePosts(post_id)
+                setPrepod(prepodus)
+            }
+            catch(error){
+                console.error(error)
+            }
+        }
+        getPost()
+    }, [])
+
+
     const reviews = useSelector(state => getPrepodReviewsByID(state, post_id))
     const [ready, setReady] = useState(false);
+    const [gradeModalOpened, setModalOpened] = useState(false);
 
         const centerItemAnimation = {
         hidden: {
@@ -85,12 +101,6 @@ const SinglePrepodPage = () => {
 
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
-            console.log({
-                name: post_id,
-                category_id: category_id,
-                author_id: author_id,
-                body: answer,
-            })
             const response = await createPost({
             name: post_id,
             category_id: category_id,
@@ -105,11 +115,14 @@ const SinglePrepodPage = () => {
         }
     }
 
-
+    if (!prepod) {
+        return <Loader1 />;
+    }
     if (!ready) return <Loader1/>;
     return(
         <>
             <Scroll />
+            <GradeModal opened={gradeModalOpened} setOpened={setModalOpened} postID={post_id}/>
             <div className={styles.wrapper}>
                         <div className={styles.topContainer}>
                             <div className={styles.topWrapper}>
@@ -117,11 +130,11 @@ const SinglePrepodPage = () => {
                                     <div className={styles.title}>
                                         {prepod.name}
                                     </div>
-                                    <div className={styles.gradeBlock}>
+                                    <div  onClick={()=>{setModalOpened(true)}} className={styles.gradeBlock}>
                                         <div className={styles.grade}>
                                             {useGetFiveScale(prepod, 1)}
                                         </div>
-                                        <Stars defaultRating={useGetFiveScale(prepod)}/>
+                                        <StarsDumb defaultRating={useGetFiveScale(prepod, 1)}/>
                                     </div>
                                 </div>
                                 <div className={styles.caption}>

@@ -19,7 +19,7 @@ import Loader2 from './components/UI/loader2/Loader2.jsx';
 import Loader1 from './components/UI/loader1/Loader1.jsx';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsers, setPosts, setComments } from './store/mainSlice.js';
+import { setUsers, setPosts, setComments, setEmail, setUserID } from './store/mainSlice.js';
 import requireComments from './queries/GET/requireComments.js';
 import requirePosts from './queries/GET/requirePosts.js';
 import RequireAuth from './hoc/RequireAuth.jsx';
@@ -34,26 +34,46 @@ import AdminPage from './pages/adminPage/AdminPage.jsx';
 const App = () => {
     const dispatch = useDispatch();
     let wasChanged = useSelector(state => state.main.wasChanged);
-
+    let userID = useSelector(state => state.main.userID)
 
     useEffect(() => {
-        if(wasChanged) {
+        if(wasChanged || !userID){
             const updateData = async () => {
-                try {
-                    const posts = await requirePosts();
-                    const comments = await requireComments();
-                    localStorage.removeItem('persist:root')
-                    dispatch(setPosts({data: posts}));
-                    dispatch(setComments({data:comments}));
-                    console.log("Storage rebuilt");
-                } catch (error) {
-                    console.error("Ошибка при обновлении данных:", error);
+                if(wasChanged){
+                    try {
+                        const posts = await requirePosts();
+                        const comments = await requireComments();
+                        localStorage.removeItem('persist:root')
+                        dispatch(setPosts({data: posts}));
+                        dispatch(setComments({data:comments}));
+                        console.log("Storage rebuilt");
+                    } catch (error) {
+                        console.error("Ошибка при обновлении данных:", error);
+                    }
+                }
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    console.warn("Нет токена — пользователь не авторизован");
+                    return;
+                }
+                if(!userID){
+                    try{
+                        const me = await getMe()
+                        dispatch(setEmail(me.email))
+                        dispatch(setUserID(me.id))
+                    }
+                    catch(error){
+                        console.error("Ошибка при обновлении данных пользователя:", error);
+                        dispatch(setEmail(""))
+                        dispatch(setUserID(null))
+                        localStorage.removeItem("token")
+                    }
                 }
             };
             updateData();
             dispatch(setChanged());
         }
-    }, [wasChanged]);
+    }, [wasChanged, userID]);
 
 
     useSmoothScroll()
