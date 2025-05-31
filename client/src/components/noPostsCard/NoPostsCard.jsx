@@ -1,10 +1,10 @@
 
 import styles from "./review.module.css"
-const NoPostsCard = ({data}) => {
+const NoPostsCard = ({text}) => {
     return(
     <div className={styles.wrapper}>
         <div className={styles.name}>
-            Тут пока ничего нет(
+            {text || "Тут пока ничего нет"}
         </div>
     </div>
 );}

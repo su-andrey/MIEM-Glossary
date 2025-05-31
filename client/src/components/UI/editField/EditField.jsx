@@ -26,7 +26,7 @@ const EditField = ({data, adminVersion, iconSize}) => {
     const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, likes, dislikes}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
-            const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id})
+            const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id, likes, dislikes})
             await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
             dispatch(refreshStoragePost({ postID: id, new_post: final_post }))

@@ -20,6 +20,7 @@ import { addComment, refreshStoragePost } from "../../../store/mainSlice";
 import ActionButton from "../../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 import updatePost from "../../../store/refreshers/updatePost";
+import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
 
 const SingleQuestionPage = () => {
     const navigate = useNavigate()
@@ -172,7 +173,7 @@ const SingleQuestionPage = () => {
                                         className={styles.metatitle}
                                         key={uid()}
                                     >
-                                        <Reply key={uid()} data={{nothing: "Пока нет ответов"}}></Reply>
+                                        <NoPostsCard text="Пока нет ответов..." />
                                     </motion.div>
                                 }
                             </div>

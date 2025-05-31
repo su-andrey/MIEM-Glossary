@@ -26,6 +26,8 @@ import CreateCommentModal from "../../../components/UI/createCommentModal/Create
 import updatePost from "../../../store/refreshers/updatePost";
 import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
 import { Navigate } from "react-router-dom";
+import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
+
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = (useParams().id);
@@ -223,7 +225,7 @@ const SingleFoodPage = () => {
                                             );
                                         })
                                         :
-                                        <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
+                                        <NoPostsCard text="Пока нет отзывов..."/>
                                     }
                                 </div>
                     </div>

@@ -7,6 +7,8 @@ const AdminPostCard = ({data}) => {
             <div className={styles.title}>Name: {data.name}</div>
             <div className={styles.title}>Body: {data.body}</div>
             <div className={styles.title}>Photos:</div>
+            <div className={styles.title}>Likes:{data.likes}</div>
+            <div className={styles.title}>Dislikes:{data.dislikes}</div>
                 {Array.isArray(data?.photos) && data.photos.length > 0 && data.photos.map((photo, index) => (
                     photo?.url && (
                         <div key={index}>

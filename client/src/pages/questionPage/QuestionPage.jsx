@@ -21,6 +21,7 @@ import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 import refreshStorage from "../../store/refreshers/refreshStorage";
+import NoPostsCard from "../../components/noPostsCard/NoPostsCard";
 const QuestionPage = () => {
     const dispatch = useDispatch();
 
@@ -142,7 +143,7 @@ const QuestionPage = () => {
                                     </motion.div>
                                 )))
                                 :
-                                <Question data={{nothing: "Пока нет вопросов"}} />
+                                <NoPostsCard  text="Пока нет вопросов("/>
                             }
                     </div>
                 </div>

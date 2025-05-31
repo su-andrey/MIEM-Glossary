@@ -33,6 +33,8 @@ import GradeModal from "../../../components/UI/gradeModal/GradeModal";
 import requirePosts from "../../../queries/GET/requirePosts";
 import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
 import updatePost from "../../../store/refreshers/updatePost";
+import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
+import { Navigate } from "react-router-dom";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -42,12 +44,12 @@ const SinglePrepodPage = () => {
     let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = (useParams().id);
-    const [prepod, setPrepod] = useState(null)
+    let prepod = useSelector(state => getPrepodByID(state, post_id))
 
     useEffect(()=>{
         updatePost({dispatch, postID: post_id})
     }, [])
-
+/*
     useEffect(()=>{
         const getPost = async ()=>{
             try{
@@ -60,7 +62,7 @@ const SinglePrepodPage = () => {
         }
         getPost()
     }, [])
-
+*/
 
     const reviews = useSelector(state => getPrepodReviewsByID(state, post_id))
     const [ready, setReady] = useState(false);
@@ -121,8 +123,8 @@ const SinglePrepodPage = () => {
         }
     }
 
-    if (!prepod) {
-        return <Loader1 />;
+    if (!prepod || prepod.id === undefined) {
+        return <Navigate to={`/prepods`} replace />;
     }
     if (!ready) return <Loader1/>;
     return(
@@ -253,7 +255,7 @@ const SinglePrepodPage = () => {
                                             );
                                         })
                                         :
-                                        <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
+                                        <NoPostsCard text="Пока нет отзывов..."/>
                                     }
                                 </div>
                     </div>
