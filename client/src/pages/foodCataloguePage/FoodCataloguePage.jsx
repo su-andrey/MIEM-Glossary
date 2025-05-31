@@ -26,13 +26,14 @@ import { addPost, setChanged } from "../../store/mainSlice";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
 import refreshStorage from "../../store/refreshers/refreshStorage";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 
 const FoodCataloguePage = () => {
     const dispatch = useDispatch();
     const [isSliderReady, setSliderReady] = useState(false);
     const { category } = useParams();
     console.log(category)
-    const posts = useSelector(state => getPostsByCategoryID(state, category));
+    const posts = useSelector(state => getModeratedCategoryPosts(state, category.id));
     const uathorID = useSelector(state => state.main.userID)
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.id == category);

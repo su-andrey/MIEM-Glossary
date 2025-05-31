@@ -72,7 +72,12 @@ const CabinetPage = () => {
             }
             {
                 isAdmin && isAuth &&
-                <Link to="/admin"><ActionButton text="Админ"></ActionButton></Link>
+                <div className={styles.gates}>
+                    <div className={styles.subtitle}>
+                        Оставь надежду, всяк сюда входящий
+                    </div>
+                    <Link to="/admin"><ActionButton text="Админ"></ActionButton></Link>
+                </div>
             }
             <img src={button} alt="HSE button" className={styles.hsebutton}/>
         </div>

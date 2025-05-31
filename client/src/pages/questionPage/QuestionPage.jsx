@@ -22,6 +22,7 @@ import CreateCommentModal from "../../components/UI/createCommentModal/CreateCom
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 import refreshStorage from "../../store/refreshers/refreshStorage";
 import NoPostsCard from "../../components/noPostsCard/NoPostsCard";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 const QuestionPage = () => {
     const dispatch = useDispatch();
 
@@ -46,11 +47,8 @@ const QuestionPage = () => {
     }
 
     let categories = useSelector(state => getCategories(state))
-    console.log(categories)
     let category = categories.find((category) => category.name == "Вопросы")
-    console.log(category)
-    let questions = useSelector(state => getPostsByCategory(state, category.id))
-    console.log(questions)
+    let questions = useSelector(state => getModeratedCategoryPosts(state, category.id))
     let authorID = useSelector(state => state.main.userID)
     const [ready, setReady] = useState(false);
 

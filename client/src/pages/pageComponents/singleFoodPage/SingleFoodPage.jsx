@@ -24,7 +24,7 @@ import { addPost } from "../../../store/mainSlice";
 import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 import updatePost from "../../../store/refreshers/updatePost";
-import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
+import ReactionBlock from "../../../components/reactionBlock/ReactionBlock";
 import { Navigate } from "react-router-dom";
 import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
 

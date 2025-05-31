@@ -3,7 +3,7 @@ import styles from "./review.module.css"
 import useNameGenerator from "../../custom hooks/useNameGenerator";
 import getFiveScale from "../../custom hooks/useGetFiveScale";
 import { useEffect, useState } from "react";
-import ReactionBlock from "../reactionBlock/ReacrionBlock";
+import ReactionBlock from "../reactionBlock/ReactionBlock";
 import EditPostButton from "../UI/editPostButton/EditPostButton";
 import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
 const Review = ({data}) => {

@@ -4,7 +4,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--page-vertical-gap);
+    gap: var(--page-vertical-offset);
 }
 
 .title{
@@ -22,6 +22,7 @@
     width: 30vw;
     position: absolute;
     left: 60%;
+    top: 35%;
 }
 
 
@@ -119,5 +120,10 @@
 
 
 
-
-
+.gates{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 1vh;
+}

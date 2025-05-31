@@ -6,10 +6,6 @@ import { useState, useEffect } from "react";
 
 import getPostsByCategory from "../../store/selectors/getPostsByCategoryID";
 import getCategories from "../../store/selectors/getCategories";
-import CafeListCard from "../../components/cafeListCard/CafeListCard";
-import AnswerField from "../../components/UI/answerField/AnswerField";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, Parallax, FreeMode, Keyboard, Mousewheel } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -25,12 +21,13 @@ import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 import refreshStorage from "../../store/refreshers/refreshStorage";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
     const categories = useSelector(state => getCategories(state));
     const category = categories.find((category) => category.name == "Преподаватели");
-    const posts = useSelector(state => getPostsByCategory(state, category?.id));
+    const posts = useSelector(state => getModeratedCategoryPosts(state, category.id));
     const author_id = useSelector(state => state.main.userID)
     console.log(posts)
     const [ready, setReady] = useState(false);

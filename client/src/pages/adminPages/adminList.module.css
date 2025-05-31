@@ -7,3 +7,20 @@
     width: 100%;
     gap: 5vh;
 }
+
+.buttonContainer{
+    padding: 5vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    gap: 5vh;
+}
+
+
+.title{
+    font-size: var(--title-font);
+    font-weight: 600;
+    color:black;
+}

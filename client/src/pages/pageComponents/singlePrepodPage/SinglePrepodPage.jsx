@@ -31,7 +31,7 @@ import CreateCommentModal from "../../../components/UI/createCommentModal/Create
 import StarsDumb from "../../../components/UI/starsDumb/StarsDumb";
 import GradeModal from "../../../components/UI/gradeModal/GradeModal";
 import requirePosts from "../../../queries/GET/requirePosts";
-import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
+import ReactionBlock from "../../../components/reactionBlock/ReactionBlock";
 import updatePost from "../../../store/refreshers/updatePost";
 import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
 import { Navigate } from "react-router-dom";
