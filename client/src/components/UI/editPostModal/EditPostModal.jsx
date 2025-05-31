@@ -1,4 +1,4 @@
-import styles from "./"
+import styles from "./editPostModal.module.css"
 import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useState, useEffect } from "react";
@@ -8,23 +8,20 @@ import { IoMdPhotos } from "react-icons/io";
 import { MdCloudUpload } from "react-icons/md";
 import { useSelector } from "react-redux";
 import FileDragField from "../postCreateField/fileDragField/FileDragField";
-
+import edit from "./../../../assets/vectors/edit/edit.svg"
 const EditPostModal = ({height, width, placeholder, caption, settings, sender}) => {
     
-    const [open, setOpen] = useState();
+    const [open, setOpen] = useState(false);
+
     let userID = useSelector(state => state.main.userID)
 
     const handleClose = () => {
         setOpen(false)
     }
-
-    const handleRedirect = ()=>{
-        navigate("/login", { state: { from: location } });
-    }
     
     return ( 
         <>
-            <ActionButton text="Добавить" onClick={()=>{setOpen(true)}}/>
+            <img src={edit} alt="edit button" className={styles.edit}/>
             {open && <div className={styles.background}>
                 <div className={styles.wrapper}>
                     <MdOutlineCancel className={styles.cancel} onClick={()=>{handleClose()}} />
