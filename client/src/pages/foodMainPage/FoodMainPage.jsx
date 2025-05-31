@@ -10,13 +10,14 @@ import { useState, useEffect } from "react";
 import Loader1 from "../../components/UI/loader1/Loader1.jsx";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper.jsx";
 import { setChanged } from "../../store/mainSlice.js";
+import refreshStorage from "../../store/refreshers/refreshStorage.js";
 const FoodMainPage = () => {
     const data = useSelector(state => getCategories(state));
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
     
     useEffect(()=>{
-        dispatch(setChanged(true))
+        refreshStorage(dispatch)
     }, [])
 
     useEffect(() => {

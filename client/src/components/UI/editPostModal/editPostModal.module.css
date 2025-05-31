@@ -17,6 +17,15 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
+.edit{
+    width: 3vw;
+    transition: 0.3s ease-in-out;
+}
+
+.edit:hover{
+    animation: wiggle 0.4s ease;
+    transform: scale(1.15);
+}
 
 .cancel{
     width: calc(1.1*var(--index));

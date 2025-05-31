@@ -25,6 +25,7 @@ import requirePosts from "../../queries/GET/requirePosts";
 import { addPost, setChanged } from "../../store/mainSlice";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
+import refreshStorage from "../../store/refreshers/refreshStorage";
 
 const FoodCataloguePage = () => {
     const dispatch = useDispatch();
@@ -38,6 +39,9 @@ const FoodCataloguePage = () => {
     const [ready, setReady] = useState(false);
     const author_id = useSelector(state => state.main.userID)
 
+    useEffect(()=>{
+        refreshStorage(dispatch)
+    }, [])
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id})

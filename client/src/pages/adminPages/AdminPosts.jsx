@@ -2,25 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setChanged } from "../../store/mainSlice";
 import getUnmoderatedPosts from "../../store/selectors/getUnmoderatedPosts";
-
+import AdminPostCard from "../../components/adminPostCard/AdminPostCard";
+import styles from "./adminList.module.css"
+import refreshStorage from "../../store/refreshers/refreshStorage";
+import { uid } from "uid";
 const AdminPosts = () => {
     const dispatch = useDispatch();
     useEffect(()=>{
-        dispatch(setChanged(true))
+        refreshStorage(dispatch)
     }, [])
 
     const posts = useSelector(state => getUnmoderatedPosts(state))
     return( 
     <>
-        <div>
+        <div className={styles.container}>
             {Array.isArray(posts) && posts.map((post) => (
-                <div key={post.id}>
-                    <hr />
-                    <div>{post.id}</div>
-                    <div>{post.name}</div>
-                    <div>{post.body}</div>
-                    <hr />
-                </div>
+                <AdminPostCard data={post} key={uid()}/>
             ))}
         </div>
     </>);

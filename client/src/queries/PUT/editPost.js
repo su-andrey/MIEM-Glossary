@@ -1,12 +1,12 @@
 import axios from "axios";
 import { BASE_URL } from "../../config";
 
-const editPost = async (name, author_id, body, category_id, id) => {
-    if (!name || !author_id || !body || !category_id || !id) {
+const editPost = async ({name, author_id, body, category_id, id, is_moderated}) => {
+    if (!name || !author_id || !body || !category_id || !id || is_moderated===undefined) {
         throw new Error("Missing required post fields");
     }
 
-    const data = { name, author_id, body, category_id };
+    const data = { name, author_id, body, category_id, is_moderated };
 
     try {
         const token = localStorage.getItem("token")

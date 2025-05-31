@@ -20,11 +20,12 @@ import { addPost, setChanged } from "../../store/mainSlice";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
+import refreshStorage from "../../store/refreshers/refreshStorage";
 const QuestionPage = () => {
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        dispatch(setChanged(true))
+        refreshStorage(dispatch)
     }, [])
     const leftItemAnimation = {
         hidden: {

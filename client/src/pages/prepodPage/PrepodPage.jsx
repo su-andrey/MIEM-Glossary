@@ -24,6 +24,7 @@ import requirePosts from "../../queries/GET/requirePosts";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
+import refreshStorage from "../../store/refreshers/refreshStorage";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
@@ -35,7 +36,7 @@ const PrepodPage = () => {
     const [ready, setReady] = useState(false);
 
     useEffect(()=>{
-        dispatch(setChanged(true))
+        refreshStorage(dispatch)
     }, [])
 
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
