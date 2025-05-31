@@ -119,6 +119,11 @@ const mainSlice = createSlice({
         deleteStoragePost: (state, action) => {
                 const { postID } = action.payload;
                 state.posts = state.posts.filter(post => post.id != postID)
+        },
+
+        deleteStorageComment: (state, action) => {
+                const { commentID } = action.payload;
+                state.comments = state.comments.filter(comment => comment.id != commentID)
         }
 
 
@@ -127,5 +132,22 @@ const mainSlice = createSlice({
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, addLikes, addDislikes, refreshStoragePost, deleteStoragePost} = mainSlice.actions;
+export const { 
+    setUsers, 
+    setPosts, 
+    setSelfUser, 
+    setComments, 
+    resetState, 
+    setChanged, 
+    setEmail, 
+    addComment, 
+    addPost, 
+    setUserID, 
+    addLikes, 
+    addDislikes, 
+    refreshStoragePost, 
+    deleteStoragePost,
+    deleteStorageComment,
+} = mainSlice.actions;
+
 export const mainReducer = mainSlice.reducer;

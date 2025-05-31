@@ -3,6 +3,8 @@ import useNameGenerator from "../../custom hooks/useNameGenerator";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import getMe from "../../queries/USER/getMe";
+import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
+import DeleteCommentButton from "../UI/deleteCommentButton/DeleteCommentButton";
 
 const Reply = ({data, serv}) => {
     const [name, setName] = useState("");
@@ -35,6 +37,10 @@ const Reply = ({data, serv}) => {
             <div className={styles.body}>
                 {data.body}
             </div>
+            <DeleteCommentButton
+                data={data}
+                iconSize="2.5vw"
+            />
         </div>
 );}
 
