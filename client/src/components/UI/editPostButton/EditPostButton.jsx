@@ -63,46 +63,25 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
     <>
         {   
             (data?.author_id==userID || me?.is_admin) &&
-            oneField ?
-            (<EditPostModal 
-                placeholder={"Текст нового поста..."}
-                caption={"Отредактируйте пост"}
-                sender={({answer, photos})=>sendWholeData({
-                    answer, 
-                    name:data?.name, 
-                    photos, 
-                    author_id: data?.author_id, 
-                    category_id: data?.category?.id, 
-                    is_moderated: false, 
-                    id: data?.id,
-                    dispatch,
-                    likes: data?.likes,
-                    dislikes: data.dislikes,
-                })}
-                data={data}
-                iconSize={iconSize}
-                oneField={oneField}
-            />)
-            :
-            (<EditPostModal 
-                placeholder={"Текст нового поста..."}
-                caption={"Отредактируйте пост"}
-                sender={({answer, name, photos})=>sendWholeData({
-                    answer, 
-                    name, 
-                    photos, 
-                    author_id: data?.author_id, 
-                    category_id: data?.category?.id, 
-                    is_moderated: false, 
-                    id: data.id,
-                    dispatch,
-                    likes: data.likes,
-                    dislikes: data.dislikes,
-                })}
-                data={data}
-                iconSize={iconSize}
-                oneField={oneField}
-            />)
+                <EditPostModal 
+                    placeholder={"Текст нового поста..."}
+                    caption={"Отредактируйте пост"}
+                    sender={({answer, photos})=>sendWholeData({
+                        answer, 
+                        name:data?.name, 
+                        photos, 
+                        author_id: data?.author_id, 
+                        category_id: data?.category?.id, 
+                        is_moderated: false, 
+                        id: data?.id,
+                        dispatch,
+                        likes: data?.likes,
+                        dislikes: data.dislikes,
+                    })}
+                    data={data}
+                    iconSize={iconSize}
+                    oneField={oneField}
+                />
         }
     </>);
 }

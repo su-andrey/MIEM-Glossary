@@ -25,9 +25,13 @@ const ReactionBlock = ({data, oneField=false}) => {
     useEffect(()=>{
         const requireLike = async ()=> {
             init = await requireReaction(data?.id)
-            console.log("Получили изначальную реакцию с серва:", init.reaction)
             const post = await requirePosts(data.id)
-            setReaction(init.reaction)
+            if(reaction === null){
+                setReaction(null)
+            }
+            else{
+                setReaction(init.reaction)
+            }
         }
         requireLike();
     }, [])
