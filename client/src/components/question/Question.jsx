@@ -14,6 +14,8 @@ import refreshPosts from "../../store/refreshers/refreshPosts";
 import { useDispatch, useSelector } from "react-redux";
 import requirePosts from "../../queries/GET/requirePosts";
 import { addLikes, addDislikes } from "../../store/mainSlice";
+import EditPostButton from "../UI/editPostButton/EditPostButton";
+import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
 
 const Question = ({data}) => {
     const postID = data.id;
@@ -123,6 +125,14 @@ const Question = ({data}) => {
                         <img src={reaction===false ? dislike_filled : dislike} className={styles.dislike_icon} alt="dislike button" />
                         <span className={styles.dislike_counter}>{dislikes}</span>
                     </div>
+                    <EditPostButton 
+                        data={data}
+                        iconSize="2vw"
+                    />
+                    <DeletePostButton
+                        data={data}
+                        iconSize="2.5vw"
+                    />
                 </div>
         </div>
 );}

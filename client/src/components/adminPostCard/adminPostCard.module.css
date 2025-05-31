@@ -13,12 +13,6 @@
 
 
 
-.wrapper:hover {
-    transform: translateY(-0.4vh) scale(1.01);
-    box-shadow: 0px 15px 20px -12px rgba(0, 0, 0, 0.8);
-    transition: all 0.3s ease-out;
-}
-
 
 .title{
     font-size: var(--caption-font);

@@ -1,8 +1,8 @@
-import styles from "./editField.module.css"
+import styles from "./editPostButton.module.css"
 import trash from "./../../../assets/vectors/edit/delete.svg"
 import edit from "./../../../assets/vectors/edit/edit.svg"
 import EditPostModal from "../editPostModal/EditPostModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import editPost from "../../../queries/PUT/editPost";
 import deletePost from "../../../queries/DELETE/deletePost";
 import { deleteStoragePost, refreshStoragePost } from "../../../store/mainSlice";
@@ -13,8 +13,25 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import updatePost from "../../../store/refreshers/updatePost";
 import createPhotos from "../../../queries/POST/createPhotos";
 import requirePosts from "../../../queries/GET/requirePosts";
-const EditField = ({data, adminVersion, iconSize}) => {
+import getMe from "../../../queries/USER/getMe";
+const EditPostButton = ({data, adminVersion, iconSize}) => {
     const dispatch = useDispatch();
+    const [userID, setUserID] = useState(null);
+    const [me, setMe] = useState(null);
+
+    useEffect(()=>{
+        const asyncGetMe = async ()=>{
+            try {
+                const me = await getMe();
+                setUserID(me.id)
+                setMe(me)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        asyncGetMe();
+    }, [])
+
     const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
@@ -27,12 +44,6 @@ const EditField = ({data, adminVersion, iconSize}) => {
             console.error(error)
         }
     }
-
-    const demolishPost = async ()=> {
-        dispatch(deleteStoragePost({postID: data?.id}))
-        await deletePost(data?.id)
-    }
-
 
         const submitPost = async ()=> {
         await editPost({
@@ -48,33 +59,28 @@ const EditField = ({data, adminVersion, iconSize}) => {
     }
 
 
-
     return (
-    <div className={styles.wrapper}>
-        <EditPostModal 
-            placeholder={"Текст нового поста..."}
-            caption={"Отредактируйте пост"}
-            sender={({answer, name, photos})=>sendWholeData({
-                answer, 
-                name, 
-                photos, 
-                author_id: data?.author_id, 
-                category_id: data?.category?.id, 
-                is_moderated: false, 
-                id: data.id,
-            })}
-            data={data}
-            iconSize={iconSize}
-        />
-        <img src={trash} alt="delete button" onClick={()=>{demolishPost()}} style={{width:`${iconSize}`}} className={styles.trash}/>
-        {adminVersion &&
-            <FaRegCircleCheck 
-                onClick={()=>{submitPost()}} 
-                className={styles.yes}
-                style={{width:`${iconSize}`}}
+    <>
+
+        {   
+            (data?.author_id==userID || me?.is_admin) &&
+            <EditPostModal 
+                placeholder={"Текст нового поста..."}
+                caption={"Отредактируйте пост"}
+                sender={({answer, name, photos})=>sendWholeData({
+                    answer, 
+                    name, 
+                    photos, 
+                    author_id: data?.author_id, 
+                    category_id: data?.category?.id, 
+                    is_moderated: false, 
+                    id: data.id,
+                })}
+                data={data}
+                iconSize={iconSize}
             />
         }
-    </div>);
+    </>);
 }
 
-export default EditField;
+export default EditPostButton;

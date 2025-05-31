@@ -17,7 +17,7 @@ const AdminPostCard = ({data}) => {
                         </div>
                     )
                 ))}
-            <EditField data={data} adminVersion={true}/>
+            <EditField data={data} adminVersion={true} />
         </div>
     );
 }
