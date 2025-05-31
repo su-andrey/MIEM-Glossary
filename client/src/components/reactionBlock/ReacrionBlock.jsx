@@ -14,7 +14,7 @@ import { addLikes, addDislikes } from "../../store/mainSlice";
 import EditPostButton from "../UI/editPostButton/EditPostButton";
 import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
 
-const ReactionBlock = ({data}) => {
+const ReactionBlock = ({data, oneField=false}) => {
     const postID = data.id;
     const post = useSelector(state => state.main.posts.find(post => post.id == postID));
     const likes = post?.likes ?? 0;
@@ -104,6 +104,7 @@ const ReactionBlock = ({data}) => {
                 <EditPostButton 
                     data={data}
                     iconSize="2vw"
+                    oneField={oneField}
                 />
                 <DeletePostButton
                     data={data}

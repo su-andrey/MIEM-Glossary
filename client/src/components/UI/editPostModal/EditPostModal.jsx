@@ -10,7 +10,10 @@ import { useSelector } from "react-redux";
 import FileDragField from "../postCreateField/fileDragField/FileDragField";
 import edit from "./../../../assets/vectors/edit/edit.svg"
 import getMe from "../../../queries/USER/getMe";
-const EditPostModal = ({height, width, placeholder, caption, settings, sender, data, iconSize}) => {
+import { createPortal } from "react-dom";
+import AnswerField from "../answerField/AnswerField";
+
+const EditPostModal = ({height, width, placeholder, caption, settings, sender, data, iconSize, oneField}) => {
     
     const [open, setOpen] = useState(false);
     const [userID, setUserID] = useState(null);
@@ -29,32 +32,62 @@ const EditPostModal = ({height, width, placeholder, caption, settings, sender, d
     const handleClose = () => {
         setOpen(false)
     }
+
+    const handleOpen = (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(true)
+    }
     
 
-    return ( 
+    return (
         <>
-            <img src={edit} alt="edit button" className={styles.edit} onClick={()=>{setOpen(true)}} style={{width:`${iconSize}`}}/>
-            {open && <div className={styles.background}>
-                <div className={styles.wrapper}>
-                    <MdOutlineCancel className={styles.cancel} onClick={()=>{handleClose()}} />
-                    <div className={styles.title}>Редактирование поста</div>
-                    {userID && 
-                        <FileDragField 
-                        height={height} 
-                        width={width}
-                        placeholder={placeholder}
-                        caption={caption}
-                        settings={settings}
-                        sender={sender}
-                        opener = {setOpen}
-                        data={data}
-                        />
-                    }
-                    {!userID && 
-                        <div className={styles.subtitle}>Зарегистрируйтесь, чтобы добавлять посты, комментировать и оставлять реакции</div>
-                    }
-                </div>
-            </div>}
+            <img
+                src={edit}
+                alt="edit button"
+                className={styles.edit}
+                onClick={(e) => handleOpen(e)}
+                style={{ width: `${iconSize}` }}
+            />
+            {open &&
+                createPortal(
+                    <div className={styles.background}>
+                        <div className={styles.wrapper}>
+                            <MdOutlineCancel className={styles.cancel} onClick={handleClose} />
+                            <div className={styles.title}>Редактирование поста</div>
+                            {userID ? (
+                                !oneField ? (
+                                    <FileDragField
+                                        height={height}
+                                        width={width}
+                                        placeholder={placeholder}
+                                        caption={caption}
+                                        settings={settings}
+                                        sender={sender}
+                                        opener={setOpen}
+                                        data={data}
+                                    />
+                                ) : (
+                                    <AnswerField 
+                                        height={height}
+                                        width={width}
+                                        placeholder={placeholder}
+                                        caption={caption}
+                                        settings={settings}
+                                        sender={sender}
+                                        opener={setOpen}
+                                        data={data}
+                                    />
+                                )
+                            ) : (
+                                <div className={styles.subtitle}>
+                                    Зарегистрируйтесь, чтобы добавлять посты, комментировать и оставлять реакции
+                                </div>
+                            )}
+                        </div>
+                    </div>,
+                    document.body
+                )}
         </>
     );
 }

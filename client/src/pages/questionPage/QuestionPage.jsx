@@ -27,6 +27,7 @@ const QuestionPage = () => {
     useEffect(()=>{
         refreshStorage(dispatch)
     }, [])
+
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
@@ -123,7 +124,9 @@ const QuestionPage = () => {
                 <div className={styles.wholeWrapper}>
                     <div className={styles.gridWrapper}>
                             {questions && questions.length > 0 ?
-                                (questions.map((post, index) => (
+                                (questions
+                                    .filter((post) => post !== undefined && post !== null && post)
+                                    .map((post, index) => (
                                     <motion.div
                                         custom={index%3}
                                         variants={centerItemAnimation}
@@ -145,7 +148,7 @@ const QuestionPage = () => {
                 </div>
             {authorID &&
                         <div className={styles.subcont}>
-                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <div className={styles.caption}>Спросите что-нибудь?</div>
                                 <CreateCommentModal 
                                     placeholder={"Спросите что-нибудь?"}
                                     caption={"Создайте собственное обсуждение"}

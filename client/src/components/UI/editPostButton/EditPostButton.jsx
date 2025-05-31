@@ -14,7 +14,7 @@ import updatePost from "../../../store/refreshers/updatePost";
 import createPhotos from "../../../queries/POST/createPhotos";
 import requirePosts from "../../../queries/GET/requirePosts";
 import getMe from "../../../queries/USER/getMe";
-const EditPostButton = ({data, adminVersion, iconSize}) => {
+const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
     const dispatch = useDispatch();
     const [userID, setUserID] = useState(null);
     const [me, setMe] = useState(null);
@@ -32,13 +32,13 @@ const EditPostButton = ({data, adminVersion, iconSize}) => {
         asyncGetMe();
     }, [])
 
-    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id}) => {
+    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, dispatch, likes, dislikes}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
-            const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id})
+            const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id, likes, dislikes})
             await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
-            dispatch(refreshStoragePost({ postID: id, new_post: final_post }))
+            await updatePost({dispatch, postID: id})
         }
         catch(error){
             console.error(error)
@@ -75,9 +75,13 @@ const EditPostButton = ({data, adminVersion, iconSize}) => {
                     category_id: data?.category?.id, 
                     is_moderated: false, 
                     id: data.id,
+                    dispatch,
+                    likes: data.likes,
+                    dislikes: data.dislikes,
                 })}
                 data={data}
                 iconSize={iconSize}
+                oneField={oneField}
             />
         }
     </>);

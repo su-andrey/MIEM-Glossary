@@ -16,9 +16,11 @@ import requirePosts from "../../queries/GET/requirePosts";
 import { addLikes, addDislikes } from "../../store/mainSlice";
 import EditPostButton from "../UI/editPostButton/EditPostButton";
 import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
-
+import { useNavigate } from "react-router-dom";
+import Loader1 from "../UI/loader1/Loader1";
 const Question = ({data}) => {
-    const postID = data.id;
+    const navigate = useNavigate();
+    const postID = data?.id;
     const [name, setName] = useState("");
     const post = useSelector(state => state.main.posts.find(post => post.id == postID));
     const likes = post?.likes ?? 0;
@@ -27,14 +29,24 @@ const Question = ({data}) => {
     const dispatch = useDispatch();
     let init;
     useEffect(()=>{setName(useNameGenerator())}, []);
+
     useEffect(()=>{
         const requireLike = async ()=> {
+            if(data == undefined || data?.id == undefined || !data?.id || !data){
+                return;
+            }
             init = await requireReaction(data?.id)
-            console.log("Получили изначальную реакцию с серва:", init.reaction)
-            const post = await requirePosts(data.id)
-            setReaction(init.reaction)
+            const post = await requirePosts(data?.id)
+            if(init===null){
+                setReaction(null)
+            }
+            else{
+                setReaction(init.reaction)
+            }
         }
-        requireLike();
+        if(data!=undefined && data?.id){
+            requireLike();
+        }
     }, [])
     
 
@@ -100,7 +112,11 @@ const Question = ({data}) => {
     }
     return commentsArray.length;
     };
-    
+
+    if(data == undefined || data?.id == undefined || !data?.id || !data){
+        return <Loader1 />
+    }
+
     return (
         <div className={styles.wrapper}>
                 <div className={styles.textWrapper}>

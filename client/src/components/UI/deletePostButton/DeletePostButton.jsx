@@ -14,8 +14,14 @@ import updatePost from "../../../store/refreshers/updatePost";
 import createPhotos from "../../../queries/POST/createPhotos";
 import requirePosts from "../../../queries/GET/requirePosts";
 import getMe from "../../../queries/USER/getMe";
+import { useNavigate } from "react-router-dom";
 const DeletePostButton = ({data, adminVersion, iconSize}) => {
     const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+    const goBack = () => {
+        navigate(-1)
+    };
 
     const [userID, setUserID] = useState(null);
     const [me, setMe] = useState(null);
@@ -32,9 +38,14 @@ const DeletePostButton = ({data, adminVersion, iconSize}) => {
         asyncGetMe();
     }, [])
 
-    const demolishPost = async ()=> {
-        dispatch(deleteStoragePost({postID: data?.id}))
+    const demolishPost = async (e)=> {
+        e.preventDefault();
+        e.stopPropagation();
+
         await deletePost(data?.id)
+        dispatch(deleteStoragePost({postID: data?.id}))
+
+
     }
 
     return (
@@ -44,7 +55,7 @@ const DeletePostButton = ({data, adminVersion, iconSize}) => {
                 <img 
                     src={trash} 
                     alt="delete button" 
-                    onClick={()=>{demolishPost()}} 
+                    onClick={(e)=>{demolishPost(e)}} 
                     style={{width:`${iconSize}`}} 
                     className={styles.trash}
                 />

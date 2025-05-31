@@ -13,9 +13,17 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import updatePost from "../../../store/refreshers/updatePost";
 import createPhotos from "../../../queries/POST/createPhotos";
 import requirePosts from "../../../queries/GET/requirePosts";
+import { useNavigate } from "react-router-dom";
 const EditField = ({data, adminVersion, iconSize}) => {
+
+    const navigate = useNavigate();
+    const goBack = () => {
+        navigate(-1);
+    };
+
+
     const dispatch = useDispatch();
-    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id}) => {
+    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, likes, dislikes}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
             const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id})
@@ -42,9 +50,12 @@ const EditField = ({data, adminVersion, iconSize}) => {
             category_id: data.category.id, 
             id: data.id, 
             is_moderated: true,
+            likes: data.likes,
+            dislikes: data.dislikes,
         });
         await updatePost({dispatch, postID: data?.id})
         console.log("Post submitted succesfully")
+        goBack()
     }
 
 
@@ -62,6 +73,8 @@ const EditField = ({data, adminVersion, iconSize}) => {
                 category_id: data?.category?.id, 
                 is_moderated: false, 
                 id: data.id,
+                likes: data.likes,
+                dislikes: data.dislikes,
             })}
             data={data}
             iconSize={iconSize}

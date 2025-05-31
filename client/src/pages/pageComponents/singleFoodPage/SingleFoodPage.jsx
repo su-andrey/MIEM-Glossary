@@ -25,6 +25,7 @@ import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
 import updatePost from "../../../store/refreshers/updatePost";
 import ReactionBlock from "../../../components/reactionBlock/ReacrionBlock";
+import { Navigate } from "react-router-dom";
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = (useParams().id);
@@ -90,7 +91,10 @@ const SingleFoodPage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
-    if (!ready) return <Loader/>;
+    if (!ready) return <Loader />;
+    if (!food || food.id === undefined) {
+        return <Navigate to={`/food/${categoryID}`} replace />;
+    }
     return(
         <>
             <Scroll />
