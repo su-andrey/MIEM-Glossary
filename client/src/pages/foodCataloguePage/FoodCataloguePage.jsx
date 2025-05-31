@@ -32,8 +32,7 @@ const FoodCataloguePage = () => {
     const dispatch = useDispatch();
     const [isSliderReady, setSliderReady] = useState(false);
     const { category } = useParams();
-    console.log(category)
-    const posts = useSelector(state => getModeratedCategoryPosts(state, category.id));
+    const posts = useSelector(state => getModeratedCategoryPosts(state, category));
     const uathorID = useSelector(state => state.main.userID)
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.id == category);

@@ -6,7 +6,7 @@ const getModeratedCategoryPosts = createSelector(
     [selectPosts, getCategoryID],
     (posts, categoryID) => {
         if(!posts || posts.length == 0){
-            return null;
+            return [];
         }
         return posts.filter(post => (post.is_moderated === true && post.category.id == categoryID))
     }

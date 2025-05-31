@@ -121,7 +121,7 @@ const PrepodPage = () => {
                             <CreatePostModal 
                                 placeholder="Предложить заведение..."
                                 caption="Забыли что-то? Напомните нам"
-                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
+                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
                             />
                         </div>
             }
