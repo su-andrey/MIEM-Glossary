@@ -32,7 +32,7 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
         asyncGetMe();
     }, [])
 
-    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, dispatch, likes, dislikes}) => {
+    const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, dispatch, likes, dislikes, oneField}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
             const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id, likes, dislikes})
@@ -61,10 +61,30 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
 
     return (
     <>
-
         {   
             (data?.author_id==userID || me?.is_admin) &&
-            <EditPostModal 
+            oneField ?
+            (<EditPostModal 
+                placeholder={"Текст нового поста..."}
+                caption={"Отредактируйте пост"}
+                sender={({answer, photos})=>sendWholeData({
+                    answer, 
+                    name:data?.name, 
+                    photos, 
+                    author_id: data?.author_id, 
+                    category_id: data?.category?.id, 
+                    is_moderated: false, 
+                    id: data?.id,
+                    dispatch,
+                    likes: data?.likes,
+                    dislikes: data.dislikes,
+                })}
+                data={data}
+                iconSize={iconSize}
+                oneField={oneField}
+            />)
+            :
+            (<EditPostModal 
                 placeholder={"Текст нового поста..."}
                 caption={"Отредактируйте пост"}
                 sender={({answer, name, photos})=>sendWholeData({
@@ -82,7 +102,7 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
                 data={data}
                 iconSize={iconSize}
                 oneField={oneField}
-            />
+            />)
         }
     </>);
 }

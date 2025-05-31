@@ -18,7 +18,7 @@ const Review = ({data}) => {
             {data.body}
         </div>
         <div className={styles.editBlock}>
-            <EditPostButton data={data} iconSize="2vw"/>
+            <EditPostButton oneField={true} data={data} iconSize="2vw"/>
             <DeletePostButton data={data} iconSize="2.5vw"/>
         </div>
     </div>

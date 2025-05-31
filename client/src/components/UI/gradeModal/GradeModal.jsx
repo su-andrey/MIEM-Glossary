@@ -119,7 +119,7 @@ const GradeModal = ({sender, opened, setOpened, postID}) => {
     return ( 
         <>
             {opened && <div className={styles.background}>
-                <div className={styles.wrapper}>
+                <div className={styles.wrapper} onClick={(e) => e.stopPropagation()}>
                     <MdOutlineCancel className={styles.cancel} onClick={()=>{handleClose()}} />
                     <div className={styles.title}>Оцените пост</div>
                     {userID && 

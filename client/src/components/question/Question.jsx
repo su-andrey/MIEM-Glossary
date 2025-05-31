@@ -142,6 +142,7 @@ const Question = ({data}) => {
                         <span className={styles.dislike_counter}>{dislikes}</span>
                     </div>
                     <EditPostButton 
+                        oneField={true}
                         data={data}
                         iconSize="2vw"
                     />

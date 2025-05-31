@@ -52,11 +52,10 @@ const EditPostModal = ({height, width, placeholder, caption, settings, sender, d
             {open &&
                 createPortal(
                     <div className={styles.background}>
-                        <div className={styles.wrapper}>
+                        <div className={styles.wrapper} onClick={(e) => e.stopPropagation()}>
                             <MdOutlineCancel className={styles.cancel} onClick={handleClose} />
                             <div className={styles.title}>Редактирование поста</div>
                             {userID ? (
-                                !oneField ? (
                                     <FileDragField
                                         height={height}
                                         width={width}
@@ -66,20 +65,9 @@ const EditPostModal = ({height, width, placeholder, caption, settings, sender, d
                                         sender={sender}
                                         opener={setOpen}
                                         data={data}
+                                        oneField={oneField}
                                     />
                                 ) : (
-                                    <AnswerField 
-                                        height={height}
-                                        width={width}
-                                        placeholder={placeholder}
-                                        caption={caption}
-                                        settings={settings}
-                                        sender={sender}
-                                        opener={setOpen}
-                                        data={data}
-                                    />
-                                )
-                            ) : (
                                 <div className={styles.subtitle}>
                                     Зарегистрируйтесь, чтобы добавлять посты, комментировать и оставлять реакции
                                 </div>
