@@ -441,4 +441,10 @@ npm install --legacy-peer-deps
 [TanStack Query](https://tanstack.com/query/latest)
 [Redux-Toolkit](https://redux-toolkit.js.org/)
 [React/Redux](https://react-redux.js.org/)
+[Redux-Persist](https://www.npmjs.com/package/redux-persist)
 [React-Router-Dom](https://reactrouter.com/)
+[Framer-Motion](https://motion.dev/)
+[React-Hook-Form](https://react-hook-form.com/)
+[Axios](https://axios-http.com/docs/intro)
+
+
