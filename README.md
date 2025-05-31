@@ -274,10 +274,10 @@ npm install --legacy-peer-deps
 }
 // Запрос (PUT /posts/{id})
 {
-  "category_id": 1,
-  "author_id": 1,
   "name": "string",
   "body": "string",
+  "likes": 1,
+  "dislikes": 1,
   "is_moderated": true
 }
 ```
