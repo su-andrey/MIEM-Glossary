@@ -446,5 +446,3 @@ npm install --legacy-peer-deps
 [Framer-Motion](https://motion.dev/)
 [React-Hook-Form](https://react-hook-form.com/)
 [Axios](https://axios-http.com/docs/intro)
-
-
