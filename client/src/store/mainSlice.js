@@ -95,18 +95,36 @@ const mainSlice = createSlice({
             }
         },
 
-        updateReaction: (state, action) => {
-                const { postId, reaction } = action.payload;
-                const post = state?.posts.find(post => post.id == postId);
+        addLikes: (state, action) => {
+                const { postID, reaction } = action.payload;
+                const post = state?.posts.find(post => post.id == postID);
                 if (!post) return;
-                if (reaction === true) {
-                    post.likes += 1;
-                } 
-                else if (reaction === false) {
-                    post.dislikes += 1;
-                }
-                post.userReaction = reaction;
+                post.likes += reaction
             },
+
+        addDislikes: (state, action) => {
+                const { postID, reaction } = action.payload;
+                const post = state?.posts.find(post => post.id == postID);
+                if (!post) return;
+                post.dislikes += reaction
+            },
+
+        refreshStoragePost: (state, action) => {
+                const { postID, new_post } = action.payload;
+                const postIndex = state.posts.findIndex(post => post.id == postID);
+                if (postIndex === -1) return;
+                state.posts[postIndex] = new_post;
+        },
+
+        deleteStoragePost: (state, action) => {
+                const { postID } = action.payload;
+                state.posts = state.posts.filter(post => post.id != postID)
+        },
+
+        deleteStorageComment: (state, action) => {
+                const { commentID } = action.payload;
+                state.comments = state.comments.filter(comment => comment.id != commentID)
+        }
 
 
 
@@ -114,5 +132,22 @@ const mainSlice = createSlice({
 }
 )
 
-export const { setUsers, setPosts, setSelfUser, setComments, resetState, setChanged, setEmail, addComment, addPost, setUserID, updateReaction} = mainSlice.actions;
+export const { 
+    setUsers, 
+    setPosts, 
+    setSelfUser, 
+    setComments, 
+    resetState, 
+    setChanged, 
+    setEmail, 
+    addComment, 
+    addPost, 
+    setUserID, 
+    addLikes, 
+    addDislikes, 
+    refreshStoragePost, 
+    deleteStoragePost,
+    deleteStorageComment,
+} = mainSlice.actions;
+
 export const mainReducer = mainSlice.reducer;

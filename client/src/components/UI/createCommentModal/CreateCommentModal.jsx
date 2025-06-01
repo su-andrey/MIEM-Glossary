@@ -25,7 +25,7 @@ const CreateCommentModal = ({height, width, placeholder, caption, settings, subm
         <>
             <ActionButton text="Добавить" onClick={()=>{setOpen(true)}}/>
             {open && <div className={styles.background}>
-                <div className={styles.wrapper}>
+                <div className={styles.wrapper} onClick={(e) => e.stopPropagation()}>
                     <MdOutlineCancel className={styles.cancel} onClick={()=>{handleClose()}} />
                     <div className={styles.title}>Добавление комментария</div>
                     {userID && 

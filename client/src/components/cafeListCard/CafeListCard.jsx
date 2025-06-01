@@ -11,7 +11,6 @@ const CafeListCard = ({data}) => {
         return getRandomImagePath();
     };
 
-    console.log(data)
     return (
         <div className={styles.wrapper}>
             <img src={getPhoto()} alt="cafe image" className={styles.image} />

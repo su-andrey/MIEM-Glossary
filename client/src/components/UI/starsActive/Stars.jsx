@@ -7,7 +7,7 @@ const DEFAULT_ICON = "★";
 const DEFAULT_UNSELECTED_COLOR = "#D9D9D9";
 const DEFAULT_COLOR = "#FFE100";
 
-export default function Stars({ count, defaultRating, icon, color, iconSize }) {
+export default function Stars({ count, defaultRating, icon, color, iconSize, sender }) {
     const [rating, setRating] = useState(defaultRating);
     const [temporaryRating, setTemporaryRating] = useState(0);
 
@@ -15,7 +15,16 @@ export default function Stars({ count, defaultRating, icon, color, iconSize }) {
 
     const handleClick = (rating) => {
         setRating(rating);
-        localStorage.setItem("starRating", rating);
+        console.log("Rating is set on", rating)
+        if(rating>3){
+            sender(true)
+        }
+        else if(rating==3){
+            sender(null)
+        }
+        else if(rating<3){
+            sender(false)
+        }
     };
 
     return (
@@ -38,7 +47,7 @@ export default function Stars({ count, defaultRating, icon, color, iconSize }) {
                 className={styles.star}
                 key={uid()}
                 style={{
-                fontSize: iconSize ? `${iconSize}px` : "2vw",
+                fontSize: iconSize ? `${iconSize}vw` : "2vw",
                 color: elementColor,
                 filter: `${isActiveColor ? "grayscale(0%)" : "grayscale(100%)"}`,
                 }}

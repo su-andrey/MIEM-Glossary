@@ -22,22 +22,26 @@ import FileDragField from "../../components/UI/postCreateField/fileDragField/Fil
 import createPost from "../../queries/POST/createPost";
 import createPhotos from "../../queries/POST/createPhotos";
 import requirePosts from "../../queries/GET/requirePosts";
-import { addPost } from "../../store/mainSlice";
+import { addPost, setChanged } from "../../store/mainSlice";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
+import refreshStorage from "../../store/refreshers/refreshStorage";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 
 const FoodCataloguePage = () => {
     const dispatch = useDispatch();
     const [isSliderReady, setSliderReady] = useState(false);
     const { category } = useParams();
-    console.log(category)
-    const posts = useSelector(state => getPostsByCategoryID(state, category));
+    const posts = useSelector(state => getModeratedCategoryPosts(state, category));
     const uathorID = useSelector(state => state.main.userID)
     const categories = useSelector(state => getCategories(state));
     const currentCategory = categories.find(categoryEl => categoryEl.id == category);
     const [ready, setReady] = useState(false);
     const author_id = useSelector(state => state.main.userID)
 
+    useEffect(()=>{
+        refreshStorage(dispatch)
+    }, [])
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
             console.log("sending this to the server:", {name, body: answer, author_id, category_id})

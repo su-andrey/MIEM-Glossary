@@ -26,7 +26,7 @@ const CreatePostModal = ({height, width, placeholder, caption, settings, sender}
         <>
             <ActionButton text="Добавить" onClick={()=>{setOpen(true)}}/>
             {open && <div className={styles.background}>
-                <div className={styles.wrapper}>
+                <div className={styles.wrapper} onClick={(e) => e.stopPropagation()}>
                     <MdOutlineCancel className={styles.cancel} onClick={()=>{handleClose()}} />
                     <div className={styles.title}>Создание поста</div>
                     {userID && 

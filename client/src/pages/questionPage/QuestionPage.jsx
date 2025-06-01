@@ -16,12 +16,20 @@ import { useState, useEffect } from "react";
 import {motion} from "framer-motion"
 import Loader1 from "../../components/UI/loader1/Loader1";
 import createPost from "../../queries/POST/createPost";
-import { addPost } from "../../store/mainSlice";
+import { addPost, setChanged } from "../../store/mainSlice";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
+import refreshStorage from "../../store/refreshers/refreshStorage";
+import NoPostsCard from "../../components/noPostsCard/NoPostsCard";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 const QuestionPage = () => {
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        refreshStorage(dispatch)
+    }, [])
+
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
@@ -39,11 +47,8 @@ const QuestionPage = () => {
     }
 
     let categories = useSelector(state => getCategories(state))
-    console.log(categories)
     let category = categories.find((category) => category.name == "Вопросы")
-    console.log(category)
-    let questions = useSelector(state => getPostsByCategory(state, category.id))
-    console.log(questions)
+    let questions = useSelector(state => getModeratedCategoryPosts(state, category.id))
     let authorID = useSelector(state => state.main.userID)
     const [ready, setReady] = useState(false);
 
@@ -118,7 +123,9 @@ const QuestionPage = () => {
                 <div className={styles.wholeWrapper}>
                     <div className={styles.gridWrapper}>
                             {questions && questions.length > 0 ?
-                                (questions.map((post, index) => (
+                                (questions
+                                    .filter((post) => post !== undefined && post !== null && post)
+                                    .map((post, index) => (
                                     <motion.div
                                         custom={index%3}
                                         variants={centerItemAnimation}
@@ -126,7 +133,7 @@ const QuestionPage = () => {
                                         whileInView="visible"
                                         viewport={{ once: true, amount: 0.5 }}
                                         className={styles.metatitle}
-                                        key={uid()}
+                                        key={post?.id || uid()}
                                     >
                                         <Link to={`/questions/${post.id}`} >
                                             <Question data={post} />
@@ -134,13 +141,13 @@ const QuestionPage = () => {
                                     </motion.div>
                                 )))
                                 :
-                                <Question data={{nothing: "Пока нет вопросов"}} />
+                                <NoPostsCard  text="Пока нет вопросов("/>
                             }
                     </div>
                 </div>
             {authorID &&
                         <div className={styles.subcont}>
-                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <div className={styles.caption}>Спросите что-нибудь?</div>
                                 <CreateCommentModal 
                                     placeholder={"Спросите что-нибудь?"}
                                     caption={"Создайте собственное обсуждение"}

@@ -44,7 +44,7 @@ const Footer = () => {
             {!open && 
                 <div className={styles.gh_container}>
                     <img src={gh_logo} alt="github" className={styles.gh_logo} onClick={()=>handleClick()}/>
-                    <div className={styles.subheader}>Click Me</div>
+
                 </div>}
             {open && 
                 <>

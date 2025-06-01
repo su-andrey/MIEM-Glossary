@@ -11,24 +11,42 @@ import dislike_filled from "./assets/dislike/dislike_filled.svg"
 import requireReaction from "../../queries/GET/requireReaction";
 import createReaction from "../../queries/POST/createReaction";
 import refreshPosts from "../../store/refreshers/refreshPosts";
-import { useDispatch } from "react-redux";
-import { updateReaction } from "../../store/mainSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import requirePosts from "../../queries/GET/requirePosts";
+import { addLikes, addDislikes } from "../../store/mainSlice";
+import EditPostButton from "../UI/editPostButton/EditPostButton";
+import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
+import { useNavigate } from "react-router-dom";
+import Loader1 from "../UI/loader1/Loader1";
 const Question = ({data}) => {
+    const navigate = useNavigate();
+    const postID = data?.id;
     const [name, setName] = useState("");
-    const [likes, setLikes] = useState(data.likes);
-    const [dislikes, setDislikes] = useState(data.dislikes);
+    const post = useSelector(state => state.main.posts.find(post => post.id == postID));
+    const likes = post?.likes ?? 0;
+    const dislikes = post?.dislikes ?? 0;
     const [reaction, setReaction] = useState(null);
     const dispatch = useDispatch();
     let init;
     useEffect(()=>{setName(useNameGenerator())}, []);
+
     useEffect(()=>{
         const requireLike = async ()=> {
+            if(data == undefined || data?.id == undefined || !data?.id || !data){
+                return;
+            }
             init = await requireReaction(data?.id)
-            console.log("Получили реакцию с серва:", init)
-            setReaction(init)
+            const post = await requirePosts(data?.id)
+            if(init===null){
+                setReaction(null)
+            }
+            else{
+                setReaction(init.reaction)
+            }
         }
-        requireLike();
+        if(data!=undefined && data?.id){
+            requireLike();
+        }
     }, [])
     
 
@@ -36,12 +54,24 @@ const Question = ({data}) => {
         e.preventDefault();
         e.stopPropagation();
         try {
-            await createReaction({ post_id: data.id, reaction: true });
-            dispatch(updateReaction({ postId: data?.id, reaction: true }));
-            if (reaction !== true) {
-                setLikes(prev => prev + 1);
-                if (reaction === false) setDislikes(prev => prev - 1);
-                setReaction(true);
+            const initial = reaction
+            if(initial === null){
+                await createReaction({ post_id: data.id, reaction: true });
+                dispatch(addLikes({ postID , reaction: 1}));
+                dispatch(addDislikes({ postID , reaction: 0}));
+                setReaction(true)
+            }
+            else if(initial === true){
+                await createReaction({ post_id: data.id, reaction: null });
+                dispatch(addLikes({ postID , reaction: -1}));
+                dispatch(addDislikes({ postID , reaction: 0}));
+                setReaction(null)
+            }
+            else if(initial === false){
+                await createReaction({ post_id: data.id, reaction: true });
+                dispatch(addLikes({ postID , reaction: 1}));
+                dispatch(addDislikes({ postID , reaction: -1}));
+                setReaction(true)
             }
         } catch (error) {
             console.error(error);
@@ -52,12 +82,24 @@ const Question = ({data}) => {
         e.preventDefault();
         e.stopPropagation();
         try {
-            await createReaction({ post_id: data.id, reaction: false });
-            dispatch(updateReaction({ postId: data?.id, reaction: false }));
-            if (reaction !== false) {
-                setDislikes(prev => prev + 1);
-                if (reaction === true) setLikes(prev => prev - 1);
-                setReaction(false);
+            const initial = reaction
+            if(initial === null){
+                await createReaction({ post_id: data.id, reaction: false });
+                dispatch(addLikes({ postID , reaction: 0}));
+                dispatch(addDislikes({ postID , reaction: 1}));
+                setReaction(false)
+            }
+            else if(initial === true){
+                await createReaction({ post_id: data.id, reaction: false });
+                dispatch(addLikes({ postID , reaction: -1}));
+                dispatch(addDislikes({ postID , reaction: 1}));
+                setReaction(false)
+            }
+            else if(initial === false){
+                await createReaction({ post_id: data.id, reaction: null });
+                dispatch(addLikes({ postID , reaction: 0}));
+                dispatch(addDislikes({ postID , reaction: -1}));
+                setReaction(null)
             }
         } catch (error) {
             console.error(error);
@@ -70,7 +112,11 @@ const Question = ({data}) => {
     }
     return commentsArray.length;
     };
-    
+
+    if(data == undefined || data?.id == undefined || !data?.id || !data){
+        return <Loader1 />
+    }
+
     return (
         <div className={styles.wrapper}>
                 <div className={styles.textWrapper}>
@@ -95,6 +141,15 @@ const Question = ({data}) => {
                         <img src={reaction===false ? dislike_filled : dislike} className={styles.dislike_icon} alt="dislike button" />
                         <span className={styles.dislike_counter}>{dislikes}</span>
                     </div>
+                    <EditPostButton 
+                        oneField={true}
+                        data={data}
+                        iconSize="2vw"
+                    />
+                    <DeletePostButton
+                        data={data}
+                        iconSize="2.5vw"
+                    />
                 </div>
         </div>
 );}

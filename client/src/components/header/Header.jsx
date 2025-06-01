@@ -14,13 +14,13 @@ const Header = () => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [username, setUsername] = useState("");
     let email = useSelector(state => state.main.email)
-    console.log("Our email", email)
     useEffect(() => {
         if (email) {
             let name = email.split('@')[0] || "";
             if (name.length > 12) {
-                name = name.slice(0, 12) + "...";
+                name = name.slice(0, 12);
             }
+            name = name.charAt(0).toUpperCase() + name.slice(1);
             setUsername(name);
         } else {
             setUsername("");

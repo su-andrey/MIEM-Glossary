@@ -2,7 +2,7 @@ import styles from "./singleQuestionPage.module.css"
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Question from "../../../components/question/Question";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { uid } from "uid";
 import AnswerField from "../../../components/UI/answerField/AnswerField";
 import Reply from "../../../components/reply/Reply";
@@ -16,10 +16,14 @@ import Loader from "../../../components/UI/loader/Loader";
 import {motion} from "framer-motion"
 import Loader1 from "../../../components/UI/loader1/Loader1";
 import createComment from "../../../queries/POST/createComment";
-import { addComment } from "../../../store/mainSlice";
+import { addComment, refreshStoragePost } from "../../../store/mainSlice";
 import ActionButton from "../../../components/UI/actionButton/ActionButton";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
+import updatePost from "../../../store/refreshers/updatePost";
+import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
+
 const SingleQuestionPage = () => {
+    const navigate = useNavigate()
     let categories = useSelector(state => getCategories(state));
     let category = categories.find((category) => category.name == "Вопросы");
     let questions = useSelector(state => getPostsByCategory(state, category.id));
@@ -29,6 +33,10 @@ const SingleQuestionPage = () => {
     const question = useSelector(state => getPostsByID(state, questionID));
     const dispatch = useDispatch()
     
+    useEffect(()=>{
+        updatePost({dispatch, postID: questionID})
+    }, [])
+
     const leftItemAnimation = {
         hidden: {
             opacity: 0,
@@ -61,8 +69,7 @@ const SingleQuestionPage = () => {
         }),
     }
 
-    const comments = useSelector(state => getCommentsByQuestionID(state, questionID))
-    console.log(comments)
+    const comments = question?.comments
 
     const submitter = async ({ answer, post_id, author_id }) => {
         console.log("Sending to server:", {
@@ -76,8 +83,8 @@ const SingleQuestionPage = () => {
         author_id: author_id,
         body: answer,
         });
-        console.log("Ответ серва при создании коммента", response);
         dispatch(addComment(response));
+        await updatePost({dispatch, postID: question.id})
     } 
     catch (error) {
         console.error("Ошибка добавления комментария", error);
@@ -95,6 +102,11 @@ const SingleQuestionPage = () => {
         return () => window.removeEventListener('load', handleLoad);
     }
     }, []);
+
+
+    if(question===undefined || question.id===undefined || question===null || !question){
+        navigate("/questions")
+    }
     if (!ready) return <Loader1 />;
     return(
         <>
@@ -131,7 +143,7 @@ const SingleQuestionPage = () => {
                                 Ответы:
                             </div>
                             <div className={styles.gridWrapper}>
-                                {comments.length > 0 ?
+                                {(comments!=null && comments.length > 0) ?
                                     comments.map((comment, index)=>{
                                         return(
                                             <motion.div
@@ -141,7 +153,7 @@ const SingleQuestionPage = () => {
                                                 whileInView="visible"
                                                 viewport={{ once: true, amount: 0.5 }}
                                                 className={styles.element}
-                                                key={uid()}
+                                                key={comment.id}
                                                 style={{
                                                     width:"max-content",
                                                     height: "stretch"
@@ -161,7 +173,7 @@ const SingleQuestionPage = () => {
                                         className={styles.metatitle}
                                         key={uid()}
                                     >
-                                        <Reply key={uid()} data={{nothing: "Пока нет ответов"}}></Reply>
+                                        <NoPostsCard text="Пока нет ответов..." />
                                     </motion.div>
                                 }
                             </div>

@@ -3,15 +3,23 @@ import CafeCard from "../../components/cafeCard/CafeCard.jsx";
 import { uid } from "uid";
 import image from "./../../assets/jpg/nothing/nothing.jpeg"
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import getCategories from "../../store/selectors/getCategories.js";
 import Loader from "../../components/UI/loader/Loader.jsx";
 import { useState, useEffect } from "react";
 import Loader1 from "../../components/UI/loader1/Loader1.jsx";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper.jsx";
+import { setChanged } from "../../store/mainSlice.js";
+import refreshStorage from "../../store/refreshers/refreshStorage.js";
 const FoodMainPage = () => {
     const data = useSelector(state => getCategories(state));
     const [ready, setReady] = useState(false);
+    const dispatch = useDispatch();
+    
+    useEffect(()=>{
+        refreshStorage(dispatch)
+    }, [])
+
     useEffect(() => {
         const MIN_LOAD_TIME = 0;
         const start = Date.now();

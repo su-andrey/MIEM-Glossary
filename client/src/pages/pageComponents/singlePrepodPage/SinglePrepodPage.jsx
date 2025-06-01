@@ -28,6 +28,13 @@ import Loader1 from "../../../components/UI/loader1/Loader1";
 import { addPost } from "../../../store/mainSlice";
 import getRandomImagePath from "../../../custom hooks/helpers/getRandomImagePath";
 import CreateCommentModal from "../../../components/UI/createCommentModal/CreateCommentModal";
+import StarsDumb from "../../../components/UI/starsDumb/StarsDumb";
+import GradeModal from "../../../components/UI/gradeModal/GradeModal";
+import requirePosts from "../../../queries/GET/requirePosts";
+import ReactionBlock from "../../../components/reactionBlock/ReactionBlock";
+import updatePost from "../../../store/refreshers/updatePost";
+import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
+import { Navigate } from "react-router-dom";
 
 const SinglePrepodPage = () => {
     const dispatch = useDispatch();
@@ -37,12 +44,29 @@ const SinglePrepodPage = () => {
     let authorID = useSelector(state => state.main.userID)
     let posts = useSelector(state => getPostsByCategory(state, category.id));
     const post_id = (useParams().id);
-    const prepod = useSelector(state => getPrepodByID(state, post_id));
-    if (!prepod) {
-        return <Loader />;
-    }
+    let prepod = useSelector(state => getPrepodByID(state, post_id))
+
+    useEffect(()=>{
+        updatePost({dispatch, postID: post_id})
+    }, [])
+/*
+    useEffect(()=>{
+        const getPost = async ()=>{
+            try{
+                let prepodus = await requirePosts(post_id)
+                setPrepod(prepodus)
+            }
+            catch(error){
+                console.error(error)
+            }
+        }
+        getPost()
+    }, [])
+*/
+
     const reviews = useSelector(state => getPrepodReviewsByID(state, post_id))
     const [ready, setReady] = useState(false);
+    const [gradeModalOpened, setModalOpened] = useState(false);
 
         const centerItemAnimation = {
         hidden: {
@@ -85,12 +109,6 @@ const SinglePrepodPage = () => {
 
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
-            console.log({
-                name: post_id,
-                category_id: category_id,
-                author_id: author_id,
-                body: answer,
-            })
             const response = await createPost({
             name: post_id,
             category_id: category_id,
@@ -105,7 +123,9 @@ const SinglePrepodPage = () => {
         }
     }
 
-
+    if (!prepod || prepod.id === undefined) {
+        return <Navigate to={`/prepods`} replace />;
+    }
     if (!ready) return <Loader1/>;
     return(
         <>
@@ -117,11 +137,11 @@ const SinglePrepodPage = () => {
                                     <div className={styles.title}>
                                         {prepod.name}
                                     </div>
-                                    <div className={styles.gradeBlock}>
+                                    <div  onClick={()=>{setModalOpened(true)}} className={styles.gradeBlock}>
                                         <div className={styles.grade}>
-                                            {useGetFiveScale(prepod, 1)}
+                                            <ReactionBlock data={prepod}/>
                                         </div>
-                                        <Stars defaultRating={useGetFiveScale(prepod)}/>
+                                        
                                     </div>
                                 </div>
                                 <div className={styles.caption}>
@@ -224,18 +244,18 @@ const SinglePrepodPage = () => {
                                                     whileInView="visible"
                                                     viewport={{ once: true, amount: 0.5 }}
                                                     className={styles.element}
-                                                    key={uid()}
+                                                    key={review.id}
                                                     style={{
                                                         width:"max-content",
                                                         height: "stretch"
                                                     }}
                                                 >
-                                                    <Review key={uid()} data={review}></Review>
+                                                    <Review data={review}></Review>
                                                 </motion.div>
                                             );
                                         })
                                         :
-                                        <Review key={uid()} data={{nothing:"Пока нет отзывов"}}></Review>
+                                        <NoPostsCard text="Пока нет отзывов..."/>
                                     }
                                 </div>
                     </div>

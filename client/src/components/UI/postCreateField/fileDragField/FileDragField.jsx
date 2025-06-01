@@ -5,11 +5,11 @@ import { uid } from "uid";
 import { useRef } from "react";
 import { IoMdPhotos } from "react-icons/io";
 import { MdCloudUpload } from "react-icons/md";
-const FileDragField = ({height, width, placeholder, caption, settings, sender, opener}) => {
+const FileDragField = ({height, width, placeholder, caption, settings, sender, opener, data, oneField}) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploaded, setUploaded] = useState();
-    const [answer, setAnswer] = useState("");
-    const [name, setName] = useState("");
+    const [answer, setAnswer] = useState(data?.body || "");
+    const [name, setName] = useState(data?.name || "");
     const [packedAnswer, setPackedAnswer] = useState(null);
     const [status, setStatus] = useState("idle");
     const [drag, setDrag] = useState(false);
@@ -60,7 +60,8 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
     <div className={styles.wrapper} style={settings}>
         <form className={styles.fieldForm} onSubmit={handleSubmit}>
             <div className={styles.caption}>{caption || "Добавьте собственное заведение или отзыв"}</div>
-            <input  
+            
+            { !oneField && <input  
                 placeholder={"Добавить имя..."}
                 className={styles.field}
                 name="name"
@@ -70,7 +71,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
                 }}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-            />
+            />}
             <textarea  
                 placeholder={placeholder || "Добавить ответ..."}
                 className={styles.field}
@@ -82,30 +83,34 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
             />
-            <input 
-                type="file"
-                multiple
-                ref={fileInputRef}
-                accept="image/*, .png, .jpg, .jpeg, .webp"
-                onChange={handleFileChange}
-                className={styles.fileInput}
-            >
-
-            </input>
-            <div 
-                className={drag ? styles.leaveField : styles.dragField}
-                onDragStart={e => dragStartHandler(e)}
-                onDragLeave={e => dragLeaveHandler(e)}
-                onDragOver={e => dragStartHandler(e)}
-                onDrop={e => onDropHandler(e)}
-                onClick={handleClickOnDropArea}
-            >
-                {drag ? 
-                    <MdCloudUpload style={{width:"12%", color:"var(--dark-grey)"}}/>
-                    :
-                    <IoMdPhotos style={{width:"12%", color:"var(--dark-grey)"}}/>
-                }
-            </div>
+            { 
+                !oneField && 
+                <>
+                    <input 
+                        type="file"
+                        multiple
+                        ref={fileInputRef}
+                        accept="image/*, .png, .jpg, .jpeg, .webp"
+                        onChange={handleFileChange}
+                        className={styles.fileInput}
+                    >
+                    </input>
+                    <div 
+                        className={drag ? styles.leaveField : styles.dragField}
+                        onDragStart={e => dragStartHandler(e)}
+                        onDragLeave={e => dragLeaveHandler(e)}
+                        onDragOver={e => dragStartHandler(e)}
+                        onDrop={e => onDropHandler(e)}
+                        onClick={handleClickOnDropArea}
+                    >
+                        {drag ? 
+                            <MdCloudUpload style={{width:"12%", color:"var(--dark-grey)"}}/>
+                            :
+                            <IoMdPhotos style={{width:"12%", color:"var(--dark-grey)"}}/>
+                        }
+                    </div>
+                </>
+            }
             {
                 selectedFiles.length > 0 
                 &&

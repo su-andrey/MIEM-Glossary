@@ -1,11 +1,17 @@
 import styles from "./adminPage.module.css"
 import Loader1 from "../../components/UI/loader1/Loader1";
-import PostCreateField from "../../components/UI/postCreateField/PostCreateField";
-import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
-import CreateCommentModal from "../../components/UI/createCommentModal/CreateCommentModal";
+import { Outlet } from "react-router-dom";
+import ActionButton from "../../components/UI/actionButton/ActionButton";
+import { Link } from "react-router-dom";
 const AdminPage = () => {
     return ( 
-    <CreateCommentModal />
+        <>
+            <div className={styles.navbar}>
+                <Link to="/admin/posts"><ActionButton text="Posts"/></Link>
+                <Link to="/admin/comments"><ActionButton text="Comments"/></Link>
+            </div>
+            <Outlet />
+        </>
     );
 }
 

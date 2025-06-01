@@ -6,10 +6,6 @@ import { useState, useEffect } from "react";
 
 import getPostsByCategory from "../../store/selectors/getPostsByCategoryID";
 import getCategories from "../../store/selectors/getCategories";
-import CafeListCard from "../../components/cafeListCard/CafeListCard";
-import AnswerField from "../../components/UI/answerField/AnswerField";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, Parallax, FreeMode, Keyboard, Mousewheel } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -19,20 +15,26 @@ import Loader1 from "../../components/UI/loader1/Loader1";
 import FileDragField from "../../components/UI/postCreateField/fileDragField/FileDragField";
 import createPost from "../../queries/POST/createPost";
 import createPhotos from "../../queries/POST/createPhotos";
-import { addPost } from "../../store/mainSlice";
+import { addPost, setChanged } from "../../store/mainSlice";
 import requirePosts from "../../queries/GET/requirePosts";
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import CreatePostModal from "../../components/UI/createPostModal/CreatePostModal";
 import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
+import refreshStorage from "../../store/refreshers/refreshStorage";
+import getModeratedCategoryPosts from "../../store/selectors/moderation/getModeratedCategoryPosts";
 const PrepodPage = () => {
     const dispatch = useDispatch(addPost)
     const [isSliderReady, setSliderReady] = useState(false);
     const categories = useSelector(state => getCategories(state));
     const category = categories.find((category) => category.name == "Преподаватели");
-    const posts = useSelector(state => getPostsByCategory(state, category?.id));
+    const posts = useSelector(state => getModeratedCategoryPosts(state, category.id));
     const author_id = useSelector(state => state.main.userID)
     console.log(posts)
     const [ready, setReady] = useState(false);
+
+    useEffect(()=>{
+        refreshStorage(dispatch)
+    }, [])
 
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
@@ -102,7 +104,7 @@ const PrepodPage = () => {
             <div className={styles.sliderWrapper}>
                         {posts && posts.length > 0 ?
                         (posts?.map((post) => (
-                                <Link to={`/prepods/${post.id}`} key={uid()}>
+                                <Link to={`/prepods/${post.id}`} key={post.id}>
                                     <PrepodCard data={post} />
                                 </Link>
                         )))
@@ -119,7 +121,7 @@ const PrepodPage = () => {
                             <CreatePostModal 
                                 placeholder="Предложить заведение..."
                                 caption="Забыли что-то? Напомните нам"
-                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: currentCategory.id})}
+                                sender={({answer, name, photos})=>sendWholeData({answer, name, photos, author_id: author_id, category_id: category.id})}
                             />
                         </div>
             }

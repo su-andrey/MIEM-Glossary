@@ -1,0 +1,65 @@
+.wrapper{
+    margin-top: 0.5vh;
+    max-width: 40vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 1.5vh;
+    border: 1px solid var(--dark-grey);
+    border-radius: 3vw;
+    padding: 2vw;
+}
+
+
+
+
+.title{
+    font-size: var(--caption-font);
+    font-weight: 500;
+    color: black;
+    word-break: break-word;
+}
+
+
+.gradeBlock{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5%;
+}
+
+
+.grade{
+    font-weight: 350;
+    font-family: Open Sans;
+    font-size: calc(1.2*var(--caption-font));
+    margin-top: 2%;
+    color: black;
+}
+
+.lower{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease-out;
+    color: black;
+}
+
+.wrapper:hover .lower{
+    transition: all 0.3s ease-out;
+    transform: translateY(0.5vh);
+}
+
+
+.photo{
+    width: 5vw;
+}
+
+.link{
+    word-break: break-all;
+    color: black;
+    font-size: var(--caption-font);
+}
