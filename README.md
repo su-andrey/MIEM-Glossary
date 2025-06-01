@@ -186,7 +186,7 @@ npm install --legacy-peer-deps
         GET     /posts                      получить все посты
         GET     /posts?limit=x&offset=y     получить x постов, начиная с y-того (только в продакшне)
         GET     /posts/{id}                 получить пост по id
-        GET     /posts/search/{str}         поиск постов по названию 
+        GET     /posts/search?str=string    поиск постов по названию 
         POST    /posts                      создать пост                    (*)
         PUT     /posts/{id}                 обновить пост по id             (**)(***)
         DELETE  /posts/{id}                 удалить пост по id              (**)(***)

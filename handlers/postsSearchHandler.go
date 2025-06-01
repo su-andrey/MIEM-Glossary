@@ -11,7 +11,7 @@ import (
 
 func SearchPosts(c fiber.Ctx) error {
 	cfg := config.LoadConfig()
-	str := strings.TrimSpace(c.Params("str"))
+	str := strings.TrimSpace(c.Query("str"))
 
 	opts := &services.Options{
 		Condition: &services.Condition{
