@@ -156,3 +156,11 @@
     font-weight: 600;
     font-size: var(--caption-font);
 }
+
+.resultContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 4vh;
+}
