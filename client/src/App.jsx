@@ -1,6 +1,7 @@
 import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Suspense, lazy, use } from 'react';
+
 const Layout = lazy(() => import('./pages/layout/Layout.jsx'));
 const LogInPage = lazy(() => import('./pages/logInPage/LogInPage.jsx'));
 const RegisterPage = lazy(() => import('./pages/registerPage/RegisterPage.jsx'));
@@ -14,6 +15,8 @@ const NotFoundPage = lazy(() => import('./pages/notFoundPage/NotFoundPage.jsx'))
 const SingleQuestionPage = lazy(() => import('./pages/pageComponents/singleQuestionPage/SingleQuestionPage.jsx'));
 const SingleFoodPage = lazy(() => import('./pages/pageComponents/singleFoodPage/SingleFoodPage.jsx'));
 const SinglePrepodPage = lazy(() => import('./pages/pageComponents/singlePrepodPage/SinglePrepodPage.jsx'));
+const SearchPage = lazy(() => import("./pages/searchPage/SearchPage.jsx"));
+
 import RequireAdmin from "./hoc/RequireAdmin.jsx"
 import Loader2 from './components/UI/loader2/Loader2.jsx';
 import Loader1 from './components/UI/loader1/Loader1.jsx';
@@ -26,10 +29,10 @@ import RequireAuth from './hoc/RequireAuth.jsx';
 import getMe from './queries/USER/getMe.js';
 import useSmoothScroll from './custom hooks/useSmoothScroll.js';
 import { setChanged } from './store/mainSlice.js';
-import setupDB from './store/fake/setupDB.js';
 import AdminPage from './pages/adminPage/AdminPage.jsx';
 import AdminPosts from './pages/adminPages/AdminPosts.jsx';
 import AdminComments from './pages/adminPages/AdminComments.jsx';
+
 
 
 
@@ -47,6 +50,7 @@ const App = () => {
                     localStorage.removeItem('persist:root')
                     dispatch(setPosts({ data: posts }));
                     dispatch(setComments({ data: comments }));
+                    localStorage.removeItem("search")
                     console.log("Storage rebuilt");
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);
@@ -90,6 +94,8 @@ const App = () => {
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/" element={<Layout></Layout>}>
             <Route index element={<Suspense fallback={<Loader2 />}><HomePage></HomePage></Suspense>}></Route>
+
+            <Route path="search" element={<Suspense fallback={<Loader1 />}><SearchPage/></Suspense>}></Route>
 
             <Route path="login" element={<LogInPage></LogInPage>}></Route>
             <Route path="register" element={<RegisterPage></RegisterPage>}></Route>

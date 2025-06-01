@@ -5,6 +5,8 @@ import { uid } from "uid";
 import { useRef } from "react";
 import { IoMdPhotos } from "react-icons/io";
 import { MdCloudUpload } from "react-icons/md";
+import updatePost from "../../../../store/refreshers/updatePost";
+import { useDispatch } from "react-redux";
 const FileDragField = ({height, width, placeholder, caption, settings, sender, opener, data, oneField}) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploaded, setUploaded] = useState();
@@ -14,8 +16,9 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
     const [status, setStatus] = useState("idle");
     const [drag, setDrag] = useState(false);
     const fileInputRef = useRef(null);
+    const dispatch = useDispatch();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const packed = {
             answer,
@@ -27,6 +30,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
         setAnswer(""); 
         setName("");
         setSelectedFiles([]);
+        await updatePost({dispatch, postID: data?.id})
         opener(false);
     };
 

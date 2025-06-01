@@ -43,6 +43,7 @@ const DeleteCommentButton = ({data, adminVersion, iconSize}) => {
         e.stopPropagation();
         await deleteComment(data?.id)
         dispatch(deleteStorageComment({commentID: data?.id}))
+        updatePost({dispatch, postID: data?.post_id})
     }
 
     return (
