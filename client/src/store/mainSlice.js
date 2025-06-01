@@ -48,8 +48,13 @@ const mainSlice = createSlice({
         wasChanged : true,
         email : "",
         userID : null,
+        search : ""
     },
     reducers:{
+        setSearch(state, action){
+            state.search = action.payload
+        },
+
         setEmail(state, action){
             state.email = action.payload
         },
@@ -148,6 +153,7 @@ export const {
     refreshStoragePost, 
     deleteStoragePost,
     deleteStorageComment,
+    setSearch,
 } = mainSlice.actions;
 
 export const mainReducer = mainSlice.reducer;
