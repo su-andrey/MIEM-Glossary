@@ -30,6 +30,7 @@ const EditField = ({data, adminVersion, iconSize}) => {
             await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
             dispatch(refreshStoragePost({ postID: id, new_post: final_post }))
+            await updatePost({dispatch, postID: id})
         }
         catch(error){
             console.error(error)
