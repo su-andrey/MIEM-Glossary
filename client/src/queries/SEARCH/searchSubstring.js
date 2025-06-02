@@ -3,7 +3,7 @@ import { BASE_URL } from "../../config";
 
 const searchSubstring = async (search) => {
     try{
-        const url = `${BASE_URL}/api/posts/search/${encodeURIComponent(search)}`;
+        const url = `${BASE_URL}/api/posts/search?str=${encodeURIComponent(search)}`;
         const response = await axios.get(
             url
         );

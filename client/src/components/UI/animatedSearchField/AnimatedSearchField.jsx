@@ -1,39 +1,45 @@
-import "./animatedSearchField.css"
-import glass from "./../../../assets/vectors/glass.svg"
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import "./animatedSearchField.css";
+import glass from "./../../../assets/vectors/glass.svg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const AnimatedSearchField = () => {
-    const [search, setSearch] = useState("")
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
-    const handleChange = (e)=>{
-        setSearch(e.target.value)
-    }
 
-    const handleSubmit = ()=>{
-        localStorage.removeItem('search')
-        localStorage.setItem("search", search)
-        setSearch("")
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const query = search.trim();
+        if (query.length > 0) {
+            navigate(`/search?q=${encodeURIComponent(query)}`);
+            setSearch("");
+        }
+        else{
+            navigate(`/search`);
+        }
+    };
 
-    return(
+    return (
         <div className="search-bar">
             <input 
                 type="search" 
                 className="search-input" 
                 placeholder="Search here..." 
-                tabIndex={0} 
-                onChange={(e)=>{handleChange(e)}}
-                value={search || ""}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        handleSubmit();
+                    }
+                }}
             />
-            <button className="search-submit" tabIndex={0}>
-                <Link to="/search" onClick={()=>{handleSubmit()}}>
-                    <img src={glass} alt="glass" className="searchIcon"/>
-                </Link>
+            <button className="search-submit" onClick={handleSubmit} tabIndex={0}>
+                <img src={glass} alt="glass" className="searchIcon" />
             </button>
         </div>
-);}
+    );
+};
 
 export default AnimatedSearchField;

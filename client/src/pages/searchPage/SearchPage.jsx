@@ -5,8 +5,13 @@ import glass from "./../../assets/vectors/glass_grey.svg"
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import searchPrepod from "../../queries/SEARCH/searchPrepod";
 import searchSubstring from "../../queries/SEARCH/searchSubstring";
+import SearchCard from "../../components/searchCard/SearchCard";
+import { uid } from "uid";
+import { useSearchParams } from "react-router-dom";
 
 const SearchPage = () => {
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("q") || "";
     const [search, setSearch] = useState("")
     const [checkbox, setCheckbox] = useState(false)
     const [name, setName] = useState("")
@@ -17,12 +22,13 @@ const SearchPage = () => {
     const [loading, setLoading] = useState(false)
     const [prepodError, setPrepodError] = useState(false)
 
-    useEffect(()=>{
-        const local = localStorage.getItem("search")
-        if(local && local.length>0){
-            setSearch(local)
+
+        useEffect(() => {
+        if (query.length > 0) {
+            setSearch(query)
+            handleSearch(query)
         }
-    }, [])
+    }, [query]);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -69,6 +75,16 @@ const SearchPage = () => {
         setSearch(e.target.value)
         try{
             const res = await searchSubstring(search)
+            setSearchResults(res)
+        }
+        catch(error){
+            console.error(error)
+        }
+    }
+
+    const handleSearch = async (str) => {
+        try{
+            const res = await searchSubstring(str)
             setSearchResults(res)
         }
         catch(error){
@@ -167,9 +183,7 @@ const SearchPage = () => {
                                 :
                                 (searchResults.map((post)=>{
                                     return(
-                                        <div className={styles.subtitle}>
-                                            {post.body}
-                                        </div>
+                                        <SearchCard data={post} disabled={false} key={post.id || uid()}/>
                                     )
                                 }))
                             }
