@@ -19,6 +19,7 @@ type Config struct {
 	CloudinaryCloudName string
 	CloudinaryAPIKey    string
 	CloudinaryAPISecret string
+	ModerationEnabled   bool // Флаг для включения/выключения модерации
 	AllowedImagesTypes  map[string]bool
 	MaxImageWeight      int
 }
@@ -47,6 +48,11 @@ func LoadConfig() Config {
 		port = "3000" // Важное автозаполнение
 	}
 
+	moderationEnabled := os.Getenv("MODERATION_ENABLED")
+	if moderationEnabled == "" {
+		moderationEnabled = "true" // По умолчанию модерация включена
+	}
+
 	return Config{
 		Port:                port,
 		DbUrl:               os.Getenv("DB_URL"),
@@ -58,7 +64,8 @@ func LoadConfig() Config {
 		CloudinaryCloudName: os.Getenv("CLOUDINARY_CLOUD_NAME"),
 		CloudinaryAPIKey:    os.Getenv("CLOUDINARY_API_KEY"),
 		CloudinaryAPISecret: os.Getenv("CLOUDINARY_API_SECRET"),
-		ENV:                 os.Getenv("ENV"), // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
+		ENV:                 os.Getenv("ENV"),            // Все остальные поля подтягиваем из .env напрямую, без доп. обработок
+		ModerationEnabled:   moderationEnabled == "true", // Преобразуем строку в bool
 		AllowedImagesTypes:  allowedImTypes,
 		MaxImageWeight:      maxImWeight,
 	}

@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/models"
 )
+
+var cfg = config.LoadConfig()
 
 func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 	whereStatement := ""
@@ -58,6 +61,10 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
+		if !cfg.ModerationEnabled {
+			post.IsModerated = true // Если модерация отключена, то все посты считаем прошедшими модерацию
+		}
+
 		commentsOpts := &Options{
 			Condition: &Condition{
 				Name:     "post_id",
@@ -100,6 +107,10 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 			&post.Category.ID, &post.Category.Name, &post.AuthorID, &post.IsModerated)
 	if err != nil {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+
+	if !cfg.ModerationEnabled {
+		post.IsModerated = true // Если модерация отключена, то все посты считаем прошедшими модерацию
 	}
 
 	commentsOpts := &Options{
@@ -162,6 +173,13 @@ func UpdatePost(ctx context.Context, id, name, body string, likes, dislikes int,
 	}
 	if !exists {
 		return errors.New("пост не найден")
+	}
+
+	if !cfg.ModerationEnabled {
+		err = database.DB.QueryRow(ctx, "SELECT is_moderated FROM posts WHERE id = $1", id).Scan(&isModerated)
+		if err != nil {
+			return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения статуса модерации поста")
+		}
 	}
 
 	_, err = database.DB.Exec(ctx,
