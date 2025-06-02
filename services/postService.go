@@ -11,6 +11,8 @@ import (
 	"github.com/su-andrey/kr_aip/models"
 )
 
+var cfg = config.LoadConfig()
+
 func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 	whereStatement := ""
 	args := []any{}
@@ -58,6 +60,10 @@ func GetPosts(ctx context.Context, opts *Options) ([]models.Post, error) {
 			return posts, errors.New("ошибка обработки данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 		}
 
+		if !cfg.ModerationEnabled {
+			post.IsModerated = true // Если модерация отключена, то все посты считаем прошедшими модерацию
+		}
+
 		commentsOpts := &Options{
 			Condition: &Condition{
 				Name:     "post_id",
@@ -100,6 +106,10 @@ func GetPostByID(ctx context.Context, id string) (models.Post, error) {
 			&post.Category.ID, &post.Category.Name, &post.AuthorID, &post.IsModerated)
 	if err != nil {
 		return post, errors.New("пост не найден") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	}
+
+	if !cfg.ModerationEnabled {
+		post.IsModerated = true // Если модерация отключена, то все посты считаем прошедшими модерацию
 	}
 
 	commentsOpts := &Options{
