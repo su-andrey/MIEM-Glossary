@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/su-andrey/kr_aip/config"
 	"github.com/su-andrey/kr_aip/database"
 	"github.com/su-andrey/kr_aip/models"
@@ -172,6 +173,13 @@ func UpdatePost(ctx context.Context, id, name, body string, likes, dislikes int,
 	}
 	if !exists {
 		return errors.New("пост не найден")
+	}
+
+	if !cfg.ModerationEnabled {
+		err = database.DB.QueryRow(ctx, "SELECT is_moderated FROM posts WHERE id = $1", id).Scan(&isModerated)
+		if err != nil {
+			return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения статуса модерации поста")
+		}
 	}
 
 	_, err = database.DB.Exec(ctx,
