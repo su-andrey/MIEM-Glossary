@@ -30,6 +30,16 @@ const SearchPage = () => {
         }
     }, [query]);
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(search);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [search]);
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -72,23 +82,29 @@ const SearchPage = () => {
     }
 
     const handleSearchChange = async (e) => {
-        setSearch(e.target.value)
-        try{
-            const res = await searchSubstring(search)
-            setSearchResults(res)
+        const value = e.target.value;
+        setSearch(value);
+        try {
+            const res = await searchSubstring(value);
+            setSearchResults(res);
+        } catch (error) {
+            console.error(error);
         }
-        catch(error){
-            console.error(error)
-        }
-    }
+    };
 
     const handleSearch = async (str) => {
         try{
+            setLoading(true)
+            setSearch(str)
             const res = await searchSubstring(str)
+            console.log(res, "резы ручного поиска")
             setSearchResults(res)
         }
         catch(error){
             console.error(error)
+        }
+        finally{
+            setLoading(false)
         }
     }
 
@@ -165,7 +181,7 @@ const SearchPage = () => {
                                     placeholder="Хочу найти..."
                                     className={styles.field}
                                     value={search}
-                                    onChange={handleSearchChange}
+                                    onChange={(e)=>handleSearchChange(e)}
                                 />
                                 <img
                                     draggable="false"
@@ -174,6 +190,7 @@ const SearchPage = () => {
                                     className={styles.glass}
                                 />
                             </div>
+                            <ActionButton text={loading ? "Поиск..." : "Искать"} onClick={()=>{handleSearch(search)}} disabled={loading}/>
                         </div>
                         <div className={styles.resultContainer}>
                             {(!searchResults || searchResults.length === 0) ?
@@ -183,7 +200,7 @@ const SearchPage = () => {
                                 :
                                 (searchResults.map((post)=>{
                                     return(
-                                        <SearchCard data={post} disabled={false} key={post.id || uid()}/>
+                                        <SearchCard data={post} disabled={false} key={post?.id}/>
                                     )
                                 }))
                             }

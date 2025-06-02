@@ -78,11 +78,13 @@ const App = () => {
                     dispatch(setEmail(""));
                     dispatch(setUserID(null));
                     localStorage.removeItem("token");
+                    localStorage.removeItem("persist:root")
                 }
             };
             fetchUser();
         }
     }, [userID]);
+
 
 
     useSmoothScroll()
