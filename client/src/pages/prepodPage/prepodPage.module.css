@@ -67,5 +67,40 @@
     width: 100%;
 }
 
+@media (max-width: 870px){
+    .sliderWrapper {
+        user-select: none;
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        justify-content: space-evenly;
+        row-gap: 12vh;
+        width: 100%;
+    }
+    .sliderWrapper {
+        row-gap: 6vh;
+    }
+}
+
+@media (max-width: 430px) {
+    .wrapper{
+        padding-block: 5vh;
+    }
+}
+
+@media (max-width: 370px) {
+    .sliderWrapper {
+        row-gap: 3vh;
+    }
+}
+
+@media (max-width: 270px) {
+    .support{
+        display: none;
+    }
+    .sliderWrapper {
+        row-gap: 2vh;
+    }
+}
+
 
 

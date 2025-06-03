@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import SearchField from "../../components/UI/searchField/SearchField";
 import styles from "./searchPage.module.css"
-import glass from "./../../assets/vectors/glass_grey.svg"
+import glass from "./../../assets/vectors/glass_light_grey.svg"
 import ActionButton from "../../components/UI/actionButton/ActionButton";
 import searchPrepod from "../../queries/SEARCH/searchPrepod";
 import searchSubstring from "../../queries/SEARCH/searchSubstring";
 import SearchCard from "../../components/searchCard/SearchCard";
 import { uid } from "uid";
 import { useSearchParams } from "react-router-dom";
+import crystal from "./../../assets/png/crystals/crystal5.png"
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
@@ -111,6 +112,7 @@ const SearchPage = () => {
 
     return (
         <div className={styles.wrapper}>
+            <img src={crystal} alt="crystal" className={styles.crystal} />
             <div className={styles.title}>
                 Поиск
             </div>
