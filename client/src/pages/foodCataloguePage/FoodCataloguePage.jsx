@@ -88,7 +88,7 @@ const FoodCataloguePage = () => {
                             Выберите интересующее заведение
                         </div>
                     </div>
-                    <div className={styles.buttonWrapper}>
+                    <div className={styles.buttonWrapper  + " " + styles.support}>
                             <div className={styles.caption}>
                                 Предложите что-то еще
                             </div>

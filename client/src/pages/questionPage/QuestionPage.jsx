@@ -109,7 +109,7 @@ const QuestionPage = () => {
                             Выберите интересующую тему
                         </div>
                     </div>
-                    <div className={styles.rightWrapper}>
+                    <div className={styles.rightWrapper + " " + styles.support}>
                         <div className={styles.caption}>
                             Задайте собственный вопрос
                         </div>

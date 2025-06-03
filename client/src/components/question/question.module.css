@@ -43,6 +43,7 @@
     display:flex;
     flex-direction: row;
     gap: 2vw;
+    flex-wrap: wrap;
 }
 
 .comment{
@@ -104,4 +105,16 @@
 .dislike_icon:hover{
     transform: scale(115%);
     transition: all 0.2s ease-out;
+}
+
+@media (max-width: 870px){
+    .wrapper{
+        width: 35vw;
+    }
+}
+
+@media (max-width: 380px){
+    .wrapper{
+        width: 50vw;
+    }
 }
