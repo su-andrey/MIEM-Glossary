@@ -127,3 +127,54 @@
     align-items: start;
     gap: 1vh;
 }
+
+@media (max-width: 1800px) {
+    .wrapper{
+        gap:calc(var(--index)*1.5);
+    }
+}
+
+@media (max-width: 1260px) {
+    .wrapper{
+        gap: calc(var(--index)*2.5);
+        padding-block: calc(var(--index)*4.5);
+        padding-bottom: calc(var(--index)*6.5);
+    }
+    .changeForm {
+        row-gap: 1.5vh;
+    }
+    .input {
+        font-size: var(--caption-font);
+        height: calc(2.2*var(--index));
+    }
+    .inputContainer{
+        width: 50%;
+        position: relative;
+    }
+
+}
+
+@media (max-width: 550px) {
+    .wrapper{
+        gap: calc(var(--index)*2.5);
+        padding-block: calc(var(--index)*3.5);
+        padding-bottom: calc(var(--index)*8.5);
+    }
+    .changeForm {
+        row-gap: 1.5vh;
+    }
+    .input {
+        font-size: var(--caption-font);
+        height: calc(2.2*var(--index));
+    }
+    .inputContainer{
+        width: 75%;
+        position: relative;
+    }
+    .hsebutton{
+        width: 50vw;
+        position: relative;
+        left: 20vw;
+    }
+
+}

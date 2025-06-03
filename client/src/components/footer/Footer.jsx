@@ -38,8 +38,10 @@ const Footer = () => {
         className={styles.wrapper}
     >
         <motion.div custom={2} variants={middleTextAnimation} className={styles.header}>MIEM Glossary<span style={{fontSize:"35%"}}>©</span></motion.div>
-        <motion.div custom={3} variants={middleTextAnimation} className={styles.subheader}>Наша команда</motion.div>
-        <motion.div custom={4} variants={middleTextAnimation} className={styles.caption}>Переходите и следите за нашими другими проектами</motion.div>
+        <div className={styles.logical}>
+            <motion.div custom={3} variants={middleTextAnimation} className={styles.subheader}>Наша команда</motion.div>
+            <motion.div custom={4} variants={middleTextAnimation} className={styles.caption}>Переходите и следите за нашими другими проектами</motion.div>
+        </div>
         <motion.div custom={5} variants={middleTextAnimation} className={styles.socials}>
             {!open && 
                 <div className={styles.gh_container}>
