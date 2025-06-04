@@ -1,10 +1,10 @@
-import "./loader1.css";
+import styles from "./loader1.module.css";
 
 const Loader1 = () => {
     return (
-        <div className="background">
-            <div className="wrapper">
-                <div className="loader1"></div>
+        <div className={styles.background}>
+            <div className={styles.wrapper}>
+                <div className={styles.loader1}></div>
             </div>
         </div>
     );

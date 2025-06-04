@@ -99,3 +99,39 @@
 }
 
 
+@media(max-width: 700px){
+    .gridWrapper{
+        user-select: none;
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        justify-content: space-around;
+        row-gap: 6vh;
+        width: 100%;
+        height: auto; 
+    }
+    .wrapper{
+        padding-block: 5vh;
+    }
+}
+
+@media(max-width: 320px){
+    .gridWrapper{
+        user-select: none;
+        display: grid;
+        grid-template-columns: repeat(1, max-content);
+        justify-content: space-around;
+        row-gap: 2vh;
+        width: 100%;
+        height: auto; 
+    }
+}
+
+@media(max-width: 270px){
+    .wrapper{
+        gap: 3.5vh;
+    }
+    .topWrapper{
+        gap: 3.5vh;
+    }
+}
+

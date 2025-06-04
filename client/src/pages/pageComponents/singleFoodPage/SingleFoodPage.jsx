@@ -28,6 +28,7 @@ import ReactionBlock from "../../../components/reactionBlock/ReactionBlock";
 import { Navigate } from "react-router-dom";
 import NoPostsCard from "../../../components/noPostsCard/NoPostsCard";
 
+
 const SingleFoodPage = () => {
     let categoryID = useParams().category;
     let postID = (useParams().id);
@@ -127,7 +128,7 @@ const SingleFoodPage = () => {
                                     />
                                 </div>
                             </div>
-                            <div className={styles.imageContainer}>
+                            <div className={styles.imageContainer + " " + styles.imageContainer1}>
                                 <Swiper
                                     className={styles.swiper}
                                     modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel, Autoplay, EffectCoverflow]}
@@ -168,12 +169,11 @@ const SingleFoodPage = () => {
                                         modifier: 1,
                                         slideShadows: false,
                                     }}
-
                                 >
-                                {food?.photos && food?.photos.length > 0 ?
+                                    {food?.photos && food?.photos.length > 0 ?
                                         (food.photos.map((photo)=>{
                                             return(
-                                                <SwiperSlide key={uid()}>
+                                                <SwiperSlide key={uid()} className={styles.SwiperSlide}>
                                                     <img src={photo.url} className={styles.image}></img>
                                                 </SwiperSlide>
                                             )
@@ -185,19 +185,149 @@ const SingleFoodPage = () => {
                                     }
                                 </Swiper>
                                 <div className={styles.swiperButtonPrev}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
                                         <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                                     </svg>
                                 </div>
-
                                 <div className={styles.swiperButtonNext}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
                                         <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
                                     </svg>
                                 </div>
                                 <div className={styles.swiperPagination}></div>                                
                             </div>
                         </div>
+
+
+
+
+                            <div className={styles.imageContainer + " " + styles.imageContainer2}>
+                                <div className={styles.swiperButtonPrev2}>
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                </div>
+                                <Swiper
+                                    className={styles.swiper + " " + styles.swiper2}
+                                    modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel, Autoplay]}
+                                    spaceBetween={20}
+                                    slidesPerView={3}
+                                    loop={true}
+                                    navigation={{
+                                        nextEl: `.${styles.swiperButtonNext}`,
+                                        prevEl: `.${styles.swiperButtonPrev}`
+                                    }}
+                                    pagination={{
+                                        el: `.${styles.swiperPagination}`,
+                                        clickable: true
+                                    }}
+                                    
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                        pauseOnMouseEnter: true,
+                                    }}
+                                    freeMode={{
+                                        enabled: true,
+                                        momentumBounceRatio: 1.5,
+                                        momentumRatio: 3,
+                                        momentumVelocityRatio: 1,
+                                    }}
+                                    keyboard={{
+                                        enabled: true,
+                                    }}
+                                    parallax={{
+                                        enabled: true,
+                                    }}
+                                    effect="coverflow"
+                        
+                                >
+                                    {food?.photos && food?.photos.length > 0 ?
+                                        (food.photos.map((photo)=>{
+                                            return(
+                                                <SwiperSlide key={uid()} className={styles.SwiperSlide}>
+                                                    <img src={photo.url} className={styles.image}></img>
+                                                </SwiperSlide>
+                                            )
+                                        }))
+                                        :
+                                        <SwiperSlide>
+                                            <img src={getRandomImagePath()} className={styles.image}></img>
+                                        </SwiperSlide>
+                                    }
+                                </Swiper>
+                                <div className={styles.swiperButtonNext2}>
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.swiperPagination}></div>                                
+                            </div>
+
+
+                            <div className={styles.imageContainer + " " + styles.imageContainer3 }>
+                                <div className={styles.swiperButtonPrev2}>
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                </div>
+                                <Swiper
+                                    className={styles.swiper + " " + styles.swiper2}
+                                    modules={[Navigation, Pagination, Parallax, FreeMode, Keyboard, Mousewheel, Autoplay]}
+                                    slidesPerView={1}
+                                    loop={true}
+                                    navigation={{
+                                        nextEl: `.${styles.swiperButtonNext}`,
+                                        prevEl: `.${styles.swiperButtonPrev}`
+                                    }}
+                                    pagination={{
+                                        el: `.${styles.swiperPagination}`,
+                                        clickable: true
+                                    }}
+                                    centeredSlides={true}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                        pauseOnMouseEnter: true,
+                                    }}
+                                    freeMode={{
+                                        enabled: true,
+                                        momentumBounceRatio: 1.5,
+                                        momentumRatio: 3,
+                                        momentumVelocityRatio: 1,
+                                    }}
+                                    keyboard={{
+                                        enabled: true,
+                                    }}
+                                    parallax={{
+                                        enabled: true,
+                                    }}
+                                    effect="coverflow"
+                        
+                                >
+                                    {food?.photos && food?.photos.length > 0 ?
+                                        (food.photos.map((photo)=>{
+                                            return(
+                                                <SwiperSlide key={uid()} className={styles.SwiperSlide}>
+                                                    <img src={photo.url} className={styles.image}></img>
+                                                </SwiperSlide>
+                                            )
+                                        }))
+                                        :
+                                        <SwiperSlide>
+                                            <img src={getRandomImagePath()} className={styles.image}></img>
+                                        </SwiperSlide>
+                                    }
+                                </Swiper>
+                                <div className={styles.swiperButtonNext2}>
+                                    <svg className={styles.swiperSVG} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                        <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.swiperPagination}></div>                                
+                            </div>
+
+
                         <div className={styles.subwrapper}>
                                 <div className={styles.subtitle}>
                                     Отзывы:

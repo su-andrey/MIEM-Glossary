@@ -19,8 +19,8 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter, 
                     className={styles.field}
                     name="answer"
                     style={{
-                        height: (height || "25vh"),
-                        width: (width || "30vw"),
+                        height: (height || ""),
+                        width: (width || ""),
                     }}
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}

@@ -113,7 +113,7 @@
 
 @media(max-width: 1000px){
     .wrapper {
-        width: 60vw;
+        width: 40vw;
         border-radius: calc(1.2*var(--index));
         row-gap: 3vh;
         padding: calc(1.8*var(--index));
@@ -123,10 +123,47 @@
 
 @media(max-width: 520px){
     .wrapper {
-        width: 75vw;
+        width: 50vw;
         border-radius: calc(1.2*var(--index));
         row-gap: 3vh;
         padding: calc(1.8*var(--index));
         max-height: 90vh;
+    }
+}
+
+@media(max-width: 410px){
+    .wrapper {
+        width: 70vw;
+        border-radius: calc(1.2*var(--index));
+        row-gap: 1vh;
+        padding: calc(1.8*var(--index));
+        max-height: 90vh;
+    }
+}
+
+
+@media(max-width: 260px){
+    .wrapper {
+        width: 80vw;
+        border-radius: calc(1.2*var(--index));
+        row-gap: 0;
+        padding: calc(1.8*var(--index));
+        max-height: 90vh;
+    }
+}
+
+@media(max-width: 210px){
+    .wrapper {
+        width: 80vw;
+        border-radius: calc(1.2*var(--index));
+        row-gap: 0;
+        padding: calc(1.8*var(--index));
+        max-height: 90vh;
+    }
+    .title {
+        font-size: calc(var(--index)*1);
+        font-weight: 650;
+        letter-spacing: calc(var(--index)*0.008);
+        user-select: none;
     }
 }

@@ -136,7 +136,12 @@ const QuestionPage = () => {
                                         key={post?.id || uid()}
                                     >
                                         <Link to={`/questions/${post.id}`} >
-                                            <Question data={post} />
+                                            <Question 
+                                                data={post} 
+                                                style={{
+                                                    width:"max-content",
+                                                    height: "stretch"
+                                                }}/>
                                         </Link>
                                     </motion.div>
                                 )))

@@ -10,9 +10,10 @@
 
 .loader1 {
   position: absolute;
-  left: 37%;
-  top: 30%;
-  height: 20vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: calc(var(--index)*8);
   aspect-ratio: 2;
   border-bottom: 5px solid #0000;
   background: 
