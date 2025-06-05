@@ -58,6 +58,17 @@ const HomePage = () => {
     const y2 = useTransform(scroll2, [0, 1], ["900px", "-1200px"])
     const y3 = useTransform(scroll3, [0, 1], ["900px", "-700px"])
 
+
+        const noAnimation = {
+        hidden: {
+            opacity: 1,
+        },
+        visible: {
+            opacity: 1,
+        },
+    }
+
+
     const textAnimation = {
         hidden: {
             opacity: 0,
@@ -160,8 +171,8 @@ const HomePage = () => {
                 <div className={styles.container}>
                     <motion.div
                         custom={2}
-                        variants={middleTextAnimation}
-                        initial="hidden"
+                        variants={isMobile ? noAnimation : middleTextAnimation}
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
                         className={styles.metatitle}
@@ -173,19 +184,18 @@ const HomePage = () => {
 
                 <div className={styles.container}>
                     <motion.div
-                        initial="hidden"
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         className={styles.textContainer}
                         custom={2}
-                        variants={topLeftTextAnimation}
+                        variants={isMobile ? noAnimation : topLeftTextAnimation}
                     >
-                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={3} variants={topLeftTextAnimation} className={styles.title} style={{ marginBottom: "2vh" }}>Мы - Глоссарий МИЭМ</motion.div>
-                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={4} variants={topLeftTextAnimation} className={styles.paragraf}>Анонимность, честность, конфиденциальность</motion.div>
-                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={5} variants={topLeftTextAnimation} className={styles.paragraf}> - это наши фундаментальные принципы</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={3} variants={isMobile ? noAnimation : topLeftTextAnimation} className={styles.title} style={{ marginBottom: "2vh" }}>Мы - Глоссарий МИЭМ</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={4} variants={isMobile ? noAnimation : topLeftTextAnimation} className={styles.paragraf}>Анонимность, честность, конфиденциальность</motion.div>
+                        <motion.div viewport={{ once:true, amount: 1, margin: "800px 800px" }} custom={5} variants={isMobile ? noAnimation : topLeftTextAnimation} className={styles.paragraf}> - это наши фундаментальные принципы</motion.div>
                     </motion.div>
                     <motion.img
                         ref={crystal1Ref}
-                        
                         style={{ y: y1 }}              
                         src={crystal1}
                         alt="MIEM logo"
@@ -204,33 +214,33 @@ const HomePage = () => {
                         loading="lazy"
                     />
                     <motion.div
-                        initial="hidden"
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, amount: 1 }}
                         custom={1}
-                        variants={rightTextAnimation}
+                        variants={isMobile ? noAnimation :  rightTextAnimation}
                         className={styles.textContainer}
                     >
-                        <motion.div custom={1} variants={rightTextAnimation} className={styles.title}>Здесь вы можете...</motion.div>
-                        <motion.div custom={2} variants={rightTextAnimation} className={styles.paragraf}>Искать правдивые ответы и отзывы</motion.div>
-                        <motion.div custom={3} variants={rightTextAnimation} className={styles.paragraf}>Задавать вопросы прямо и открыто</motion.div>
-                        <motion.div custom={4} variants={rightTextAnimation} className={styles.paragraf}>Давать фидбек честно и откровенно</motion.div>
+                        <motion.div custom={1} variants={isMobile ? noAnimation :  rightTextAnimation} className={styles.title}>Здесь вы можете...</motion.div>
+                        <motion.div custom={2} variants={isMobile ? noAnimation :  rightTextAnimation} className={styles.paragraf}>Искать правдивые ответы и отзывы</motion.div>
+                        <motion.div custom={3} variants={isMobile ? noAnimation : rightTextAnimation} className={styles.paragraf}>Задавать вопросы прямо и открыто</motion.div>
+                        <motion.div custom={4} variants={isMobile ? noAnimation : rightTextAnimation} className={styles.paragraf}>Давать фидбек честно и откровенно</motion.div>
                     </motion.div>
                 </div>
 
                 <div className={styles.container}>
                     <motion.div
-                        initial="hidden"
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, amount: 1 }}
                         custom={1}
                         variants={leftTextAnimation}
                         className={styles.textContainer}
                     >
-                        <motion.div custom={1} variants={leftTextAnimation} className={styles.title}>Тут каждый студент...</motion.div>
-                        <motion.div custom={2} variants={leftTextAnimation} className={styles.paragraf}>Остается полностью анонимным</motion.div>
-                        <motion.div custom={3} variants={leftTextAnimation} className={styles.paragraf}>Может и должен критиковать</motion.div>
-                        <motion.div custom={4} variants={leftTextAnimation} className={styles.paragraf}>Поможет другим узнать истину</motion.div>
+                        <motion.div custom={1} variants={isMobile ? noAnimation : leftTextAnimation} className={styles.title}>Тут каждый студент...</motion.div>
+                        <motion.div custom={2} variants={isMobile ? noAnimation : leftTextAnimation} className={styles.paragraf}>Остается полностью анонимным</motion.div>
+                        <motion.div custom={3} variants={isMobile ? noAnimation : leftTextAnimation} className={styles.paragraf}>Может и должен критиковать</motion.div>
+                        <motion.div custom={4} variants={isMobile ? noAnimation : leftTextAnimation} className={styles.paragraf}>Поможет другим узнать истину</motion.div>
                     </motion.div>
                     <motion.img
                         ref={crystal3Ref}
@@ -244,7 +254,7 @@ const HomePage = () => {
 
                 {!userID && <div className={styles.container}>
                     <motion.div
-                        initial="hidden"
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.7 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -260,7 +270,7 @@ const HomePage = () => {
                 </div>}
                 {userID && <div className={styles.container}>
                     <motion.div
-                        initial="hidden"
+                        initial= {isMobile ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.7 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}

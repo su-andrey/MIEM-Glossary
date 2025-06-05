@@ -63,3 +63,31 @@
     justify-content: start;
     gap: 5vh;
 }
+
+
+@media(max-width: 820px){
+    .crystal2{
+        width: 45vw;
+    }
+
+}
+
+
+@media(max-width: 490px){
+    .crystal2{
+        width: 45vw;
+    }
+
+    .title{
+        font-weight: 700;
+        font-size: calc(0.8*var(--title-font));
+        margin-bottom: 2vh;
+    }
+
+    .paragraf{
+        font-weight: 450;
+        font-size: calc(0.8*var(--subprimary-font));
+        color: var(--dark-grey);
+        line-height: 150%;
+    }
+}
