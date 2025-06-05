@@ -12,9 +12,11 @@ import Loader2 from "../../components/UI/loader2/Loader2"
 import useScrollToTop from "../../custom hooks/useScrollToTop"
 import { useSelector } from "react-redux"
 import Scroll from "../../components/UI/scrollButton/Scroll"
+import useIsMobile from "../../custom hooks/useIsMobile"
 
 const HomePage = () => {
     useScrollToTop()
+    const isMobile = useIsMobile();
     const navigate = useNavigate();
     const location = useLocation();
     const userID = useSelector(state => state.main.userID)
