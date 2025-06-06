@@ -1,4 +1,4 @@
-import styles from "./gradeModal.module.css"
+import styles from "./GradeModal.module.css"
 import ActionButton from "../actionButton/ActionButton";
 import { MdOutlineCancel } from "react-icons/md";
 import { useState, useEffect } from "react";
