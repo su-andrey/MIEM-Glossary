@@ -67,12 +67,8 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
             
             { !oneField && <input  
                 placeholder={"Добавить имя..."}
-                className={styles.field}
+                className={styles.input}
                 name="name"
-                style={{
-                    height: (height || "8vh"),
-                    width: (width || "30vw"),
-                }}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />}
@@ -80,10 +76,6 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
                 placeholder={placeholder || "Добавить ответ..."}
                 className={styles.field}
                 name="answer"
-                style={{
-                    height: (height || "25vh"),
-                    width: (width || "30vw"),
-                }}
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
             />

@@ -29,20 +29,21 @@
     color: black;
     font-weight: 500;
     font-size: var(--subprimary-font);
-
+    word-break: break-word;
 }
 
 .body{
     color: var(--dark-grey);
     font-size: var(--caption-font);
     max-width: 100%;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .commentBlock{
     display:flex;
     flex-direction: row;
     gap: 2vw;
+    flex-wrap: wrap;
 }
 
 .comment{
@@ -104,4 +105,31 @@
 .dislike_icon:hover{
     transform: scale(115%);
     transition: all 0.2s ease-out;
+}
+
+@media (max-width: 870px){
+    .wrapper{
+        width: 35vw;
+    }
+}
+
+@media (max-width: 780px){
+    .wrapper{
+        padding: 2vw;
+        width: 30vw;
+    }
+}
+
+@media (max-width: 546px){
+    .wrapper{
+        padding: 3vw;
+        width: 40vw;
+    }
+}
+
+@media (max-width: 330px){
+    .wrapper{
+        padding: 4vw;
+        width: 45vw;
+    }
 }

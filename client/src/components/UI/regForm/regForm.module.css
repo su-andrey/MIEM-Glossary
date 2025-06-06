@@ -238,3 +238,15 @@
     }
 }
 
+
+@media(max-width: 420px){
+    .wrapper {
+        row-gap: 2vh;
+    }
+    input{
+        font-size: calc(var(--index)*0.95);
+    }
+    
+}
+
+

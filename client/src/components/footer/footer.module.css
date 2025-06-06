@@ -87,7 +87,14 @@
 .subheader{
     font-size: var(--primary-font);
     color: white;
-    margin-bottom: calc(-1.2 * var(--left-padding));
+}
+
+.logical{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    align-items: center;
+    color: white;
 }
 
 .profile1, .profile2, .profile3 {
@@ -248,5 +255,135 @@ a:hover .profileGlow::before {
     }
     50% {
         transform: scale(1.08);
+    }
+}
+
+@media (max-width: 1700px) {
+    .socials{
+        gap: calc(4*var(--left-padding));
+    }
+}
+
+@media (max-width: 1380px) {
+    .wrapper{
+        padding: calc(1.5*var(--left-padding));
+        gap: calc(1.0*var(--left-padding));
+    }
+    .socials{
+        gap: calc(3.5*var(--left-padding));
+    }
+
+    .profile1, .profile2, .profile3 {
+        width: calc(8 * var(--index));
+        height: calc(8 * var(--index));
+    }
+
+    .profileGlow {
+        width: calc(9 * var(--index));
+        height: calc(9 * var(--index));
+    }
+
+}
+
+
+@media (max-width: 880px) {
+
+    .socials{
+        gap: calc(2.1*var(--left-padding));
+    }
+
+}
+
+@media (max-width: 740px) {
+
+    .socials{
+        gap: calc(2*var(--left-padding));
+    }
+
+    .profileGlow {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+    .profile1, .profile2, .profile3 {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+    .wrapper{
+        padding: calc(1.1*var(--left-padding));
+        gap: calc(0.7*var(--left-padding));
+    }
+
+    .socials{
+        gap: calc(1.5*var(--left-padding));
+    }
+
+    .profileGlow {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+    .profile1, .profile2, .profile3 {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+    .wrapper{
+        padding: calc(1.1*var(--left-padding));
+        gap: calc(0.7*var(--left-padding));
+    }
+
+    .socials{
+        gap: calc(1.5*var(--left-padding));
+    }
+
+    .profileGlow {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+    .profile1, .profile2, .profile3 {
+        width: calc(7 * var(--index));
+        height: calc(7 * var(--index));
+    }
+
+}
+
+
+
+@media (max-width: 500px) {
+    .caption{
+        font-size: calc(var(--caption-font)*0.8);
+        color: white;
+        margin-bottom: 1vh;
+    }
+
+    .profileGlow {
+        position: relative;
+        width: calc(6.5 * var(--index));
+        height: calc(6.5 * var(--index));
+    }
+
+    .profile1, .profile2, .profile3 {
+        width: calc(6.5 * var(--index));
+        height: calc(6.5 * var(--index));
+    }
+
+    .socials{
+        gap: calc(0.5*var(--left-padding));
+    }
+
+    .name{
+        font-size: var(--caption-font);
+        font-weight: 400;
     }
 }

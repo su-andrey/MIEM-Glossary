@@ -5,6 +5,7 @@
     --dark-grey: #464646;
     --light-grey: #878787;
     --dark-gradient: linear-gradient(270deg,rgba(6, 1, 29, 1) 44%, rgba(11, 9, 76, 1) 100%);
+    --black-gradient: linear-gradient(90deg,rgba(6, 1, 29, 1) 0%, rgba(0, 0, 0, 1) 100%);
     --yellow: #FFE100;
 
     --font-family: Raleway, Roboto, sans-serif;

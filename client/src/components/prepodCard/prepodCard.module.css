@@ -62,3 +62,23 @@
     transition: all 0.3s ease-out;
     transform: translateY(0.5vh);
 }
+
+@media (max-width: 430px) {
+    .wrapper{
+        width:calc(12*var(--index));
+    }
+
+    .image{
+    height: calc(12*var(--index));
+    }
+}
+
+@media (max-width: 370px) {
+    .wrapper{
+        width:calc(10*var(--index));
+    }
+
+    .image{
+    height: calc(10*var(--index));
+    }
+}

@@ -110,7 +110,7 @@
 
 @media(max-width: 1000px){
     .wrapper {
-        width: 60vw;
+        width: 40vw;
         border-radius: calc(1.2*var(--index));
         row-gap: 3vh;
         padding: calc(1.8*var(--index));
@@ -119,6 +119,28 @@
 }
 
 @media(max-width: 520px){
+    .wrapper {
+        width: 50vw;
+        border-radius: calc(1.2*var(--index));
+        row-gap: 3vh;
+        padding: calc(1.8*var(--index));
+        max-height: 90vh;
+    }
+}
+
+
+@media(max-width: 450px){
+    .wrapper {
+        width: 65vw;
+        border-radius: calc(1.2*var(--index));
+        row-gap: 3vh;
+        padding: calc(1.8*var(--index));
+        max-height: 90vh;
+    }
+}
+
+
+@media(max-width: 320px){
     .wrapper {
         width: 75vw;
         border-radius: calc(1.2*var(--index));

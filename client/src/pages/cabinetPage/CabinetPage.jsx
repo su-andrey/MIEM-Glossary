@@ -70,6 +70,7 @@ const CabinetPage = () => {
                     <ChangeForm />
                 </>
             }
+            <img src={button} alt="HSE button" className={styles.hsebutton}/>
             {
                 isAdmin && isAuth &&
                 <div className={styles.gates}>
@@ -79,7 +80,6 @@ const CabinetPage = () => {
                     <Link to="/admin"><ActionButton text="Админ"></ActionButton></Link>
                 </div>
             }
-            <img src={button} alt="HSE button" className={styles.hsebutton}/>
         </div>
         </>
     );

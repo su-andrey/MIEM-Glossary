@@ -13,3 +13,10 @@
     width: 2vw;
     transition: all 0.3s ease-out;
 }
+
+
+@media(max-width: 420px){
+    .eye{
+        width: calc(var(--index)*0.9);
+    }
+}

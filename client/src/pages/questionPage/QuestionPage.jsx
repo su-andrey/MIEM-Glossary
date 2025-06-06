@@ -109,7 +109,7 @@ const QuestionPage = () => {
                             Выберите интересующую тему
                         </div>
                     </div>
-                    <div className={styles.rightWrapper}>
+                    <div className={styles.rightWrapper + " " + styles.support}>
                         <div className={styles.caption}>
                             Задайте собственный вопрос
                         </div>
@@ -136,7 +136,12 @@ const QuestionPage = () => {
                                         key={post?.id || uid()}
                                     >
                                         <Link to={`/questions/${post.id}`} >
-                                            <Question data={post} />
+                                            <Question 
+                                                data={post} 
+                                                style={{
+                                                    width:"max-content",
+                                                    height: "stretch"
+                                                }}/>
                                         </Link>
                                     </motion.div>
                                 )))

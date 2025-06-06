@@ -63,3 +63,9 @@
     color: black;
     font-size: var(--caption-font);
 }
+
+@media(max-width: 768px){
+    .wrapper{
+        border-radius: 4vw;
+    }
+}

@@ -71,26 +71,30 @@ const ChangeForm = () => {
             <div className={styles.subtitle}>
                 Смена пароля:
             </div>
-            <input 
-                className={errors.email ? styles.input_err : styles.input} 
-                type="email" 
-                placeholder="Введите вашу почту..."
-                {...register('email', {
-                    required: "Поле обязательно к заполнению",
-                    minLength: {
-                        value: 5,
-                        message: "Слишком короткая почта"
-                    },
-                    maxLength: {
-                        value: 40,
-                        message: "Слишком длинная почта"
-                    },
-                    pattern: {
-                        value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                        message: "Неверный формат почты"
-                    },
-                })}
-            />
+            <div className={styles.inputContainer}>
+                <input 
+                    style={{width:"100%"}}
+                    className={errors.email ? styles.input_err : styles.input} 
+                    type="email" 
+                    placeholder="Введите вашу почту..."
+                    {...register('email', {
+                        required: "Поле обязательно к заполнению",
+                        minLength: {
+                            value: 5,
+                            message: "Слишком короткая почта"
+                        },
+                        maxLength: {
+                            value: 40,
+                            message: "Слишком длинная почта"
+                        },
+                        pattern: {
+                            value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                            message: "Неверный формат почты"
+                        },
+                    })}
+                />
+            </div>
+
             {errors.email && <div className={styles.error_warning}>{errors.email.message}</div>}
             
             <div className={styles.inputContainer}>

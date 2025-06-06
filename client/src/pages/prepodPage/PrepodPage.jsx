@@ -81,7 +81,7 @@ const PrepodPage = () => {
                         Выберите интересующего преподавателя
                     </div>
                 </div>
-                <div className={styles.buttonWrapper}>
+                <div className={styles.buttonWrapper + " " + styles.support}>
                         <div className={styles.caption}>
                             Предложите кого-то еще
                         </div>
@@ -93,10 +93,10 @@ const PrepodPage = () => {
                             />
                         }
                         {!author_id &&
-                            <>
+                            <div className={styles.support}>
                                 <div className={styles.caption}>Войдите в аккаунт чтобы добавлять посты</div>
                                 <Link to="/login"><ActionButton text="Авторизоваться"/></Link>
-                            </>
+                            </div>
                         }
                 </div>
             </div>

@@ -6,6 +6,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--page-vertical-offset);
+    position: relative;
+    overflow: hidden;
 }
 
 .title{
@@ -19,7 +21,12 @@
     color: var(--dark-grey);
 }
 
-
+.crystal{
+    position: absolute;
+    width: 40vw;
+    right: 3%;
+    top: 5%;
+}
 
 .field{
     position: relative;
@@ -30,7 +37,7 @@
     background-color: #e7e7e7;
     padding: calc(1*var(--index));
     border-radius: calc(1.25*var(--index));
-    padding-left: 5vw;
+    padding-left: 4vw;
     transition: all 0.3s ease-out;
     margin-right: 0;
     font-size: calc(var(--subprimary-font)*0.85);
@@ -52,14 +59,13 @@
 
 .glass{
     position: absolute;
-    width: 2.2vw;
-    min-width: 1em;
-    min-height: 1em;
-    top:28%;
+    width: calc(var(--index)*1.2);
+    top:50%;
+    transform: translateY(-50%);
     left: 3%;
     z-index: 3;
     transition: all 0.3s ease-out;
-    color: var(--dark-grey)
+    color: var(--light-grey)
 }
 
 @keyframes shake {
@@ -163,4 +169,121 @@
     justify-content: start;
     align-items: start;
     gap: 4vh;
+}
+
+
+
+@media(max-width: 1700px) {
+    .wrapper{
+        gap: 6vh;
+    }
+}
+
+@media(max-width: 1250px) {
+    .wrapper{
+        gap: 5vh;
+        padding-block: 7vh;
+    }
+
+}
+
+@media(max-width: 1180px) {
+    .field{
+        height: 6vh;
+        border-radius: calc(0.75*var(--index));
+    }
+
+    .wrapper{
+        gap: 4.5vh;
+    }
+}
+
+
+@media(max-width: 1000px) {
+    .field{
+        height: 4.5vh;
+        border-radius: calc(0.75*var(--index));
+    }
+
+
+}
+
+
+@media(max-width: 950px) {
+    .field{
+        width: 40vw;
+    }
+
+    .wrapper{
+        gap: 3.5vh;
+    }
+}
+
+@media(max-width: 690px) {
+    .field{
+        height: 5vh;
+        padding-left: 12%;
+    }
+
+    .wrapper{
+        gap: 3.5vh;
+        padding-block: 4vh;
+    }
+
+    .glass{
+        width: 8px;
+    }
+}
+
+@media(max-width: 480px) {
+    .field{
+        height: 4vh;
+        padding-left: 14%;
+    }
+
+    .wrapper{
+        gap: 3.5vh;
+        padding-block: 4vh;
+    }
+
+    .checkbox{
+        transform: scale(1.1);
+    }
+
+    .glass{
+        width: calc(var(--index)*0.8);
+    }
+
+}
+
+
+@media(max-width: 310px) {
+    .field{
+        height: 4vh;
+        padding-left: 17%;
+        width: 50vw;
+    }
+
+    .wrapper{
+        gap: 3.5vh;
+        padding-block: 4vh;
+    }
+
+    .crystal{
+        top: 15%;
+    } 
+}
+
+
+@media(max-width: 230px) {
+    .crystal{
+        display: none;
+    } 
+
+    .field{
+        height: 4vh;
+        padding-left: 18%;
+        width: 70vw;
+    }
+
 }
