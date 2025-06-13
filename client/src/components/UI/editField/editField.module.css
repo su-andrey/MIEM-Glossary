@@ -1,0 +1,40 @@
+.trash{
+    width: 4vw;
+}
+
+
+@keyframes wiggle {
+    0%   { transform: rotate(0deg) scale(1.15); }
+    25%  { transform: rotate(-10deg) scale(1.15); }
+    50%  { transform: rotate(10deg) scale(1.15); }
+    75%  { transform: rotate(-5deg) scale(1.15); }
+    100% { transform: rotate(0deg) scale(1.15); }
+}
+
+
+.trash:hover{
+    animation: wiggle 0.4s ease;
+    transform: scale(1.15);
+}
+
+
+.wrapper{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1vw;
+}
+
+
+.yes{
+    width: 3.2vw;
+    justify-content: start;
+    color: #464646;
+}
+
+
+.yes:hover{
+    animation: wiggle 0.4s ease;
+    transform: scale(1.15);
+}

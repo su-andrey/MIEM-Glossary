@@ -1,0 +1,98 @@
+.errorBox {
+    min-width: 350px;
+    background: #fff;
+    font-size: 0.9em;
+    border: 1px solid #2d89ef;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+    animation: bounce 0.15s ease-in;
+    position: absolute;
+}
+  
+.out {
+    animation: bounce-out 0.2s ease forwards;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    background: #f0f0f0;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.close {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #000;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+.iconError {
+    width: 40px;
+    height: 40px;
+    display: block;
+    font-size: 0;
+    margin-right: 15%;
+}
+
+.iconError svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.iconError svg circle {
+    fill: #a50000;
+}
+
+.iconError svg line {
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+footer {
+    display: flex;
+    justify-content: flex-end;
+    background: #f0f0f0;
+    padding: 8px 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+button {
+    padding: 6px 12px;
+    background: #d9d9d9;
+    border: 1px solid #c0c0c0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+button:focus {
+    border-color: #2d89ef;
+}
+
+button:active {
+    border-color: #2b5797;
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce-out {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}

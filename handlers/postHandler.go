@@ -1,12 +1,26 @@
 package handlers
 
 import (
-	"context"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/database"
-	"github.com/su-andrey/kr_aip/models"
+	"github.com/su-andrey/kr_aip/config"
+	"github.com/su-andrey/kr_aip/services"
 )
+
+type postInput struct {
+	CategoryID int    `json:"category_id" validate:"required,gt=0"`
+	Name       string `json:"name" validate:"required,min=1,max=100"`
+	Body       string `json:"body" validate:"required,min=1,max=2000"`
+}
+
+type updatePostInput struct {
+	Name        string `json:"name" validate:"required,min=1,max=100"`
+	Body        string `json:"body" validate:"required,min=1,max=2000"`
+	Likes       int    `json:"likes"`
+	Dislikes    int    `json:"dislikes"`
+	IsModerated bool   `json:"is_moderated"`
+}
 
 // Общая структура всех функций в данном хэндлере (схожа с другими)
 // Выполняем подключение к БД, выполняем запрос. В случае ошибки сообщаем информативно
@@ -14,26 +28,29 @@ import (
 // Возвращаем полученный результат или сообщение об ошибки. Если результата не является объектом - выводим сообщение
 // GetPosts возвращает все посты
 func GetPosts(c fiber.Ctx) error {
-	rows, err := database.DB.Query(context.Background(),
-		`SELECT p.id, p.name, p.body, p.likes, p.dislikes, 
-		        c.id, c.name, 
-		        p.author_id 
-		 FROM posts p
-		 JOIN categories c ON p.category_id = c.id`)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-	defer rows.Close()
+	cfg := config.LoadConfig()
+	var opts services.Options
 
-	var posts []models.Post
-	for rows.Next() {
-		var post models.Post
-		err := rows.Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
-			&post.Category.ID, &post.Category.Name, &post.AuthorID)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-		}
-		posts = append(posts, post)
+	limitStr := c.Query("limit")
+	offsetStr := c.Query("offset")
+
+	if cfg.ENV == "production" {
+		limitStr = c.Query("limit", "20")
+		offsetStr = c.Query("offset", "0")
+	}
+
+	limit, err1 := strconv.Atoi(limitStr)
+	offset, err2 := strconv.Atoi(offsetStr)
+	if err1 == nil && limit > 0 {
+		opts.Limit = &limit
+	}
+	if err2 == nil && offset >= 0 {
+		opts.Offset = &offset
+	}
+
+	posts, err := services.GetPosts(c.Context(), &opts)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Ошибка запроса к БД")
 	}
 
 	return c.JSON(posts)
@@ -43,19 +60,9 @@ func GetPosts(c fiber.Ctx) error {
 func GetPost(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	var post models.Post
-	err := database.DB.QueryRow(context.Background(),
-		`SELECT p.id, p.name, p.body, p.likes, p.dislikes, 
-		        c.id, c.name, 
-		        p.author_id
-		 FROM posts p
-		 JOIN categories c ON p.category_id = c.id
-		 WHERE p.id = $1`, id).
-		Scan(&post.ID, &post.Name, &post.Body, &post.Likes, &post.Dislikes,
-			&post.Category.ID, &post.Category.Name, &post.AuthorID)
-
+	post, err := services.GetPostByID(c.Context(), id)
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "Ошибка запроса к БД")
 	}
 
 	return c.JSON(post)
@@ -64,51 +71,41 @@ func GetPost(c fiber.Ctx) error {
 // Создать новый пост
 func CreatePost(c fiber.Ctx) error {
 	// Создаем временную структуру для парсинга входных данных
-	var input struct {
-		CategoryID int    `json:"category_id"`
-		AuthorID   int    `json:"author_id"`
-		Name       string `json:"name"`
-		Body       string `json:"body"`
-	}
+	var input postInput
 
 	// Парсим тело запроса
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	// Проверяем, существует ли категория
-	var category models.Category
-	err := database.DB.QueryRow(
-		context.Background(),
-		"SELECT id, name FROM categories WHERE id = $1",
-		input.CategoryID,
-	).Scan(&category.ID, &category.Name)
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
+	}
 
+	userIDRaw := c.Locals("userID")
+	if userIDRaw == nil {
+		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+	}
+	userID := userIDRaw.(int)
+
+	category, err := services.GetCategoryByID(c.Context(), strconv.Itoa(input.CategoryID))
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Категория не найдена"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "категория не найдена")
+	}
+	if category.Name == "Отзывы" {
+		postID, err := strconv.Atoi(input.Name)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "неверный формат ID поста")
+		}
+		post, err := services.GetPostByID(c.Context(), strconv.Itoa(postID))
+		if err != nil || post.Category.Name == "Отзывы" || post.Category.Name == "Вопросы" {
+			return fiber.NewError(fiber.StatusBadRequest, "пост не найден или не является постом, на который можно оставить отзыв")
+		}
 	}
 
-	// Вставляем пост в базу
-	err = database.DB.QueryRow(
-		context.Background(),
-		`INSERT INTO posts (name, body, category_id, author_id, likes, dislikes)
-		 VALUES ($1, $2, $3, $4, 0, 0) RETURNING id`,
-		input.Name, input.Body, input.CategoryID, input.AuthorID,
-	).Scan(&input.CategoryID) // Получаем ID созданного поста
-
+	post, err := services.CreatePost(c.Context(), input.CategoryID, input.Name, input.Body, userID)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-
-	// Формируем объект Post с вложенной категорией
-	post := models.Post{
-		ID:       input.CategoryID, // Возвращенный ID поста
-		Category: category,         // Заполненный объект категории
-		AuthorID: input.AuthorID,
-		Name:     input.Name,
-		Body:     input.Body,
-		Likes:    0,
-		Dislikes: 0,
+		return fiber.NewError(fiber.StatusBadRequest, "error creating post")
 	}
 
 	return c.JSON(post)
@@ -117,30 +114,36 @@ func CreatePost(c fiber.Ctx) error {
 // UpdatePost обновляет существующий пост
 func UpdatePost(c fiber.Ctx) error {
 	id := c.Params("id")
-	post := new(models.Post)
+	var input updatePostInput
 
-	if err := c.Bind().Body(post); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+	if err := c.Bind().Body(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	_, err := database.DB.Exec(context.Background(),
-		"UPDATE posts SET name = $1, body = $2, likes = $3, dislikes = $4 WHERE id = $5",
-		post.Name, post.Body, post.Likes, post.Dislikes, id)
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
+	}
+
+	err := services.UpdatePost(c.Context(), id, input.Name, input.Body, input.Likes, input.Dislikes, input.IsModerated)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления поста")
 	}
 
-	return c.JSON(fiber.Map{"message": "Пост обновлен"})
+	post, err := services.GetPostByID(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения поста после обновления")
+	}
+
+	return c.JSON(post)
 }
 
 // DeletePost удаляет пост
 func DeletePost(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	_, err := database.DB.Exec(context.Background(),
-		"DELETE FROM posts WHERE id = $1", id)
+	err := services.DeletePost(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка удаления поста")
 	}
 
 	return c.JSON(fiber.Map{"message": "Пост удален"})

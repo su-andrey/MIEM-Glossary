@@ -1,68 +1,30 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    --primary-color: #0E0B60;
+    --primary-color-dark: #06011D;
+    --primary-color-light: rgb(35, 12, 136);
+    --dark-grey: #464646;
+    --light-grey: #878787;
+    --dark-gradient: linear-gradient(270deg,rgba(6, 1, 29, 1) 44%, rgba(11, 9, 76, 1) 100%);
+    --black-gradient: linear-gradient(90deg,rgba(6, 1, 29, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    --yellow: #FFE100;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    --font-family: Raleway, Roboto, sans-serif;
+    --title-font: calc(2*var(--index));
+    --primary-font: calc(1.2*var(--index));
+    --subprimary-font: calc(1.0*var(--index));
+    --caption-font: calc(0.8*var(--index));
+    --subcaption-font: calc(0.7*var(--index));
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+    --index: calc(1vh + 1vw);
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    --border-radius: calc(1*var(--index));
+    --left-padding: 3.5vh;
+    --page-main-padding: 6vw;
+    --page-vertical-gap: 6vh;
+    --page-vertical-offset: 10vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+*{
+    font-family: Raleway, Roboto, sans-serif;
 }

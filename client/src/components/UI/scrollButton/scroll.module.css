@@ -1,0 +1,21 @@
+.main{
+    display: block;
+    width:4.5%;
+    position:fixed;
+    right:0.7vw;
+    bottom:0.7vw;
+    cursor: pointer;
+    color: var(--light-grey);
+}
+.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.25s ease-out;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease-out;
+    right: -5vw;
+}

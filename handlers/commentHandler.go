@@ -2,44 +2,51 @@ package handlers
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/su-andrey/kr_aip/database"
-	"github.com/su-andrey/kr_aip/models"
+	"github.com/su-andrey/kr_aip/config"
+	"github.com/su-andrey/kr_aip/services"
 )
+
+type commentsInput struct {
+	PostID int    `json:"post_id" validate:"required,gt=0"`
+	Body   string `json:"body" validate:"required,min=1,max=1000"`
+}
+
+type updateCommentInput struct {
+	Body string `json:"body" validate:"required,min=1,max=1000"`
+}
 
 // Общая структура хэндлеров в данном файле (схоже с категориями)
 // Пробуем подключиться к бд и выполнить запрос, если ошибка - выводим информативное сообщение
 // При успешном получении данных пытаемся их обработать, в случае отсутствия ошибок возвращаем их
-// Если возвращать нечего (например удаление), выводим сообщение (удалённый объект не возвращаем за ненадобностью)
+// Если возвращать нечего (например удаление), выводим сообщение (удаленный объект не возвращаем за ненадобностью)
 // GetComments возвращает все комментарии
 func GetComments(c fiber.Ctx) error {
-	rows, err := database.DB.Query(context.Background(),
-		`SELECT cm.id, cm.body, cm.likes, cm.dislikes, 
-		        p.id, p.name, p.body, p.likes, p.dislikes, p.author_id, 
-		        c.id, c.name,
-		        cm.author_id
-		 FROM comments cm
-		 JOIN posts p ON cm.post_id = p.id
-		 JOIN categories c ON p.category_id = c.id`)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка запроса к базе данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-	defer rows.Close()
+	cfg := config.LoadConfig()
+	opts := &services.Options{}
 
-	var comments []models.Comment
-	for rows.Next() {
-		var comment models.Comment
-		err := rows.Scan(
-			&comment.ID, &comment.Body, &comment.Likes, &comment.Dislikes,
-			&comment.Post.ID, &comment.Post.Name, &comment.Post.Body, &comment.Post.Likes, &comment.Post.Dislikes, &comment.Post.AuthorID,
-			&comment.Post.Category.ID, &comment.Post.Category.Name,
-			&comment.AuthorID,
-		)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Ошибка обработки данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-		}
-		comments = append(comments, comment)
+	limitStr := c.Query("limit")
+	offsetStr := c.Query("offset")
+
+	if cfg.ENV == "production" {
+		limitStr = c.Query("limit", "20")
+		offsetStr = c.Query("offset", "0")
+	}
+
+	limit, err1 := strconv.Atoi(limitStr)
+	offset, err2 := strconv.Atoi(offsetStr)
+	if err1 == nil && limit > 0 {
+		opts.Limit = &limit
+	}
+	if err2 == nil && offset >= 0 {
+		opts.Offset = &offset
+	}
+
+	comments, err := services.GetComments(c.Context(), opts)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения комментариев")
 	}
 
 	return c.JSON(comments)
@@ -49,25 +56,9 @@ func GetComments(c fiber.Ctx) error {
 func GetComment(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	var comment models.Comment
-	err := database.DB.QueryRow(context.Background(),
-		`SELECT cm.id, cm.body, cm.likes, cm.dislikes, 
-		        p.id, p.name, p.body, p.likes, p.dislikes, p.author_id, 
-		        c.id, c.name,
-		        cm.author_id
-		 FROM comments cm
-		 JOIN posts p ON cm.post_id = p.id
-		 JOIN categories c ON p.category_id = c.id
-		 WHERE cm.id = $1`, id).
-		Scan(
-			&comment.ID, &comment.Body, &comment.Likes, &comment.Dislikes,
-			&comment.Post.ID, &comment.Post.Name, &comment.Post.Body, &comment.Post.Likes, &comment.Post.Dislikes, &comment.Post.AuthorID,
-			&comment.Post.Category.ID, &comment.Post.Category.Name,
-			&comment.AuthorID,
-		)
-
+	comment, err := services.GetCommentById(context.Background(), id)
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Комментарий не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения комментария")
 	}
 
 	return c.JSON(comment)
@@ -76,61 +67,26 @@ func GetComment(c fiber.Ctx) error {
 // Создать новый комментарий
 func CreateComment(c fiber.Ctx) error {
 	// Создаем временную структуру для парсинга входных данных
-	var input struct {
-		PostID   int    `json:"post_id"`
-		AuthorID int    `json:"author_id"`
-		Body     string `json:"body"`
-	}
+	var input commentsInput
 
 	// Парсим тело запроса
 	if err := c.Bind().Body(&input); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных") // Сообщение об ошибке, чтобы приложение не падало по неясной причине
 	}
 
-	// Проверяем, существует ли пост
-	var post models.Post
-	err := database.DB.QueryRow(
-		context.Background(),
-		"SELECT id, name, body, category_id, author_id, likes, dislikes FROM posts WHERE id = $1",
-		input.PostID,
-	).Scan(&post.ID, &post.Name, &post.Body, &post.Category.ID, &post.AuthorID, &post.Likes, &post.Dislikes)
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
+	}
 
+	userIDRaw := c.Locals("userID")
+	if userIDRaw == nil {
+		return fiber.NewError(fiber.StatusUnauthorized, "userID is missing")
+	}
+	userID := userIDRaw.(int)
+
+	comment, err := services.CreateComment(c.Context(), userID, input.PostID, input.Body)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Пост не найден"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-
-	// Подгружаем объект категории
-	err = database.DB.QueryRow(
-		context.Background(),
-		"SELECT id, name FROM categories WHERE id = $1",
-		post.Category.ID,
-	).Scan(&post.Category.ID, &post.Category.Name)
-
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка загрузки категории поста"}) // Сообщение об ошибке, чтобы приложение не падало по неясной причине
-	}
-
-	// Вставляем комментарий в базу
-	var commentID int
-	err = database.DB.QueryRow(
-		context.Background(),
-		`INSERT INTO comments (post_id, body, author_id, likes, dislikes)
-		 VALUES ($1, $2, $3, 0, 0) RETURNING id`,
-		input.PostID, input.Body, input.AuthorID,
-	).Scan(&commentID) // Получаем ID созданного комментария
-
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка добавления комментария"})
-	}
-
-	// Формируем объект Comment с вложенным постом
-	comment := models.Comment{
-		ID:       commentID,      // ID созданного комментария
-		Post:     post,           // Заполненный объект поста
-		AuthorID: input.AuthorID, // Объект автора
-		Body:     input.Body,
-		Likes:    0, // По умолчанию все реакцию нулим
-		Dislikes: 0,
+		return fiber.NewError(fiber.StatusInternalServerError, "")
 	}
 
 	return c.JSON(comment)
@@ -139,30 +95,36 @@ func CreateComment(c fiber.Ctx) error {
 // UpdateComment обновляет существующий комментарий
 func UpdateComment(c fiber.Ctx) error {
 	id := c.Params("id")
-	comment := new(models.Comment)
+	var input updateCommentInput
 
-	if err := c.Bind().Body(comment); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Неверный формат данных"})
+	if err := c.Bind().Body(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "неверный формат данных")
 	}
 
-	_, err := database.DB.Exec(context.Background(),
-		"UPDATE comments SET body = $1, likes = $2, dislikes = $3 WHERE id = $4",
-		comment.Body, comment.Likes, comment.Dislikes, id)
+	if err := config.Validator.Struct(&input); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "ошибка валидации")
+	}
+
+	err := services.UpdateComment(c.Context(), id, input.Body)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка обновления комментария"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка обновления комментария")
 	}
 
-	return c.JSON(fiber.Map{"message": "Комментарий обновлен"})
+	comment, err := services.GetCommentById(c.Context(), id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка получения обновленного комментария")
+	}
+
+	return c.JSON(comment)
 }
 
 // DeleteComment удаляет комментарий
 func DeleteComment(c fiber.Ctx) error {
 	id := c.Params("id")
 
-	_, err := database.DB.Exec(context.Background(),
-		"DELETE FROM comments WHERE id = $1", id)
+	err := services.DeleteComment(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Ошибка удаления комментария"})
+		return fiber.NewError(fiber.StatusInternalServerError, "ошибка удаления комментария")
 	}
 
 	return c.JSON(fiber.Map{"message": "Комментарий удален"})

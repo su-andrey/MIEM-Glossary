@@ -1,0 +1,137 @@
+.wrapper{
+    padding-block: var(--page-vertical-offset);
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    padding-inline: var(--page-main-padding);
+    gap: var(--page-vertical-gap);
+}
+
+.topWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--page-vertical-gap);
+    width: 100%;
+}
+
+.textWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    width: 100%;
+}
+
+.topContainer{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.image{
+    width: calc(4*var(--index));
+    height: calc(4*var(--index));
+}
+
+.imageContainer{
+    height: calc(4*var(--index));
+}
+
+.title{
+    font-size: var(--title-font);
+    font-weight: 700;
+    color: black;
+}
+
+.subtitle{
+    font-size: var(--primary-font);
+    font-weight: 650;
+    color: black;
+}
+
+.caption{
+    font-size: var(--caption-font);
+    color: var(--dark-grey);
+    
+}
+
+
+.wholeWrapper{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+
+}
+
+.sliderWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+}
+
+.gridWrapper{
+    user-select: none;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
+    row-gap: 6vh;
+    width: 100%;
+    height: auto; 
+}
+
+
+.subwrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: start;
+    gap: 2vh;
+}
+
+
+.logicalBlock{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+
+@media(max-width: 700px){
+    .gridWrapper{
+        user-select: none;
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        justify-content: space-around;
+        row-gap: 6vh;
+        width: 100%;
+        height: auto; 
+    }
+    .wrapper{
+        padding-block: 5vh;
+    }
+}
+
+@media(max-width: 320px){
+    .gridWrapper{
+        user-select: none;
+        display: grid;
+        grid-template-columns: repeat(1, max-content);
+        justify-content: space-around;
+        row-gap: 2vh;
+        width: 100%;
+        height: auto; 
+    }
+}
+
+@media(max-width: 270px){
+    .wrapper{
+        gap: 3.5vh;
+    }
+    .topWrapper{
+        gap: 3.5vh;
+    }
+}
+

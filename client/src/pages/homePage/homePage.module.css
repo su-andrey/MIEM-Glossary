@@ -1,0 +1,93 @@
+.wrapper{
+    padding-inline: var(--page-main-padding);
+    padding-block: calc(3*var(--page-vertical-offset));
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: calc(2.5*var(--page-vertical-offset));
+    overflow: hidden;
+    position: relative;
+}
+.metatitle{
+    font-weight: 700;
+    font-size: calc(1.2*var(--title-font));
+}
+
+.title{
+    font-weight: 700;
+    font-size: var(--title-font);
+    margin-bottom: 2vh;
+}
+
+.subtitle{
+    font-weight: 600;
+    font-size: var(--primary-font);
+}
+
+.paragraf{
+    font-weight: 450;
+    font-size: var(--subprimary-font);
+    color: var(--dark-grey);
+    line-height: 150%;
+}
+
+.crystal{
+    width: 35vw;
+    transform: scale(105%);
+    will-change: transform;
+}
+
+.crystal2{
+    transform: scale(125%);
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+    position: relative;
+}
+
+.textContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.bottomContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 5vh;
+}
+
+
+@media(max-width: 820px){
+    .crystal2{
+        width: 45vw;
+    }
+
+}
+
+
+@media(max-width: 490px){
+    .crystal2{
+        width: 45vw;
+    }
+
+    .title{
+        font-weight: 700;
+        font-size: calc(0.8*var(--title-font));
+        margin-bottom: 2vh;
+    }
+
+    .paragraf{
+        font-weight: 450;
+        font-size: calc(0.8*var(--subprimary-font));
+        color: var(--dark-grey);
+        line-height: 150%;
+    }
+}

@@ -2,16 +2,17 @@ package creators
 
 import (
 	"context"
-	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/su-andrey/kr_aip/config"
+	"go.uber.org/zap"
 )
 
 func CreatePostsTable(DB *pgxpool.Pool) {
 	ctx := context.Background()
 	tx, err := DB.Begin(ctx)
 	if err != nil {
-		log.Fatal("Ошибка начала транзакции:", err)
+		config.Logger.Fatal("Ошибка начала транзакции: ", zap.Error(err))
 	}
 	defer tx.Rollback(ctx)
 
@@ -20,10 +21,10 @@ func CreatePostsTable(DB *pgxpool.Pool) {
 		"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'posts');").
 		Scan(&tableExists)
 	if err != nil {
-		log.Fatal("Ошибка проверки таблицы posts:", err) // логируем критические ошибки
+		config.Logger.Fatal("Ошибка проверки таблицы posts: ", zap.Error(err)) // логируем критические ошибки
 	}
 
-	if !tableExists { // Создаем таблицу, если её еще нет, важны типы данных
+	if !tableExists { // Создаем таблицу, если ее еще нет, важны типы данных
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE posts (
 				id SERIAL PRIMARY KEY,
@@ -32,19 +33,20 @@ func CreatePostsTable(DB *pgxpool.Pool) {
 				name TEXT NOT NULL,
 				body TEXT NOT NULL,
 				likes INTEGER DEFAULT 0,
-				dislikes INTEGER DEFAULT 0
+				dislikes INTEGER DEFAULT 0,
+				is_moderated BOOL DEFAULT FALSE
 			);
 		`)
 		if err != nil {
-			log.Fatal("Ошибка создания таблицы posts:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка создания таблицы posts: ", zap.Error(err)) // логируем критические ошибки
 		}
 
 		err = tx.Commit(ctx)
 		if err != nil {
-			log.Fatal("Ошибка фиксации транзакции:", err) // логируем критические ошибки
+			config.Logger.Fatal("Ошибка фиксации транзакции: ", zap.Error(err)) // логируем критические ошибки
 		}
 
-		log.Println("✅ Таблица posts успешно создана!") // Записываем сообщение об успехе
+		config.Logger.Info("✅ Таблица posts успешно создана!") // Записываем сообщение об успехе
 	} else {
 		tx.Rollback(ctx)
 	}

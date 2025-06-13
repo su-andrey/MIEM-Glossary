@@ -1,0 +1,39 @@
+.wrapper{
+    width:calc(12*var(--index));
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 1vh;
+    transition: all 0.3s ease-out;
+    
+}
+
+.wrapper:hover .title{
+    transition: all 0.3s ease-out;
+    transform: translateY(0.8vh);
+}
+
+.image{
+    width: 100%;
+    height: calc(12*var(--index));
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    transition: all 0.3s ease-out;
+}
+
+
+.image:hover{
+    transform: translateY(-0.4vh) scale(1.01);
+    box-shadow: 0px 15px 20px -12px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease-out;
+}
+
+
+.title{
+    margin-top: 0.5vh;
+    font-size: calc(1*var(--subprimary-font));
+    font-weight: 600;
+    transition: all 0.3s ease-out;
+    color: black;
+}

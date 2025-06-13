@@ -1,0 +1,72 @@
+
+.field{
+    position: relative;
+    z-index: 1;
+    width:30vw;
+    height:5vh;
+    background-color: white;
+    background-color: #e7e7e7;
+    padding: calc(1*var(--index));
+    border-radius: calc(0.75*var(--index));
+    padding-left: calc(2*var(--index));
+    transition: all 0.3s ease-out;
+    margin-right: 0;
+    font-size: var(--caption-font);
+}
+
+.field::-webkit-search-cancel-button {
+    appearance: none;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='%23464646' viewBox='0 0 20 20'><path d='M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 12.197l-2.651 2.652a1.2 1.2 0 1 1-1.697-1.697l2.652-2.651-2.652-2.651a1.2 1.2 0 1 1 1.697-1.697L10 8.803l2.651-2.652a1.2 1.2 0 1 1 1.697 1.697L11.197 10l2.652 2.651a1.2 1.2 0 0 1-.001 1.698z'/></svg>") no-repeat center;
+    background-size: contain;
+    height: 1em;
+    width: 1em;
+    cursor: pointer;
+}
+
+.glass{
+    position: relative;
+    width: 1.7vw;
+    min-width: 1em;
+    min-height: 1em;
+    top:1.2vh;
+    left:-19.25vw;
+    z-index: 3;
+    transition: all 0.3s ease-out;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    50% { transform: rotate(10deg); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.wrapper{
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    padding-right: 0;
+}
+
+.wrapper:focus-within .glass {
+    animation: wiggle 0.4s ease;
+    pointer-events: none;
+    
+}
+
+
+
+.wrapper:focus-within .field{
+    box-shadow: 0px 15px 20px -12px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-out;
+}
