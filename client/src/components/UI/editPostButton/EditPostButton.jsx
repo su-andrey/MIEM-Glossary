@@ -66,9 +66,9 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
                 <EditPostModal 
                     placeholder={"Текст нового поста..."}
                     caption={"Отредактируйте пост"}
-                    sender={({answer, photos})=>sendWholeData({
+                    sender={({answer, photos, name = data?.name})=>sendWholeData({
                         answer, 
-                        name:data?.name, 
+                        name: name || data?.name, 
                         photos, 
                         author_id: data?.author_id, 
                         category_id: data?.category?.id, 
