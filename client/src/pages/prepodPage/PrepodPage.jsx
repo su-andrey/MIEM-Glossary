@@ -117,7 +117,7 @@ const PrepodPage = () => {
             }
             {author_id &&
                         <div className={styles.subcont}>
-                            <div className={styles.caption}>Добавьте свое заведение</div>
+                            <div className={styles.caption}>Предложите кого-то еще</div>
                             <CreatePostModal 
                                 placeholder="Предложить заведение..."
                                 caption="Забыли что-то? Напомните нам"
