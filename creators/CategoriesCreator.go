@@ -24,7 +24,7 @@ func CreateCategoriesTable(DB *pgxpool.Pool) {
 		config.Logger.Fatal("Ошибка проверки таблицы categories:", zap.Error(err)) // логируем критические ошибки
 	}
 
-	if !tableExists { // Если таблицы ещё не было - создаём. Важны типы данных и первичный ключ
+	if !tableExists { // Если таблицы еще не было - создаем. Важны типы данных и первичный ключ
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE categories (
 				id SERIAL PRIMARY KEY,

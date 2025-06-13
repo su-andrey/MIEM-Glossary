@@ -24,7 +24,7 @@ const RegisterForm = ({initialOpen = true}) => {
     } = useForm({mode: "all",})
 
     const onSubmit = async (data)=> {
-        console.log("Отправили вот это", data)
+        //console.log("Отправили вот это", data)
         try{
             await HandleRegisterUser(data.email, data.password)
             setOpen(false);
@@ -32,7 +32,7 @@ const RegisterForm = ({initialOpen = true}) => {
             handleRedirect();
         }
         catch(error){
-            console.log("Popalsa")
+            //console.log("Popalsa")
             if (error.response?.status == 409) {
                 setRegError("Такой пользователь уже существует");
             } else {

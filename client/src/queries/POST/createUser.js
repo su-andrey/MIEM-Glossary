@@ -23,7 +23,7 @@ const createUser = async (email, password, is_admin) => {
                 }
             }
         );
-        console.log("User created:", response.data);
+        //console.log("User created:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error creating user:", error.response?.data?.error || error.message);

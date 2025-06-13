@@ -116,7 +116,7 @@ const SinglePrepodPage = () => {
             author_id: author_id,
             body: answer,
             });
-            console.log("Ответ серва при создании отзыва", response);
+            //console.log("Ответ серва при создании отзыва", response);
             dispatch(addPost(response));
         } 
         catch (error) {
@@ -156,7 +156,7 @@ const SinglePrepodPage = () => {
                                     <CreateCommentModal
                                         settings={{marginTop:'1vh'}}
                                         placeholder={"Поделитесь мнением?"}
-                                        caption={"Добавте отзыв о преподе"}
+                                        caption={"Добавьте отзыв о преподе"}
                                         submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: post_id  })}
                                     />
                                 </div>

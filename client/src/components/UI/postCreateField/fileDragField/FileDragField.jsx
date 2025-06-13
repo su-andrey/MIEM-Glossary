@@ -26,7 +26,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
             photos: selectedFiles,
         };
         sender(packed);
-        console.log(packed);
+        //console.log(packed);
         setAnswer(""); 
         setName("");
         setSelectedFiles([]);
@@ -35,7 +35,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
     };
 
     const handleFileChange = (e) => {
-        console.log(e.target.files)
+        //console.log(e.target.files)
         setSelectedFiles(Array.from(e.target.files));
     }
 

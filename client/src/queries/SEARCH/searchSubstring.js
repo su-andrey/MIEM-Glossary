@@ -13,7 +13,7 @@ const searchSubstring = async (search) => {
         }
 
         const filtered = data.filter(post => !!post?.is_moderated);
-        console.log("Filtered results:", filtered);
+        //console.log("Filtered results:", filtered);
         return filtered;
     } catch (error) {
         console.error(error.response?.data?.error || error.message);

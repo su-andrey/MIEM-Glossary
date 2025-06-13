@@ -30,7 +30,7 @@ const createComment = async ({post_id, author_id, body}) => {
                 }
             }
         );
-        console.log("Comment added:", response.data);
+        //console.log("Comment added:", response.data);
         return response.data;
     }
     catch(error) {

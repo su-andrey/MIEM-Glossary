@@ -5,7 +5,7 @@ const requireCategory = async () => {
     try{
         const url = `${BASE_URL}/api/categories`;
         const response = await axios.get(url);
-        console.log("Categories received: ", response.data);
+        //console.log("Categories received: ", response.data);
         return response.data;
     } 
     catch(error){

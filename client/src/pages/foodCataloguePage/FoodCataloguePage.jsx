@@ -44,11 +44,11 @@ const FoodCataloguePage = () => {
     }, [])
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
-            console.log("sending this to the server:", {name, body: answer, author_id, category_id})
+            //console.log("sending this to the server:", {name, body: answer, author_id, category_id})
             const response = await createPost({name, body: answer, author_id, category_id})
             await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
-            console.log("final cafe post", final_post)
+            //console.log("final cafe post", final_post)
             dispatch(addPost(final_post))
         }
         catch(error){
@@ -124,7 +124,7 @@ const FoodCataloguePage = () => {
                 }
                 {author_id &&
                         <div className={styles.subcont}>
-                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <div className={styles.caption}>Добавьте свое заведение</div>
                             <CreatePostModal 
                                 placeholder="Предложить заведение..."
                                 caption="Забыли что-то? Напомните нам"

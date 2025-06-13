@@ -23,7 +23,7 @@ const createCategory = async (categoryName) => {
                 }
             }
         );
-        console.log("Category created:", response.data);
+        //console.log("Category created:", response.data);
         return response.data;
     }
     catch(error) {

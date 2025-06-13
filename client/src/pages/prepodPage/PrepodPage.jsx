@@ -29,7 +29,7 @@ const PrepodPage = () => {
     const category = categories.find((category) => category.name == "Преподаватели");
     const posts = useSelector(state => getModeratedCategoryPosts(state, category.id));
     const author_id = useSelector(state => state.main.userID)
-    console.log(posts)
+    //console.log(posts)
     const [ready, setReady] = useState(false);
 
     useEffect(()=>{
@@ -38,11 +38,11 @@ const PrepodPage = () => {
 
     const sendWholeData = async ({answer, name, photos, author_id, category_id}) => {
         try{
-            console.log("sending this to the server:", {name, body: answer, author_id, category_id})
+            //console.log("sending this to the server:", {name, body: answer, author_id, category_id})
             const response = await createPost({name, body: answer, author_id, category_id})
             const photots_answer = await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
-            console.log(final_post)
+            //console.log(final_post)
             dispatch(addPost(final_post))
         }
         catch(error){
@@ -117,7 +117,7 @@ const PrepodPage = () => {
             }
             {author_id &&
                         <div className={styles.subcont}>
-                            <div className={styles.caption}>Добавте свое заведение</div>
+                            <div className={styles.caption}>Добавьте свое заведение</div>
                             <CreatePostModal 
                                 placeholder="Предложить заведение..."
                                 caption="Забыли что-то? Напомните нам"

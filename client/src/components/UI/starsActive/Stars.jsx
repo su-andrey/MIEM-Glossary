@@ -15,7 +15,7 @@ export default function Stars({ count, defaultRating, icon, color, iconSize, sen
 
     const handleClick = (rating) => {
         setRating(rating);
-        console.log("Rating is set on", rating)
+        //console.log("Rating is set on", rating)
         if(rating>3){
             sender(true)
         }

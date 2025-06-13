@@ -24,7 +24,7 @@ func CreatePostsTable(DB *pgxpool.Pool) {
 		config.Logger.Fatal("Ошибка проверки таблицы posts: ", zap.Error(err)) // логируем критические ошибки
 	}
 
-	if !tableExists { // Создаем таблицу, если её еще нет, важны типы данных
+	if !tableExists { // Создаем таблицу, если ее еще нет, важны типы данных
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE posts (
 				id SERIAL PRIMARY KEY,

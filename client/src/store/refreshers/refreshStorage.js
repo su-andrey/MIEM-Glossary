@@ -9,7 +9,7 @@ const refreshStorage = async (dispatch)=>{
         localStorage.removeItem('persist:root')
         dispatch(setPosts({ data: posts }));
         dispatch(setComments({ data: comments }));
-        console.log("Storage rebuilt");
+        //console.log("Storage rebuilt");
     } catch (error) {
         console.error("Ошибка при обновлении данных:", error);
     }

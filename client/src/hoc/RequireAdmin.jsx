@@ -29,7 +29,7 @@ const RequireAuth = ({ children }) => {
     }
     
     if (!admin) {
-        console.log("Вы не обладаете необходимыми правами для этого действия");
+        //console.log("Вы не обладаете необходимыми правами для этого действия");
         return <Navigate to="/" state={{ from: location.pathname }} replace />;
     }
 

@@ -17,11 +17,11 @@ function App() {
           throw new Error(data.error || "Something went wrong")
         }
 
-        console.log(data) // в консоли увидим данные в чистом виде, как они приходят от сервера
+        //console.log(data) // в консоли увидим данные в чистом виде, как они приходят от сервера
 
         return data || [] // если дата есть, возвращаешь, иначе возвращаешь пустой массив
       } catch (error) {
-        console.log(error) // вывод в консоль ошибки при наличии
+        //console.log(error) // вывод в консоль ошибки при наличии
       }
     }
   })
@@ -36,7 +36,7 @@ function App() {
     mutationKey: ["createComment"],
     mutationFn: async (e) => {
       e.preventDefault(); // отключаем отправку формы, по умолчанию перезагружающее страницу
-      if (!author_id || !body || !post_id) return alert("Заполните все поля!"); // очев
+      if (!author_id || !body || !post_id) return console.error("Заполните все поля!"); // очев
 
       const commentData = { // создаем массив из данных, которые позже улетят в json-тело запроса. !название тэга будет выглядеть как название переменной в кавычках!
         author_id: Number(author_id), // Приводим к числу
@@ -44,7 +44,7 @@ function App() {
         post_id: Number(post_id), // Приводим к числу
       };
 
-      console.log("Отправляемые данные:", commentData); // увидим данные перед отправкой
+      //console.log("Отправляемые данные:", commentData); // увидим данные перед отправкой
 
       try {
         const res = await fetch(BASE_URL + `/comments`, { // аналогично получению пользователей отправляешь запрос, но уже с параметрами
@@ -71,7 +71,7 @@ function App() {
       queryClient.invalidateQueries({ queryKey: ["comments"] }); // в случае успеха асинхронно вызываем функцию, получающую список комментов
     },
     onError: (error) => {
-      alert(error.message); // в случае ошибки выводим ошибку
+      console.error(error.message); // в случае ошибки выводим ошибку
     },
   });
 
@@ -101,7 +101,7 @@ function App() {
         }
         return data;
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     },
     onSuccess: () => {
@@ -124,7 +124,7 @@ function App() {
             }
             return data;
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     },
     onSuccess: () => {

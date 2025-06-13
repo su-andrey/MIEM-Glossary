@@ -23,7 +23,7 @@ const createReaction = async ({post_id, reaction}) => {
                 }
             }
         );
-        console.log("Reaction created:", response.data);
+        //console.log("Reaction created:", response.data);
         return response.data;
     }
     catch(error) {

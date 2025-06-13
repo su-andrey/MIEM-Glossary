@@ -34,7 +34,7 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
 
     const sendWholeData = async ({answer, name, photos, author_id, category_id, is_moderated, id, dispatch, likes, dislikes, oneField}) => {
         try{
-            console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
+            //console.log("sending this to the server:", {name, body: answer, author_id, category_id, is_moderated})
             const response = await editPost({name, body: answer, author_id, category_id, is_moderated, id, likes, dislikes})
             await createPhotos({photos, id: response.id})
             const final_post = await requirePosts(response.id)
@@ -55,7 +55,7 @@ const EditPostButton = ({data, adminVersion, iconSize, oneField}) => {
             is_moderated: true,
         });
         await updatePost({dispatch, postID: data?.id})
-        console.log("Post submitted succesfully")
+        //console.log("Post submitted succesfully")
     }
 
 

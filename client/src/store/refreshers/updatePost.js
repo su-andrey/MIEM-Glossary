@@ -10,7 +10,7 @@ const updatePost = async ({dispatch, postID})=>{
             throw new Error("Ошибка получения поста с серва")
         }
         dispatch(refreshStoragePost({postID, new_post}))
-        console.log("post synchronized sucessfully")
+        //console.log("post synchronized sucessfully")
         return new_post;
     }
     catch(error){

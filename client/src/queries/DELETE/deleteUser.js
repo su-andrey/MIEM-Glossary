@@ -19,7 +19,7 @@ const deleteUser = async (id) => {
                 }
             }
         );
-        console.log(`User with ID ${id} deleted successfully:`, response.data);
+        //console.log(`User with ID ${id} deleted successfully:`, response.data);
         return response.data;
     } catch (error) {
         console.error("Error deleting user:", error.response?.data?.error || error.message);

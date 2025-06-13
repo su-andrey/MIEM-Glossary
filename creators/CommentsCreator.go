@@ -24,7 +24,7 @@ func CreateCommentsTable(DB *pgxpool.Pool) {
 		config.Logger.Fatal("Ошибка проверки таблицы comments:", zap.Error(err)) // логируем критические ошибки
 	}
 
-	if !tableExists { // Создаём таблицу, если её еще не было. Важны типы данных полей и первичные ключи
+	if !tableExists { // Создаем таблицу, если ее еще не было. Важны типы данных полей и первичные ключи
 		_, err = tx.Exec(ctx, `
 			CREATE TABLE comments (
 				id SERIAL PRIMARY KEY,
