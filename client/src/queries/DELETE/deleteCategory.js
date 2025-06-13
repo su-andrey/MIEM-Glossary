@@ -19,7 +19,7 @@ const deleteCategory = async (id) => {
                 }
             }
         );
-        console.log("Category deleted:", response.data);
+        //console.log("Category deleted:", response.data);
         return response.data;
     } 
     catch (error) {

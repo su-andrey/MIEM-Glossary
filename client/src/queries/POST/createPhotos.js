@@ -36,7 +36,7 @@ const createPhotos = async ({photos, id}) => {
                 }
             }
         );
-        console.log("Photos sent:", response);
+        //console.log("Photos sent:", response);
         return response.data;
     } catch (error) {
         console.error("Error sending photos:", error.response?.data?.error || error.message);

@@ -33,9 +33,9 @@ const ChangeForm = () => {
 
     const onSubmit = async (data) => {
         try {
-            console.log(data);
+            //console.log(data);
             let me  = await getMe()
-            console.log(me)
+            //console.log(me)
             await editMyData(data.email, data.password, me.id, me.is_admin)
             dispatch(setEmail(me.email))
             reset();

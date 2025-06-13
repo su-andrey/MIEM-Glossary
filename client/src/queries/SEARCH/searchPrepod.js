@@ -4,7 +4,7 @@ import { BASE_URL } from "../../config";
 const searchPrepod = async (name) => {
 
     const isThreeWords = (str) => {
-        return /^[А-Яа-яЁёA-Za-z]+ [А-Яа-яЁёA-Za-z]+ [А-Яа-яЁёA-Za-z]+$/.test(str.trim());
+        return /^[А-Яа-яееA-Za-z]+ [А-Яа-яееA-Za-z]+ [А-Яа-яееA-Za-z]+$/.test(str.trim());
     }
 
     try{

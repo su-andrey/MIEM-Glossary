@@ -13,7 +13,7 @@ const editUser = async (email, id, password, is_admin) => {
         if (!token){
             throw new Error("Пользователь не аутентифицирован")
         }
-        console.log("Отправка данных:", JSON.stringify(data));
+        //console.log("Отправка данных:", JSON.stringify(data));
         const response = await axios.put(
             `${BASE_URL}/api/users/${id}`, 
             data,
@@ -23,7 +23,7 @@ const editUser = async (email, id, password, is_admin) => {
                 }
             }
         );
-        console.log("User edited:", response.data);
+        //console.log("User edited:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error editing user:", error.response?.data?.error || error.message);

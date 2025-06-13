@@ -7,7 +7,7 @@ const editMyData = async (email, password, id, is_admin) => {
     }
     try {
         const response = await editUser(email, id, password, is_admin)
-        console.log("Data edited:", response.data);
+        //console.log("Data edited:", response.data);
         return response.data;
     } 
     catch (error) {

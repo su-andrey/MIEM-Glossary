@@ -33,7 +33,7 @@ const GradeModal = ({sender, opened, setOpened, postID}) => {
     useEffect(()=>{
         const requireLike = async ()=> {
             init = await requireReaction(postID)
-            console.log("Получили изначальную реакцию с серва:", init)
+            //console.log("Получили изначальную реакцию с серва:", init)
             const post = await requirePosts(postID)
             setReaction(init)
         }

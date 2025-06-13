@@ -14,7 +14,7 @@ const requireUsers = async (id = "") => {
                 Authorization: `Bearer ${token}`
             }}
         );
-        console.log("Users received: ",response.data);
+        //console.log("Users received: ",response.data);
         return response.data;
     } 
     catch(error){

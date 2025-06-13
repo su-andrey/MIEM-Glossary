@@ -18,7 +18,7 @@ const deleteComment = async (id) => {
                 }
             }
         );
-        console.log("Comment deleted:", response.data);
+        //console.log("Comment deleted:", response.data);
         return response.data;
     } 
     catch(error){

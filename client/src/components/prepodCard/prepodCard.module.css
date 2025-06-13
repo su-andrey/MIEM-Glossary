@@ -29,6 +29,8 @@
     font-size: var(--caption-font);
     font-weight: 500;
     color: black;
+    max-width: 70%;
+    word-break: break-all;
 }
 
 

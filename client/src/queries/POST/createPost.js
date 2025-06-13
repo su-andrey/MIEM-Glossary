@@ -6,7 +6,7 @@ const createPost = async ({name, author_id, body, category_id}) => {
         throw new Error("Missing required post fields");
     }
     const data = { name, author_id, body, category_id };
-    console.log("sending data", data)
+    //console.log("sending data", data)
     try {
         const token = localStorage.getItem("token")
         if (!token){
@@ -21,7 +21,7 @@ const createPost = async ({name, author_id, body, category_id}) => {
                 }
             }
         );
-        console.log("Post created:", response.data);
+        //console.log("Post created:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error creating post:", error.response?.data?.error || error.message);

@@ -37,7 +37,7 @@ const SingleFoodPage = () => {
     const reviews = useSelector(state => getFoodReviewsByID(state, postID)) 
     let categories = useSelector(state => state.main.categories)
     let reviewCategory = categories.find((category) => category.name == "Отзывы");
-    console.log("Полученные отзывы", reviews)
+    //console.log("Полученные отзывы", reviews)
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ const SingleFoodPage = () => {
     
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
-            console.log({
+            //console.log({
                 name: post_id,
                 category_id: Number(category_id),
                 author_id: author_id,
@@ -76,7 +76,7 @@ const SingleFoodPage = () => {
             author_id: Number(author_id),
             body: answer,
             });
-            console.log("Ответ серва при создании отзыва", response);
+            //console.log("Ответ серва при создании отзыва", response);
             dispatch(addPost(response));
         } 
         catch (error) {
@@ -123,7 +123,7 @@ const SingleFoodPage = () => {
                                     <CreateCommentModal
                                         settings={{marginTop:'1vh'}}
                                         placeholder={"Поделитесь мнением?"}
-                                        caption={"Добавте отзыв о заведении"}
+                                        caption={"Добавьте отзыв о заведении"}
                                         submitter={(answer) => submitter({answer, category_id: reviewCategory.id, author_id: authorID, post_id: postID  })}
                                     />
                                 </div>

@@ -47,12 +47,12 @@ const SearchPage = () => {
         setPrepodError(false)
         try{
             const fullName = `${surname} ${name} ${patronimic}`.trim()
-            console.log(fullName)
+            //console.log(fullName)
             const linka = await searchPrepod(fullName)
             if(!linka.link){
                 throw new Error("Prepod not found")
             }
-            console.log(linka)
+            //console.log(linka)
             setPrepodResult(linka)
         }
         catch(error){
@@ -98,7 +98,7 @@ const SearchPage = () => {
             setLoading(true)
             setSearch(str)
             const res = await searchSubstring(str)
-            console.log(res, "резы ручного поиска")
+            //console.log(res, "резы ручного поиска")
             setSearchResults(res)
         }
         catch(error){
@@ -129,7 +129,7 @@ const SearchPage = () => {
                     <>
                         <form className={styles.nameForm} onSubmit={handleSubmit}>
                             <div className={styles.subtitle}>
-                                Пробьем падлу по ФИО
+                                Найдем кого угодно
                             </div>
                             <input 
                                 type="text" 

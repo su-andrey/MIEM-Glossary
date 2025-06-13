@@ -20,7 +20,7 @@ const requireReaction = async (id) => {
                 }
             }
         );
-        console.log("Reaction received: ",response.data);
+        //console.log("Reaction received: ",response.data);
         return response.data;
     } 
     catch(error){

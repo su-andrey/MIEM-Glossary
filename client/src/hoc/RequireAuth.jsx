@@ -26,7 +26,7 @@ const RequireAuth = ({children}) => {
         return <Loader1 />;
     }
     if(!auth){
-        console.log("Проверка аутетификации в HOC провалилась")
+        //console.log("Проверка аутетификации в HOC провалилась")
         return(
             <Navigate to="/login" state={{ from: location }} replace />
         )

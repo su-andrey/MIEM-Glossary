@@ -388,7 +388,7 @@
     }
 }
 
-@media(max-width: 380px){
+@media(max-width: 440px){
     .gridWrapper{
         grid-template-columns: repeat(1, max-content);
         justify-content: space-around;

@@ -22,7 +22,7 @@ const editPost = async ({name, author_id, body, category_id, id, is_moderated, l
                 }
             }
         );
-        console.log("Post edited:", response.data);
+        //console.log("Post edited:", response.data);
         return response.data;
     } 
     catch(error){

@@ -22,7 +22,7 @@ const editCategory = async (category_name, category_id) => {
                 }
             }
         );
-        console.log("Category edited:", response.data);
+        //console.log("Category edited:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error editing category:", error.response?.data?.error || error.message);

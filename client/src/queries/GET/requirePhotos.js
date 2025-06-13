@@ -10,7 +10,7 @@ const requirePhotos = async (id) => {
         const response = await axios.get(
             `${BASE_URL}/api/posts/${id}/photos`
         );
-        console.log("Photos received:", response.data);
+        //console.log("Photos received:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error receiving photos:", error.response?.data?.error || error.message);

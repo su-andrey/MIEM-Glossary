@@ -10,7 +10,7 @@ const registerUser = async (email, password) => {
 
     try{
         const response = await axios.post(`${BASE_URL}/auth/register`, data);
-        console.log("User registered:", response.data);
+        //console.log("User registered:", response.data);
         localStorage.setItem("token", response.data.token);
         return response.data;
 

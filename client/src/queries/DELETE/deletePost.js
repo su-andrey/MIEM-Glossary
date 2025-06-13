@@ -17,7 +17,7 @@ const deletePost = async (id) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-        console.log("Post deleted:", response.data);
+        //console.log("Post deleted:", response.data);
         return response.data;
     } 
     catch(error){

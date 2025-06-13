@@ -29,7 +29,7 @@ const SingleQuestionPage = () => {
     let questions = useSelector(state => getPostsByCategory(state, category.id));
     const questionID = useParams().id;
     const authorID = useSelector(state => state.main.userID)
-    console.log("authorID:", authorID);
+    //console.log("authorID:", authorID);
     const question = useSelector(state => getPostsByID(state, questionID));
     const dispatch = useDispatch()
     
@@ -72,7 +72,7 @@ const SingleQuestionPage = () => {
     const comments = question?.comments
 
     const submitter = async ({ answer, post_id, author_id }) => {
-        console.log("Sending to server:", {
+        //console.log("Sending to server:", {
                 post_id,
                 author_id,
                 body: answer,
@@ -128,7 +128,7 @@ const SingleQuestionPage = () => {
                                     </div>
                                     <CreateCommentModal
                                         placeholder={"Поможете бедолаге?"}
-                                        caption={"Добавте ответ на вопрос"}
+                                        caption={"Добавьте ответ на вопрос"}
                                         submitter={(answer) => submitter({answer, post_id: questionID, author_id: authorID })}
                                     />
                         </div>

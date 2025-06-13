@@ -76,7 +76,7 @@ const QuestionPage = () => {
             author_id: author_id,
             body: answer,
             });
-            console.log("Ответ серва при создании коммента", response);
+            //console.log("Ответ серва при создании коммента", response);
             dispatch(addPost(response));
         } 
         catch (error) {

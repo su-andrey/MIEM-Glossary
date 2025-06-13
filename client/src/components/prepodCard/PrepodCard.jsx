@@ -3,7 +3,7 @@ import getFiveScale from "../../custom hooks/useGetFiveScale";
 import StarsDumb from "../UI/starsDumb/StarsDumb";
 import getRandomImagePath from "../../custom hooks/helpers/getRandomImagePath";
 const PrepodCard = ({data}) => {
-    console.log(data)
+    //console.log(data)
     const getPhoto = () => {
             if (Array.isArray(data?.photos) && data.photos.length > 0) {
                 return data.photos[0].url;

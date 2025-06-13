@@ -51,7 +51,7 @@ const App = () => {
                     dispatch(setPosts({ data: posts }));
                     dispatch(setComments({ data: comments }));
                     localStorage.removeItem("search")
-                    console.log("Storage rebuilt");
+                    //console.log("Storage rebuilt");
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);
                 }

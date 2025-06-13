@@ -22,7 +22,7 @@ const editComment = async (body, id, post_id, author_id) => {
                 }
             }
         );
-        console.log("Comment edited:", response.data);
+        //console.log("Comment edited:", response.data);
         return response.data;
     } 
     catch(error){

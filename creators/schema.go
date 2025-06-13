@@ -5,7 +5,7 @@ import (
 	"github.com/su-andrey/kr_aip/seeders"
 )
 
-// Схема миграции: создаётся 4 ключевые таблицы. Подробнее их структура описана в других файлах
+// Схема миграции: создается 4 ключевые таблицы. Подробнее их структура описана в других файлах
 func Migrate(db *pgxpool.Pool) {
 	CreateUsersTable(db)
 	CreateCategoriesTable(db)

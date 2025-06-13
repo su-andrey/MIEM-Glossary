@@ -7,7 +7,7 @@ const requirePosts = async (id = "") => {
         const response = await axios.get(
             url
         );
-        console.log("Posts received: ",response.data);
+        //console.log("Posts received: ",response.data);
         return response.data;
     } 
     catch(error){
