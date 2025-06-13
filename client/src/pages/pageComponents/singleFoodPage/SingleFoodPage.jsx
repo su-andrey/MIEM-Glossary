@@ -65,11 +65,11 @@ const SingleFoodPage = () => {
     const submitter = async ({ answer, category_id, author_id, post_id }) => {
         try {
             //console.log({
-                name: post_id,
-                category_id: Number(category_id),
-                author_id: author_id,
-                body: answer,
-            })
+            //     name: post_id,
+            //     category_id: Number(category_id),
+            //     author_id: author_id,
+            //     body: answer,
+            // })
             const response = await createPost({
             name: post_id,
             category_id: Number(category_id),
