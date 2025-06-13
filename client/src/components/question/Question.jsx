@@ -18,6 +18,7 @@ import EditPostButton from "../UI/editPostButton/EditPostButton";
 import DeletePostButton from "../UI/deletePostButton/DeletePostButton";
 import { useNavigate } from "react-router-dom";
 import Loader1 from "../UI/loader1/Loader1";
+import ReactionBlock from "../reactionBlock/ReactionBlock";
 const Question = ({data}) => {
     const navigate = useNavigate();
     const postID = data?.id;
@@ -37,7 +38,7 @@ const Question = ({data}) => {
             }
             init = await requireReaction(data?.id)
             const post = await requirePosts(data?.id)
-            if(init===null){
+            if(init?.reaction===null || init===null){
                 setReaction(null)
             }
             else{
@@ -62,7 +63,7 @@ const Question = ({data}) => {
                 setReaction(true)
             }
             else if(initial === true){
-                await createReaction({ post_id: data.id, reaction: null });
+                await createReaction({ post_id: data.id, reaction: true });
                 dispatch(addLikes({ postID , reaction: -1}));
                 dispatch(addDislikes({ postID , reaction: 0}));
                 setReaction(null)
@@ -96,7 +97,7 @@ const Question = ({data}) => {
                 setReaction(false)
             }
             else if(initial === false){
-                await createReaction({ post_id: data.id, reaction: null });
+                await createReaction({ post_id: data.id, reaction: false });
                 dispatch(addLikes({ postID , reaction: 0}));
                 dispatch(addDislikes({ postID , reaction: -1}));
                 setReaction(null)

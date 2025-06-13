@@ -72,11 +72,6 @@ const SingleQuestionPage = () => {
     const comments = question?.comments
 
     const submitter = async ({ answer, post_id, author_id }) => {
-        //console.log("Sending to server:", {
-                post_id,
-                author_id,
-                body: answer,
-    });
     try {
         const response = await createComment({
         post_id,
