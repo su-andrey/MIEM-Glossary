@@ -23,10 +23,10 @@ const ReactionBlock = ({data, oneField=false}) => {
     const dispatch = useDispatch();
     let init;
     useEffect(()=>{
-        const requireLike = async ()=> {
+        const requireLike = async () => {
             init = await requireReaction(data?.id)
             const post = await requirePosts(data.id)
-            if(reaction === null){
+            if(init?.reaction === null || init === null){
                 setReaction(null)
             }
             else{
@@ -40,8 +40,9 @@ const ReactionBlock = ({data, oneField=false}) => {
     const handleLikeClick = async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        const initial = reaction
+        //console.log("initial was", initial)
         try {
-            const initial = reaction
             if(initial === null){
                 await createReaction({ post_id: data.id, reaction: true });
                 dispatch(addLikes({ postID , reaction: 1}));
@@ -49,7 +50,8 @@ const ReactionBlock = ({data, oneField=false}) => {
                 setReaction(true)
             }
             else if(initial === true){
-                await createReaction({ post_id: data.id, reaction: null });
+                console.log("RABOTAEM")
+                await createReaction({ post_id: data.id, reaction: true });
                 dispatch(addLikes({ postID , reaction: -1}));
                 dispatch(addDislikes({ postID , reaction: 0}));
                 setReaction(null)
@@ -83,7 +85,7 @@ const ReactionBlock = ({data, oneField=false}) => {
                 setReaction(false)
             }
             else if(initial === false){
-                await createReaction({ post_id: data.id, reaction: null });
+                await createReaction({ post_id: data.id, reaction: false });
                 dispatch(addLikes({ postID , reaction: 0}));
                 dispatch(addDislikes({ postID , reaction: -1}));
                 setReaction(null)
