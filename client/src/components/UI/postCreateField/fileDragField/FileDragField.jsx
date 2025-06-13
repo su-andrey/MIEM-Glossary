@@ -118,7 +118,7 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
                     )
                 })
             }
-            <ActionButton text="Отправить" type="submit"></ActionButton>
+            <ActionButton text="Отправить" type="submit" reload={true}></ActionButton>
         </form>
         
     </div>

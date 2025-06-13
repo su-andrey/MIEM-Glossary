@@ -9,6 +9,8 @@ import SearchCard from "../../components/searchCard/SearchCard";
 import { uid } from "uid";
 import { useSearchParams } from "react-router-dom";
 import crystal from "./../../assets/png/crystals/crystal5.png"
+import Loader1 from "../../components/UI/loader1/Loader1";
+import AppLoaderWrapper from "../appLoaderWarapper/AppLoaderWrapper";
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
@@ -109,8 +111,21 @@ const SearchPage = () => {
         }
     }
 
-
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        const handleLoad = () => setReady(true);
+    if (document.readyState === 'complete') {
+        handleLoad();
+    } 
+    else {
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+    }
+    }, []);
+    if (!ready) return <Loader1 />;
     return (
+        <>
+        <AppLoaderWrapper />
         <div className={styles.wrapper}>
             <img src={crystal} alt="crystal" className={styles.crystal} />
             <div className={styles.title}>
@@ -211,6 +226,7 @@ const SearchPage = () => {
                 )
             }
         </div> 
+        </>
     );
 }
 
