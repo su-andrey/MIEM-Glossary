@@ -26,7 +26,7 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter, 
                     onChange={(e) => setAnswer(e.target.value)}
                 />
             </div>
-            <ActionButton text="Отправить" type="submit"></ActionButton>
+            <ActionButton text="Отправить" type="submit" reload={true}></ActionButton>
         </form>
         
     </div>
