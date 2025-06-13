@@ -42,7 +42,7 @@ func main() {
 
 	if cfg.ENV == "production" {
 		app.Use(limiter.New(limiter.Config{
-			Max:        100,       // Максимум запросов в минуту
+			Max:        200,       // Максимум запросов в минуту
 			Expiration: 60 * 1000, // Время жизни в миллисекундах
 			LimitReached: func(c fiber.Ctx) error {
 				return c.Status(fiber.StatusTooManyRequests).JSON(fiber.Map{
