@@ -25,13 +25,14 @@ const FileDragField = ({height, width, placeholder, caption, settings, sender, o
             name,
             photos: selectedFiles,
         };
-        sender(packed);
+        await sender(packed);
         //console.log(packed);
         setAnswer(""); 
         setName("");
         setSelectedFiles([]);
         await updatePost({dispatch, postID: data?.id})
         opener(false);
+        window.location.reload();
     };
 
     const handleFileChange = (e) => {

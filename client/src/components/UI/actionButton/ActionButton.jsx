@@ -5,9 +5,9 @@ import { forwardRef } from "react";
 const ActionButton = forwardRef(({ onClick = () => {}, text = "Click Me", reload = false}, ref) => {
     const handleClick = (e) => {
         onClick(e)
-        if(reload){
-            window.location.reload();
-        }
+        // if(reload){
+        //     window.location.reload();
+        // }
     }
     return (
         <button

@@ -43,7 +43,7 @@ func SetupRoutes(app *fiber.App) { //Вызывае мобработчики и�
 	posts.Post("/", handlers.CreatePost, middleware.JWTMiddlewate())                                                            // Создание поста
 	posts.Put("/:id", handlers.UpdatePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(services.GetPostAuthorID))    // Обновление поста
 	posts.Delete("/:id", handlers.DeletePost, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(services.GetPostAuthorID)) // Удаление поста
-	posts.Post("/:id/photos", handlers.UploadPostPhotos, middleware.JWTMiddlewate(), middleware.IsAuthor(services.GetCreatingPostID))
+	posts.Post("/:id/photos", handlers.UploadPostPhotos, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(services.GetCreatingPostID))
 
 	photos := api.Group("/photos")
 	photos.Delete("/:id", handlers.DeletePhoto, middleware.JWTMiddlewate(), middleware.IsAuthorOrAdmin(services.GetPhotoPostAuthorID))
