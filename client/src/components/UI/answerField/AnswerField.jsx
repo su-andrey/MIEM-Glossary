@@ -3,11 +3,12 @@ import styles from "./answerField.module.css"
 import { useState } from "react";
 const AnswerField = ({height, width, placeholder, caption, settings, submitter, opener}) => {
     const [answer, setAnswer] = useState("");
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        submitter(answer); 
+        await submitter(answer); // дождаться завершения
         setAnswer(""); 
         opener(false);
+        window.location.reload(); // перезагрузка после отправки
     };
     return (<>
     <div className={styles.wrapper} style={settings}>
@@ -26,7 +27,7 @@ const AnswerField = ({height, width, placeholder, caption, settings, submitter, 
                     onChange={(e) => setAnswer(e.target.value)}
                 />
             </div>
-            <ActionButton text="Отправить" type="submit" reload={true}></ActionButton>
+            <ActionButton text="Отправить" type="submit"></ActionButton>
         </form>
         
     </div>
