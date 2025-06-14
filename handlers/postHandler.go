@@ -34,7 +34,7 @@ func GetPosts(c fiber.Ctx) error {
 	limitStr := c.Query("limit")
 	offsetStr := c.Query("offset")
 
-	if cfg.ENV == "production" {
+	if cfg.PaginationEnabled {
 		limitStr = c.Query("limit", "20")
 		offsetStr = c.Query("offset", "0")
 	}
