@@ -7,17 +7,6 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react)
 
-## 🛠️ Installation Steps
-
-### 1. Install Go
-![Go Installation](https://img.shields.io/badge/Step-1_Install_Go-00ADD8?style=for-the-badge&logo=go)
-
-### 2. Setup PostgreSQL
-![Database Setup](https://img.shields.io/badge/Step-2_PostgreSQL_Setup-336791?style=for-the-badge&logo=postgresql)
-
-**MacOS:**
-```bash
-# Follow instructions until "How to connect to PostgreSQL on Mac OS"
 ## Документация и иструкция для запуска этого чуда на своих печках
 
 Для начала установим GOLANG на свой ПК глобально по [этой инструкции](https://go.dev/doc/install)
